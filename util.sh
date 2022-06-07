@@ -18,7 +18,7 @@ function avalon_web_cd::pull_repo() {
 
     if [[ ${repo} == 'git@*' ]]; then
         echo '从git拉取代码'
-        git clone --depth=1 "${repo}"
+        git clone -b="${branch}" --depth=1 "${repo}"
         return 1
     fi
 
