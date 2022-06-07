@@ -19,6 +19,7 @@ function avalon_web_cd::pull_repo(){
     if [[ ${repo} == 'git@*' ]]; then
         echo '从git拉取代码'
         git clone --depth=1 "${repo}"
+        return
     fi
 
     if [[ ${repo} == 'https://svn*' ]]; then
@@ -31,5 +32,8 @@ function avalon_web_cd::pull_repo(){
         fi
 
         svn co "${repo}/${branch}" -r "${svnVersion}" --trust-server-cert --non-interactive
+        return
     fi
+
+    exit 1
 }
