@@ -16,8 +16,7 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                sh './pull_repo.sh'
-                sh 'pull_repo'
+                sh 'source ./util.sh || avalon_web_cd::pull_repo'
             }
         }
     }
