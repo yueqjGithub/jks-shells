@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # 拉取仓库代码
-function avalon_web_cd::pull_repo() {
+function avalon_web_cd_pull_repo() {
     repo="$1"
     branch="$2"
     svnVersion="$3"
