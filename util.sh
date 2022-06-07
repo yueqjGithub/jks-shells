@@ -4,7 +4,6 @@
 function avalon_web_cd_pull_repo() {
     repo="$1"
     branch="$2"
-    svnVersion="$3"
 
     if [[ ${repo} == '' ]]; then
         echo '未设置仓库地址'
@@ -16,12 +15,13 @@ function avalon_web_cd_pull_repo() {
         return 1
     fi
 
-    if [[ ${repo} == 'git@*' ]]; then
+    if [[ ${repo} == git@* ]]; then
         echo '从git拉取代码'
         git clone -b="${branch}" --depth=1 "${repo}"
         return 0
-    elif [[ ${repo} == 'https://svn*' ]]; then
+    elif [[ ${repo} == https://svn* ]]; then
         echo '从svn拉取代码'
+        svnVersion="$3"
         #获取svn最新版本号
         if [[ $3 == 'latest' ]]; then
             for i in $(svn info "${repo}/${branch}" --trust-server-cert --non-interactive | grep Revision); do
