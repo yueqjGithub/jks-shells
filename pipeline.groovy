@@ -1,7 +1,5 @@
 pipeline {
-    environment {
-        BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
-    }
+
 
     agent {
         node {
@@ -9,7 +7,27 @@ pipeline {
         }
     } 
 
+    parameters {
+        gitParameter name: 'BRANCH_TAG',
+                     type: 'PT_BRANCH_TAG',
+                     defaultValue: 'master'
+    }
+
     stages {
+
+        stage('Example') {
+            steps {
+                checkout([$class: 'GitSCM',
+                          branches: [[name: "${params.BRANCH_TAG}"]],
+                          doGenerateSubmoduleConfigurations: false,
+                          extensions: [],
+                          gitTool: 'Default',
+                          submoduleCfg: [],
+                          userRemoteConfigs: [[url: 'https://github.com/jenkinsci/git-parameter-plugin.git']]
+                        ])
+            }
+        }
+
         // stage('拉取统一构建脚本') {
         //     steps {
         //         sh 'rm -rf ${WORKSPACE}'
