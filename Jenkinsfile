@@ -18,6 +18,7 @@ pipeline {
             credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
             defaultValue: 'main',
             type: 'PT_BRANCH_TAG',
+            listSize: '1'
         )
     }
 
