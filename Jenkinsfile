@@ -7,7 +7,7 @@ pipeline {
 
     parameters {
         listGitBranches(
-            name: 'branch',
+            name: 'CD_BRANCH',
             description: 'svn/git的tag/branch列表',
             remoteURL: 'http://git.avalongames.com/oa_tools/oa_tools.git',
             credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
