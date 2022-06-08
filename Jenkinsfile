@@ -14,7 +14,7 @@ pipeline {
             name: 'CD_BRANCH',
             description: 'svn/git的tag/branch列表',
             remoteURL: env.CD_REPO_HTTP,
-            credentialsId: env.CD_GIT_CRED,
+            credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
             defaultValue: 'main',
             type: 'PT_BRANCH_TAG',
         )
