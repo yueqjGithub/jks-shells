@@ -14,20 +14,6 @@ pipeline {
     }
 
     stages {
-
-        stage('Example') {
-            steps {
-                checkout([$class: 'GitSCM',
-                          branches: [[name: "${params.BRANCH_TAG}"]],
-                          doGenerateSubmoduleConfigurations: false,
-                          extensions: [],
-                          gitTool: 'Default',
-                          submoduleCfg: [],
-                          userRemoteConfigs: [[url: 'https://github.com/jenkinsci/git-parameter-plugin.git']]
-                        ])
-            }
-        }
-
         // stage('拉取统一构建脚本') {
         //     steps {
         //         sh 'rm -rf ${WORKSPACE}'
