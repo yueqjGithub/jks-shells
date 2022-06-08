@@ -1,19 +1,25 @@
 #!/usr/bin/env bash
 
+# 检查参数
+function avalon_web_cd_check_param() {
+    if [[ ${CD_REPO} == '' ]]; then
+        echo '未设置仓库地址'
+        return 1
+    fi
+    if [[ ${CD_BRANCH} == '' ]]; then
+        echo '未设置仓库分支'
+        return 1
+    fi
+    if [[ ${CD_REPO} == https://svn* ]] && [[ ${CD_SVN_VERSION} == '' ]]; then
+        echo '未设置svn版本号'
+        return 1
+    fi
+}
+
 # 拉取仓库代码
 function avalon_web_cd_pull_repo() {
     local repo="$1"
     local branch="$2"
-
-    if [[ ${repo} == '' ]]; then
-        echo '未设置仓库地址'
-        return 1
-    fi
-
-    if [[ ${branch} == '' ]]; then
-        echo '未设置仓库分支'
-        return 1
-    fi
 
     if [[ ${repo} == git@* ]]; then
         echo '从git拉取代码'

@@ -1,6 +1,4 @@
 pipeline {
-
-
     agent {
         node {
             label 'WebJenkins'
@@ -27,15 +25,21 @@ pipeline {
         //     }
         // }
 
+        stage('参数检查') {
+            steps {
+                sh 'source ./util.sh && avalon_web_cd_check_param'
+            }
+        }
+
         stage('拉取项目仓库') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_pull_repo "${CD_REPO}" "${branch}" "${svnVersion}"'
+                sh 'avalon_web_cd_pull_repo "${CD_REPO}" "${CD_BRANCH}" "${CD_SVN_VERSION}"'
             }
         }
     }
 
     post {
-        // Clean after build
+        // 构建后删除整个工作目录
         always {
             cleanWs()
         }
