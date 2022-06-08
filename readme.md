@@ -23,3 +23,7 @@
     + updateTarget 注意冒号为英文逗号，逗号为中文逗号
     + customShellPath 自定义脚本路径，可选参数，在压缩成zip和生成md5前执行
 
+#仓库地址，git仓库末尾需要包含.git
+CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git
+#应用列表，目录为仓库
+CD_APPLIST=FrontEnd,OaToolsManage
