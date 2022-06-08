@@ -1,3 +1,30 @@
+properties([
+  parameters([
+    [
+      $class: 'ChoiceParameter',
+      choiceType: 'PT_SINGLE_SELECT',
+      name: 'Environment',
+      script: [
+        $class: 'ScriptlerScript',
+        scriptlerScriptId:'Environments.groovy'
+      ]
+    ],
+    [
+      $class: 'CascadeChoiceParameter',
+      choiceType: 'PT_SINGLE_SELECT',
+      name: 'Host',
+      referencedParameters: 'Environment',
+      script: [
+        $class: 'ScriptlerScript',
+        scriptlerScriptId:'HostsInEnv.groovy',
+        parameters: [
+          [name:'Environment', value: '$Environment']
+        ]
+      ]
+   ]
+ ])
+])
+
 pipeline {
     agent {
         node {
@@ -10,14 +37,21 @@ pipeline {
     }
 
     parameters {
-        listGitBranches(
-            name: 'CD_BRANCH',
-            description: 'svn/git的tag/branch列表',
-            remoteURL: env.CD_REPO_HTTP,
-            credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
-            defaultValue: 'main',
-            type: 'PT_BRANCH_TAG',
-        )
+        // when {
+        //     expression {
+        //         return env.CD_REPO.contains("git.avalongames.com")
+        //     }
+            
+            listGitBranches(
+                name: 'CD_BRANCH',
+                description: 'svn/git的tag/branch列表',
+                remoteURL: env.CD_REPO,
+                credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
+                defaultValue: 'main',
+                type: 'PT_BRANCH_TAG',
+            )
+        // }
+ 
     }
 
     stages {
@@ -29,7 +63,7 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO_HTTP} ${CD_BRANCH} ${CD_SVN_VERSION}'
+                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}'
             }
         }
     }
