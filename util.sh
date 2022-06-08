@@ -23,7 +23,7 @@ function avalon_web_cd_pull_repo() {
 
     if [[ ${repo} == *git.avalongames.com* ]]; then
         echo '从公司内网git拉取代码'
-        repo=$(echo "${repo}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g" | awk '{print $0".git"}')
+        repo=$(echo "${repo}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g")
         git clone -b"${branch}" --depth=1 "${repo}"
         return 0
     elif [[ ${repo} == *svn.avalongames.com* ]]; then
