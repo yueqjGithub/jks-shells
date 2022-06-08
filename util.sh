@@ -2,7 +2,7 @@
 
 # 检查参数
 function avalon_web_cd_check_param() {
-    if [[ ${CD_REPO_HTTP} == '' ]]; then
+    if [[ ${CD_REPO} == '' ]]; then
         echo '未设置仓库http地址'
         return 1
     fi
