@@ -61,7 +61,9 @@ pipeline {
         stage('参数检查') {
             steps {
                 sh 'source ./util.sh && avalon_web_cd_check_param'
+                
                 if(env.CD_REPO.contains("git.avalongames.com")){
+                    echo env.CD_REPO
                     branchList = listGitBranches(
                         name: 'CD_BRANCH',
                         description: 'svn/git的tag/branch列表',
@@ -71,7 +73,6 @@ pipeline {
                         type: 'PT_BRANCH_TAG',
                     )
                 }
-
             }
         }
 
