@@ -5,12 +5,16 @@ pipeline {
         }
     }
 
+    environment {
+        CD_GIT_CRED = 'e2972996-6557-42ba-8f14-045b927e177e'
+    }
+
     parameters {
         listGitBranches(
             name: 'CD_BRANCH',
             description: 'svn/git的tag/branch列表',
             remoteURL: env.CD_REPO_HTTP,
-            credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
+            credentialsId: env.CD_GIT_CRED,
             defaultValue: 'main',
             type: 'PT_BRANCH_TAG',
         )
@@ -33,7 +37,7 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_pull_repo "${CD_REPO_HTTP}" "${CD_BRANCH}" "${CD_SVN_VERSION}"'
+                sh 'source ./util.sh && avalon_web_cd_pull_repo "${env.CD_REPO_HTTP}" "${env.CD_BRANCH}" "${env.CD_SVN_VERSION}"'
             }
         }
     }
