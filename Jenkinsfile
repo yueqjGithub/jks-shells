@@ -30,7 +30,7 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                sh "source ./util.sh && avalon_web_cd_pull_repo ${env.CD_REPO} ${env.CD_BRANCH} ${env.CD_SVN_VERSION}"
+                sh "source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}"
             }
         }
     }
