@@ -31,13 +31,13 @@ pipeline {
 
         stage('参数检查') {
             steps {
-                sh "source ./util.sh && avalon_web_cd_check_param"
+                sh 'source ./util.sh && avalon_web_cd_check_param'
             }
         }
 
         stage('拉取项目仓库') {
             steps {
-                sh "source ./util.sh && avalon_web_cd_pull_repo ${env.CD_REPO_HTTP} ${env.CD_BRANCH} ${env.CD_SVN_VERSION}"
+                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO_HTTP} ${CD_BRANCH} ${CD_SVN_VERSION}'
             }
         }
     }
