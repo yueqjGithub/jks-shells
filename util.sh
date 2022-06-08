@@ -19,14 +19,15 @@ function avalon_web_cd_check_param() {
 # 拉取仓库代码
 function avalon_web_cd_pull_repo() {
     local repo="$1"
+    repo =$(echo "${repo}" | sed "s/http\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g".git)
     local branch="$2"
 
-    if [[ ${repo} == git@* ]]; then
-        echo '从git拉取代码'
+    if [[ ${repo} == *git.avalongames.com* ]]; then
+        echo '从公司内网git拉取代码'
         git clone -b"${branch}" --depth=1 "${repo}"
         return 0
-    elif [[ ${repo} == https://svn* ]]; then
-        echo '从svn拉取代码'
+    elif [[ ${repo} == *svn.avalongames.com* ]]; then
+        echo '从公司内网svn拉取代码'
         local svnVersion="$3"
         #获取svn最新版本号
         if [[ $3 == 'latest' ]]; then

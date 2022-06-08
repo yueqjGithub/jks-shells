@@ -5,10 +5,6 @@ pipeline {
         }
     }
 
-    environment {
-        CD_REPO_GIT = env.CD_REPO_HTTP.replace('http://', 'git@').replace('avalongames.com/', 'avalongames.com:').git
-    }
-
     parameters {
         listGitBranches(
             name: 'CD_BRANCH',
