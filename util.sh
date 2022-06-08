@@ -17,7 +17,7 @@ function avalon_web_cd_pull_repo() {
 
     if [[ ${repo} == git@* ]]; then
         echo '从git拉取代码'
-        git clone -b="${branch}" --depth=1 "${repo}"
+        git clone -b"${branch}" --depth=1 "${repo}"
         return 0
     elif [[ ${repo} == https://svn* ]]; then
         echo '从svn拉取代码'
