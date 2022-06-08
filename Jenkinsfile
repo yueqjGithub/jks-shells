@@ -3,17 +3,17 @@ pipeline {
         node {
             label 'WebJenkins'
         }
-    } 
+    }
 
     environment {
-        CD_REPO = ''
+        CD_REPO_GIT = env.CD_REPO_HTTP.replace('http://', 'git@').replace('avalongames.com/', 'avalongames.com:').git
     }
 
     parameters {
         listGitBranches(
             name: 'CD_BRANCH',
             description: 'svn/git的tag/branch列表',
-            remoteURL: env.CD_REPO,
+            remoteURL: env.CD_REPO_HTTP,
             credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
             defaultValue: 'main',
             type: 'PT_BRANCH_TAG',
@@ -37,7 +37,7 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                sh 'avalon_web_cd_pull_repo "${CD_REPO}" "${CD_BRANCH}" "${CD_SVN_VERSION}"'
+                sh 'avalon_web_cd_pull_repo "${CD_REPO_GIT}" "${CD_BRANCH}" "${CD_SVN_VERSION}"'
             }
         }
     }

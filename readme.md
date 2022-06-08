@@ -1,3 +1,7 @@
+## pipeline语法校验
++ 地址 https://newjenkins.avalongames.com/pipeline-model-converter/validate
++ 快捷键 shift + alt + v
+
 ## 使用条件
 + 只适应于web平台内部项目，目前支持web前端，node后端应用，laravel应用，java应用，未识别的类型不做额外处理
 + 项目分支结构必须为标准结构，即xxxxx/trunk xxxx/branches/xxx xxxx/tags/xxx
