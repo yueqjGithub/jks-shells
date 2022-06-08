@@ -33,7 +33,7 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                sh 'avalon_web_cd_pull_repo "${CD_REPO_HTTP}" "${CD_BRANCH}" "${CD_SVN_VERSION}"'
+                sh 'source ./util.sh && avalon_web_cd_pull_repo "${CD_REPO_HTTP}" "${CD_BRANCH}" "${CD_SVN_VERSION}"'
             }
         }
     }
