@@ -13,8 +13,8 @@ pipeline {
         listGitBranches(
             name: 'CD_BRANCH',
             description: 'svn/git的tag/branch列表',
-            remoteURL: CD_REPO_HTTP,
-            credentialsId: CD_GIT_CRED,
+            remoteURL: env.CD_REPO_HTTP,
+            credentialsId: env.CD_GIT_CRED,
             defaultValue: 'main',
             type: 'PT_BRANCH_TAG',
         )
