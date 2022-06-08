@@ -5,6 +5,14 @@ pipeline {
         node {
             label 'WebJenkins'
         }
+    } 
+
+    parameters {
+        listGitBranches(
+            name: 'branch',
+            remoteURL: 'http://git.avalongames.com/oa_tools/oa_tools.git',
+            credentialsId: 'avalon.dev.release.web'
+        )
     }
 
     stages {
