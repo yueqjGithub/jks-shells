@@ -19,11 +19,11 @@ function avalon_web_cd_check_param() {
 # 拉取仓库代码
 function avalon_web_cd_pull_repo() {
     local repo="$1"
-    repo =$(echo "${repo}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g" | awk '{print $0".git"}')
     local branch="$2"
 
     if [[ ${repo} == *git.avalongames.com* ]]; then
         echo '从公司内网git拉取代码'
+        repo =$(echo "${repo}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g" | awk '{print $0".git"}')
         git clone -b"${branch}" --depth=1 "${repo}"
         return 0
     elif [[ ${repo} == *svn.avalongames.com* ]]; then
