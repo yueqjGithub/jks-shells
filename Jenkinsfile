@@ -31,7 +31,8 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                sh "source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}"
+                /* groovylint-disable-next-line GStringExpressionWithinString */
+                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}'
             }
         }
     }
