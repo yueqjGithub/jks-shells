@@ -26,6 +26,12 @@ pipeline {
         stage('参数检查') {
             steps {
                 sh 'source ./util.sh && avalon_web_cd_check_param'
+
+                script  {
+                    // Show the select input
+                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: env.LIST, description: 'What is the release scope?')]
+                }
             }
         }
 
