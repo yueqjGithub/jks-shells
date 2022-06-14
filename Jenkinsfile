@@ -30,7 +30,7 @@ pipeline {
                 script  {
                     // Show the select input
                     env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
-                            parameters: [choice(name: 'RELEASE_SCOPE', choices: env.LIST, description: 'What is the release scope?')]
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: ['1', '2'], description: 'What is the release scope?')]
                 }
             }
         }
