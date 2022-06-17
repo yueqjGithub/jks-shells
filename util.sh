@@ -169,7 +169,7 @@ function avalon_web_cd_build_app() {
             echo "${appName}未检测到自定义脚本custom-build/build.sh，无需执行"
         fi
 
-        mv ${buildFile} "${workDir}/build/${appName}" || exit 1
+        mv ${buildFile} "${destDir}/${appName}" || exit 1
 
         #压缩并移动
         cd "${workDir}/build" || exit 1
