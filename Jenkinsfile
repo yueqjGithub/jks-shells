@@ -56,10 +56,10 @@ pipeline {
         }
     }
 
-    post {
-        // 构建后删除整个工作目录
-        always {
-            cleanWs()
-        }
-    }
+    // post {
+    //     // 构建后删除整个工作目录
+    //     always {
+    //         cleanWs()
+    //     }
+    // }
 }
