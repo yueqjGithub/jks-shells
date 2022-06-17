@@ -37,22 +37,27 @@ pipeline {
     stages {
         stage('参数检查') {
             steps {
-                sh '    if [[ ${CD_REPO} == '' ]]; then
-                            echo '未设置仓库http地址'
-                            return 1
-                        fi
-                        if [[ ${CD_BRANCH} == '' ]]; then
-                            echo '未设置仓库分支'
-                            return 1
-                        fi
-                        if [[ ${CD_REPO} == https://svn* ]] && [[ ${CD_SVN_VERSION} == '' ]]; then
-                            echo '未设置svn版本号'
-                            return 1
-                        fi
-                        if [[ ${CD_APPLIST} == '' ]]; then
-                            echo '未设置应用列表'
-                        fi
-                '
+                if (env.CD_REPO == ''){
+                    echo '未设置仓库http地址'
+                    return 1
+                }
+
+                // sh '    if [[ ${CD_REPO} == '' ]]; then
+                            
+                //             return 1
+                //         fi
+                //         if [[ ${CD_BRANCH} == '' ]]; then
+                //             echo '未设置仓库分支'
+                //             return 1
+                //         fi
+                //         if [[ ${CD_REPO} == https://svn* ]] && [[ ${CD_SVN_VERSION} == '' ]]; then
+                //             echo '未设置svn版本号'
+                //             return 1
+                //         fi
+                //         if [[ ${CD_APPLIST} == '' ]]; then
+                //             echo '未设置应用列表'
+                //         fi
+                // '
             }
         }
 
