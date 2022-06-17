@@ -54,10 +54,11 @@ function avalon_web_cd_pull_repo() {
     fi
 }
 
-# 构建应用
+# 构建应用,构建后的文件位于 ${workDir}/dist/${zipRootDirName} 目录下
 function avalon_web_cd_build_app() {
     local workDir="$1"
     local appList="$2"
+    local zipRootDirName="$3"
 
     mkdir ${workDir}/dist
 

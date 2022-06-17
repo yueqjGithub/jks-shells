@@ -7,6 +7,7 @@ pipeline {
 
     // environment {
     // // CD_GIT_CRED = 'e2972996-6557-42ba-8f14-045b927e177e'
+    //     CD_ZIP_ROOT_DIR_NAME= "web"
     // }
 
     parameters {
@@ -48,7 +49,7 @@ pipeline {
 
         stage('构建应用') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_build_app ${WORKSPACE} ${CD_SELECTED_APPLIST}'
+                sh 'source ./util.sh && avalon_web_cd_build_app ${WORKSPACE} ${CD_SELECTED_APPLIST} ${CD_ZIP_ROOT_DIR_NAME}'
             }
         }
     }

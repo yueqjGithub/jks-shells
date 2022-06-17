@@ -27,3 +27,5 @@
 CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git
 #应用列表，根目录为仓库
 CD_APPLIST=FrontEnd,OaToolsManage
+#zip包的根目录
+CD_ZIP_ROOT_DIR_NAME=web
