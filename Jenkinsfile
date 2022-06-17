@@ -42,25 +42,19 @@ pipeline {
                         echo '未设置仓库http地址'
                         return 1
                     }
+                    if (env.CD_BRANCH == '') {
+                        echo '未设置仓库分支'
+                        return 1
+                    }
+                    if (env.CD_REPO == 'https://svn*' && env.CD_SVN_VERSION == '' ) {
+                        echo '未设置svn版本号'
+                        return 1
+                    }
+                    if (env.CD_APPLIST == '') {
+                        echo '未设置应用列表'
+                        return 1
+                    }
                 }
-
-
-                // sh '    if [[ ${CD_REPO} == '' ]]; then
-                            
-                //             return 1
-                //         fi
-                //         if [[ ${CD_BRANCH} == '' ]]; then
-                //             echo '未设置仓库分支'
-                //             return 1
-                //         fi
-                //         if [[ ${CD_REPO} == https://svn* ]] && [[ ${CD_SVN_VERSION} == '' ]]; then
-                //             echo '未设置svn版本号'
-                //             return 1
-                //         fi
-                //         if [[ ${CD_APPLIST} == '' ]]; then
-                //             echo '未设置应用列表'
-                //         fi
-                // '
             }
         }
 

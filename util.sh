@@ -1,25 +1,5 @@
 #!/usr/bin/env bash
 
-# 检查参数
-function avalon_web_cd_check_param() {
-    if [[ ${CD_REPO} == '' ]]; then
-        echo '未设置仓库http地址'
-        return 1
-    fi
-    if [[ ${CD_BRANCH} == '' ]]; then
-        echo '未设置仓库分支'
-        return 1
-    fi
-    if [[ ${CD_REPO} == https://svn* ]] && [[ ${CD_SVN_VERSION} == '' ]]; then
-        echo '未设置svn版本号'
-        return 1
-    fi
-    if [[ ${CD_APPLIST} == '' ]]; then
-        echo '未设置应用列表'
-    fi
-
-}
-
 #清空上一次的构建残留
 function avalon_web_cd_clear_build() {
     local workDir="$1"
@@ -67,7 +47,8 @@ function avalon_web_cd_build_app() {
     local appList="$2"
     local zipRootDirName="$3"
 
-    mkdir ${workDir}/dist
+    destDir=${workDir}/dist/${zipRootDirName}
+    mkdir -p ${destDir}
 
     OLD_IFS="$IFS"
     IFS=","
@@ -78,8 +59,6 @@ function avalon_web_cd_build_app() {
         appName=${app##*/}
 
         echo "开始构建应用${appName}"
-
-        destDir=${workDir}/dist/${zipRootDirName}
 
         cd "${workDir}/build/${appName}" || exit 1
 
