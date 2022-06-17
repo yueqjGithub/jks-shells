@@ -1,5 +1,3 @@
-
-/* groovylint-disable-next-line CompileStatic */
 pipeline {
     agent {
         node {
@@ -30,8 +28,9 @@ pipeline {
             saveJSONParameterToFile: false,
             type: 'PT_CHECKBOX',
             value: env.CD_APPLIST,
-            visibleItemCount: 5
+            visibleItemCount: 20
         )
+
     }
 
     stages {
@@ -43,14 +42,12 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                /* groovylint-disable-next-line GStringExpressionWithinString */
                 sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}'
             }
         }
 
         stage('构建应用') {
             steps {
-                /* groovylint-disable-next-line GStringExpressionWithinString */
                 sh 'source ./util.sh && avalon_web_cd_build_app ${CD_SELECTED_APPLIST}'
             }
         }

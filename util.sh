@@ -20,7 +20,7 @@ function avalon_web_cd_check_param() {
 
 }
 
-# 拉取仓库代码
+# 拉取仓库代码,应用列表位于${WORKSPACE}/build/目录
 function avalon_web_cd_pull_repo() {
     local repo="$1"
     local branch="$2"
@@ -29,10 +29,15 @@ function avalon_web_cd_pull_repo() {
         echo '从公司内网git拉取代码'
         repo=$(echo "${repo}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g")
         git clone -b"${branch}" --depth=1 "${repo}"
+        local projectName=$(echo "${repo}" | sed "s/.*\///g" | sed "s/\.git//g")
+        mv ${WORKSPACE}/${projectName} ${WORKSPACE}/build
+        cd ${WORKSPACE}/build || exit 1
         return 0
     elif [[ ${repo} == *svn.avalongames.com* ]]; then
         echo '从公司内网svn拉取代码'
         local svnVersion="$3"
+        mkdir ${WORKSPACE}/build
+        cd ${WORKSPACE}/build || exit 1
         #获取svn最新版本号
         if [[ $3 == 'latest' ]]; then
             for i in $(svn info "${repo}/${branch}" --trust-server-cert --non-interactive | grep Revision); do
