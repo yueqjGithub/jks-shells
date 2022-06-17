@@ -1,3 +1,4 @@
+
 /* groovylint-disable-next-line CompileStatic */
 pipeline {
     agent {
@@ -15,11 +16,21 @@ pipeline {
             name: 'CD_BRANCH',
             description: 'git的tag/branch列表',
             remoteURL: env.CD_REPO,
-            // credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
-            credentialsId: withCredentials([usernamePassword(credentialsId: 'avalon.dev.release.web')]),
+            credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
             defaultValue: 'main',
             type: 'PT_BRANCH_TAG',
             listSize: '1'
+        )
+
+        extendedChoice(
+            description: '应用列表',
+            multiSelectDelimiter: ',',
+            name: 'CD_SELECTED_APPLIST',
+            quoteValue: false,
+            saveJSONParameterToFile: false,
+            type: 'PT_MULTI_SELECT',
+            value: env.CD_APPLIST,
+            visibleItemCount: 5
         )
     }
 
@@ -40,7 +51,7 @@ pipeline {
         stage('构建应用') {
             steps {
                 /* groovylint-disable-next-line GStringExpressionWithinString */
-                sh 'source ./util.sh && avalon_web_cd_build_app ${CD_APPLIST}'
+                sh 'source ./util.sh && avalon_web_cd_build_app ${CD_SELECTED_APPLIST}'
             }
         }
     }
