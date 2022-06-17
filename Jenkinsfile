@@ -28,7 +28,7 @@ pipeline {
             name: 'CD_SELECTED_APPLIST',
             quoteValue: false,
             saveJSONParameterToFile: false,
-            type: 'PT_MULTI_SELECT',
+            type: 'PT_CHECKBOX',
             value: env.CD_APPLIST,
             visibleItemCount: 5
         )
