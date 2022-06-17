@@ -20,6 +20,11 @@ function avalon_web_cd_check_param() {
 
 }
 
+#avalon_web_cd_check_param
+function avalon_web_cd_clear_build(){
+
+}
+
 # 拉取仓库代码,应用列表位于 ${workDir}/build/ 目录下
 function avalon_web_cd_pull_repo() {
     local repo="$1"
