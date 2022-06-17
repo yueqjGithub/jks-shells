@@ -58,7 +58,7 @@ pipeline {
 
         stage('清理上一次构建的残留') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_check_param'
+                sh 'source ./util.sh && avalon_web_cd_clear_build ${WORKSPACE}'
             }
         }
 
