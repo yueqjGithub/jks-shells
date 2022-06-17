@@ -42,13 +42,13 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}'
+                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${WORKSPACE} ${CD_SVN_VERSION}'
             }
         }
 
         stage('构建应用') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_build_app ${CD_SELECTED_APPLIST}'
+                sh 'source ./util.sh && avalon_web_cd_build_app ${WORKSPACE} ${CD_SELECTED_APPLIST}'
             }
         }
     }

@@ -20,24 +20,25 @@ function avalon_web_cd_check_param() {
 
 }
 
-# 拉取仓库代码,应用列表位于${WORKSPACE}/build/目录
+# 拉取仓库代码,应用列表位于 ${workDir}/build/ 目录下
 function avalon_web_cd_pull_repo() {
     local repo="$1"
     local branch="$2"
+    local workDir="$3"
 
     if [[ ${repo} == *git.avalongames.com* ]]; then
         echo '从公司内网git拉取代码'
         repo=$(echo "${repo}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g")
         git clone -b"${branch}" --depth=1 "${repo}"
         local projectName=$(echo "${repo}" | sed "s/.*\///g" | sed "s/\.git//g")
-        mv ${WORKSPACE}/${projectName} ${WORKSPACE}/build
-        cd ${WORKSPACE}/build || exit 1
+        mv ${workDir}/${projectName} ${workDir}/build
+        cd ${workDir}/build || exit 1
         return 0
     elif [[ ${repo} == *svn.avalongames.com* ]]; then
         echo '从公司内网svn拉取代码'
-        local svnVersion="$3"
-        mkdir ${WORKSPACE}/build
-        cd ${WORKSPACE}/build || exit 1
+        local svnVersion="$4"
+        mkdir ${workDir}/build
+        cd ${workDir}/build || exit 1
         #获取svn最新版本号
         if [[ $3 == 'latest' ]]; then
             for i in $(svn info "${repo}/${branch}" --trust-server-cert --non-interactive | grep Revision); do
@@ -55,7 +56,10 @@ function avalon_web_cd_pull_repo() {
 
 # 构建应用
 function avalon_web_cd_build_app() {
-    local appList="$1"
+    local workDir="$1"
+    local appList="$2"
+
+    mkdir ${workDir}/dist
 
     OLD_IFS="$IFS"
     IFS=","
@@ -67,24 +71,24 @@ function avalon_web_cd_build_app() {
 
         echo "开始构建应用${appName}"
 
-        destDir=${WORKSPACE}/dist/${zipRootDirName}
+        destDir=${workDir}/dist/${zipRootDirName}
 
-        cd "${WORKSPACE}/build/repo/${appName}" || exit 1
+        cd "${workDir}/build/${appName}" || exit 1
 
-        [[ -d "${WORKSPACE}/build/${appName}" ]] || mkdir "${WORKSPACE}/build/${appName}"
+        [[ -d "${workDir}/build/${appName}" ]] || mkdir "${workDir}/build/${appName}"
 
         appType='未知'
-        buildFile="${WORKSPACE}/build/repo/${appName}/*"
+        buildFile="${workDir}/build/${appName}/*"
         if [[ -f 'composer.json' ]] && [[ $(cat composer.json | grep "laravel/framework") ]]; then
             appType='laravel'
         elif [[ -f 'webpack.config.custom.js' ]]; then
             appType='front'
-            buildFile="${WORKSPACE}/build/repo/${appName}/dist/*"
+            buildFile="${workDir}/build/${appName}/dist/*"
         elif [[ -f 'package.json' ]]; then
             appType='node'
         elif [[ -f 'pom.xml' ]]; then
             appType='java'
-            buildFile="${WORKSPACE}/build/repo/${appName}/target/${appName}.jar"
+            buildFile="${workDir}/build/${appName}/target/${appName}.jar"
         fi
 
         echo "${appName}应用类型=${appType}"
@@ -149,18 +153,18 @@ function avalon_web_cd_build_app() {
             mvn clean install -DskipTests || exit 1
         fi
 
-        if [[ -f "${WORKSPACE}/build/repo/${appName}/custom-build/build.sh" ]]; then
+        if [[ -f "${workDir}/build/${appName}/custom-build/build.sh" ]]; then
             echo "${appName}检测到自定义脚本custom-build/build.sh，开始执行"
-            bash "${WORKSPACE}/build/repo/${appName}/custom-build/build.sh" || exit 1
-            cd "${WORKSPACE}/build/repo/${appName}" || exit 1
+            bash "${workDir}/build/${appName}/custom-build/build.sh" || exit 1
+            cd "${workDir}/build/${appName}" || exit 1
         else
             echo "${appName}未检测到自定义脚本custom-build/build.sh，无需执行"
         fi
 
-        mv ${buildFile} "${WORKSPACE}/build/${appName}" || exit 1
+        mv ${buildFile} "${workDir}/build/${appName}" || exit 1
 
         #压缩并移动
-        cd "${WORKSPACE}/build" || exit 1
+        cd "${workDir}/build" || exit 1
         zip -r -q "${appName}.zip" "${appName}/"
         [[ -d ${destDir} ]] || mkdir "${destDir}"
         mv "${appName}.zip" "${destDir}" || exit 1
