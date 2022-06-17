@@ -48,7 +48,7 @@ function avalon_web_cd_build_app() {
     local zipRootDirName="$3"
 
     destDir=${workDir}/dist/${zipRootDirName}
-    mkdir -p ${destDir}
+    mkdir -p ${destDir} || exit 1
 
     OLD_IFS="$IFS"
     IFS=","
@@ -61,7 +61,6 @@ function avalon_web_cd_build_app() {
         echo "开始构建应用${appName}"
 
         cd "${workDir}/build/${appName}" || exit 1
-
         [[ -d "${workDir}/build/${appName}" ]] || mkdir "${workDir}/build/${appName}"
 
         appType='未知'
@@ -148,6 +147,7 @@ function avalon_web_cd_build_app() {
             echo "${appName}未检测到自定义脚本custom-build/build.sh，无需执行"
         fi
 
+        mkdir "${destDir}/${appName}" || exit 1
         mv ${buildFile} "${destDir}/${appName}" || exit 1
 
         #压缩并移动
