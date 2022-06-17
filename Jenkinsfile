@@ -13,9 +13,10 @@ pipeline {
     parameters {
         listGitBranches(
             name: 'CD_BRANCH',
-            description: 'svn/git的tag/branch列表',
+            description: 'git的tag/branch列表',
             remoteURL: env.CD_REPO,
-            credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
+            // credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
+            credentialsId: withCredentials([usernamePassword(credentialsId: 'avalon.dev.release.web')]),
             defaultValue: 'main',
             type: 'PT_BRANCH_TAG',
             listSize: '1'
@@ -26,12 +27,6 @@ pipeline {
         stage('参数检查') {
             steps {
                 sh 'source ./util.sh && avalon_web_cd_check_param'
-
-                script  {
-                    // Show the select input
-                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
-                            parameters: [choice(name: 'RELEASE_SCOPE', choices: ['1', '2'], description: 'What is the release scope?')]
-                }
             }
         }
 
@@ -39,6 +34,13 @@ pipeline {
             steps {
                 /* groovylint-disable-next-line GStringExpressionWithinString */
                 sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}'
+            }
+        }
+
+        stage('构建应用') {
+            steps {
+                /* groovylint-disable-next-line GStringExpressionWithinString */
+                sh 'source ./util.sh && avalon_web_cd_build_app ${CD_APPLIST}'
             }
         }
     }

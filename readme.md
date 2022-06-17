@@ -25,5 +25,5 @@
 
 #仓库地址，git仓库末尾需要包含.git
 CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git
-#应用列表，目录为仓库
+#应用列表，根目录为仓库
 CD_APPLIST=FrontEnd,OaToolsManage
