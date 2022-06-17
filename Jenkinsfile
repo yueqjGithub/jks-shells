@@ -13,8 +13,8 @@ pipeline {
 
     parameters {
         listGitBranches(
-            name: 'git的tag/branch列表',
-            description: '',
+            name: 'CD_BRANCH',
+            description: 'git的tag/branch列表',
             remoteURL: env.CD_REPO,
             credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
             defaultValue: 'main',
@@ -23,9 +23,9 @@ pipeline {
         )
 
         extendedChoice(
-            description: '',
+            description: '应用列表',
             multiSelectDelimiter: ',',
-            name: '应用列表',
+            name: 'CD_SELECTED_APPLIST',
             quoteValue: false,
             saveJSONParameterToFile: false,
             type: 'PT_CHECKBOX',
@@ -44,14 +44,14 @@ pipeline {
         stage('拉取项目仓库') {
             steps {
                 /* groovylint-disable-next-line GStringExpressionWithinString */
-                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${git的tag/branch列表} ${CD_SVN_VERSION}'
+                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}'
             }
         }
 
         stage('构建应用') {
             steps {
                 /* groovylint-disable-next-line GStringExpressionWithinString */
-                sh 'source ./util.sh && avalon_web_cd_build_app ${应用列表}'
+                sh 'source ./util.sh && avalon_web_cd_build_app ${CD_SELECTED_APPLIST}'
             }
         }
     }
