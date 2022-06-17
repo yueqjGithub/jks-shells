@@ -37,10 +37,13 @@ pipeline {
     stages {
         stage('参数检查') {
             steps {
-                if (env.CD_REPO == ''){
-                    echo '未设置仓库http地址'
-                    return 1
+                script {
+                    if (env.CD_REPO == '') {
+                        echo '未设置仓库http地址'
+                        return 1
+                    }
                 }
+
 
                 // sh '    if [[ ${CD_REPO} == '' ]]; then
                             
