@@ -32,4 +32,4 @@ CD_ZIP_ROOT=web
 #jira项目的key
 CD_JIRA_KEY=OA
 #服务器列表
-CD_SERVERS=内网测试(ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)
+CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)

@@ -112,6 +112,12 @@ pipeline {
                 sh 'source ./util.sh && avalon_web_cd_build_app'
             }
         }
+
+        stage('更新到服务器') {
+            steps {
+                sh 'source ./util.sh && avalon_web_cd_update_to_server'
+            }
+        }        
     }
 
     // post {

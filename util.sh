@@ -147,15 +147,106 @@ function avalon_web_cd_build_app() {
 
     #生成readme和Version.txt
     cd "${WORKSPACE}/build" || exit 1
-    local version=$(echo "git rev-parse --short HEAD")
+    local version=$(git rev-parse --short HEAD)
     cd "${WORKSPACE}/dist/${CD_ZIP_ROOT}" || exit 1
     echo "${CD_REAMME}" | sed 's: :\n:g' >readme.txt
     echo "${version}" >Version.txt
 
     #压缩并生成md5
     cd "${WORKSPACE}/dist" || exit 1
-    zipname=${zipPrefix}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
+    zipname=${JOB_BASE_NAME}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
     txtname=${zipname}.txt
     zip -r -q "${zipname}" ${CD_ZIP_ROOT}/
     md5sum "${zipname}" | cut -d ' ' -f1 | tee "${txtname}"
+}
+
+# 更新到服务器
+function avalon_web_cd_update_to_server(){
+    OLD_IFS="$IFS"
+    IFS=","
+    updateTargetList=(${CD_SELECTED_SERVERS})
+    IFS="$OLD_IFS"
+    for ut in ${updateTargetList[@]}; do
+        local targetName=$(echo "${ut}" | sed "s/(.*)//g")
+        echo "#自动更新到"${targetName}
+        local paramStr=$(echo "${ut}" | sed "s/.*(//g" | sed "s/).*//g")
+        local user=$(echo "${paramStr}" | sed "s/.*user://g" | sed "s/，.*//g")        
+        local ip=$(echo "${paramStr}" | sed "s/.*ip://g" | sed "s/，.*//g")
+        local port=$(echo "${paramStr}" | sed "s/.*端口://g" | sed "s/，.*//g")
+        local willSudo=$(echo "${paramStr}" | sed "s/.*是否sudo://g" | sed "s/，.*//g")
+        local deployDir=$(echo "${paramStr}" | sed "s/.*部署目录://g" | sed "s/，.*//g")
+
+        scp -P ${port} ${WORKSPACE}/dist/${zipname} ${user}@${ip}:/tmp/
+cat >${WORKSPACE}/dist/update_${JOB_BASE_NAME}.sh <<EOF
+#!/usr/bin/env bash
+echo "#解压并移动到指定目录"
+mv -f /tmp/${zipname} ${deployDir}/
+cd ${deployDir}
+unzip -o ${zipname}
+mv -f ${deployDir}/web/*.zip ${deployDir}/
+rm -rf ${deployDir}/web/
+rm -f ${zipname}
+
+echo "#遍历目录"
+for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
+  do
+    appName=\`echo \${i} | cut -f 1 -d .\`
+
+    echo "#开始更新\${appName}应用"
+    if [[ -f \${appName}.json ]]; then
+      echo "检测到文件\${appName}.json,判断为node应用,使用pm2更新"
+      pm2 delete \${appName}.json >/dev/null 2>&1
+      echo "删除原目录"
+      rm -rf \${appName}
+      unzip -o \${appName}.zip >/dev/null 2>&1
+      pm2 start \${appName}.json >/dev/null 2>&1
+    elif [[ -f \${appName}/.env ]]; then
+      echo "laravel应用需要备份.env文件"
+      mv \${appName}/.env \${appName}.env
+      rm -rf \${appName}
+      unzip -o \${appName}.zip >/dev/null 2>&1
+      mv \${appName}.env \${appName}/.env 
+    elif [[ -f \${appName}/\${appName}.jar ]]; then
+      echo "java应用需要备份.properties文件"
+      pid=$(ps ax | grep -i \${appName}.jar |grep java | grep -v grep | awk '{print $1}') || exit 1
+      if [ -z "\$pid" ] ; then
+        echo "\${appName}.jar未运行,不做停服处理"
+      else
+        kill \${pid}
+      fi
+      mv \${appName}/\${appName}.properties \${appName}.properties
+      rm -rf \${appName}
+      unzip -o \${appName}.zip >/dev/null 2>&1
+      mv \${appName}.properties \${appName}/\${appName}.properties       
+      nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${appName}.jar --config-path=\${appName}/\${appName}.properties  >/dev/null 2>&1 &
+    else
+      rm -rf \${appName}
+      unzip -o \${appName}.zip >/dev/null 2>&1
+    fi
+
+    if [[ -f \${appName}/custom-build/before-app-start.sh ]]
+    then    
+      echo "开始执行应用启动前的自定义脚本"
+      cd \${appName}
+      bash custom-build/before-app-start.sh
+      cd ../
+    else
+      echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
+    fi
+
+    rm -f \${appName}.zip
+  done
+
+exit 0
+EOF
+        scp -P ${port} ${WORKSPACE}/dist/update_${JOB_BASE_NAME}.sh ${user}@${ip}:/tmp/ || exit 1
+
+        sudoStr=''
+        if [[ ${willSudo} == 'true' ]]; then
+            echo "#以管理员执行命令"
+            sudoStr='sudo -i'
+        fi
+
+        ssh -p ${port} -T ${user}@${ip} "${sudoStr} bash /tmp/update_${JOB_BASE_NAME}.sh" || exit 1
+    done
 }
