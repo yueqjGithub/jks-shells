@@ -1,4 +1,18 @@
-properties([[$class: 'JiraProjectProperty'], parameters([[$class: 'JiraVersionParameterDefinition', jiraProjectKey: 'OA', jiraReleasePattern: '', jiraShowArchived: 'false', jiraShowReleased: 'false', name: 'appVersion']])])
+properties(
+    [
+        [$class: 'JiraProjectProperty'], 
+        parameters([
+            [
+                $class: 'JiraVersionParameterDefinition', 
+                jiraProjectKey: env.CD_JIRAKEY, 
+                jiraReleasePattern: '', 
+                jiraShowArchived: 'false', 
+                jiraShowReleased: 'false', 
+                name: 'CD_APPVERSION'
+            ]
+        ])
+    ]
+)
 
 pipeline {
     agent {
