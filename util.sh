@@ -52,19 +52,23 @@ function avalon_web_cd_build_app() {
     local zipRootDirName
     local readme
 
-    while getopts "workDir:appList:zipRootDirName:readme:" arg; do
+    while getopts "w:a:z:r:" arg; do
         case $arg in
-        workDir)
+        w)
             workDir=$OPTARG
             ;;
-        appList)
+        a)
             appList=$OPTARG
             ;;
-        zipRootDirName)
+        z)
             zipRootDirName=$OPTARG
             ;;
-        readme)
+        r)
             readme=$OPTARG
+            ;;
+        ?)
+            echo "未知参数"
+            exit 1
             ;;
         esac
     done
