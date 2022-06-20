@@ -16,7 +16,8 @@ function avalon_web_cd_pull_repo() {
     if [[ ${repo} == *git.avalongames.com* ]]; then
         echo '从公司内网git拉取代码'
         repo=$(echo "${repo}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g")
-        git clone -b"${branch}" --depth=1 "${repo}"
+        local branhName=$(echo "${branch}" | sed "s/.*\///g")
+        git clone -b"${branhName}" --depth=1 "${repo}"
         local projectName=$(echo "${repo}" | sed "s/.*\///g" | sed "s/\.git//g")
         mv ${workDir}/${projectName} ${workDir}/build
         cd ${workDir}/build || exit 1
