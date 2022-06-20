@@ -67,7 +67,7 @@ function avalon_web_cd_build_app() {
             readme=$OPTARG
             ;;
         ?)
-            echo "未知参数"
+            echo "未知参数:$OPTARG"
             exit 1
             ;;
         esac
