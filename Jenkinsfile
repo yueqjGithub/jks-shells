@@ -60,7 +60,7 @@ pipeline {
 
         stage('清理构建历史') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_clear_build ${WORKSPACE}'
+                sh 'source ./util.sh && avalon_web_cd_clear_build ${WORKSPACE} ${CD_REPO}'
             }
         }
 

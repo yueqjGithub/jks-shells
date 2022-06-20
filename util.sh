@@ -3,8 +3,11 @@
 #清空上一次的构建残留
 function avalon_web_cd_clear_build() {
     local workDir="$1"
+    local repo="$2"
+    local projectName=$(echo "${repo}" | sed "s/.*\///g" | sed "s/\.git//g")
     rm -rf ${workDir}/build
     rm -rf ${workDir}/dist
+    rm -rf ${workDir}/${projectName}
 }
 
 # 拉取仓库代码,应用列表位于 ${workDir}/build/ 目录下
