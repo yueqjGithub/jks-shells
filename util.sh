@@ -40,15 +40,15 @@ function avalon_web_cd_pull_repo() {
     fi
 }
 
-# 构建应用,构建后的文件位于 ${WORKSPACE}/dist/${CD_ZIPROOT} 目录下
+# 构建应用,构建后的文件位于 ${WORKSPACE}/dist/${CD_ZIP_ROOT} 目录下
 function avalon_web_cd_build_app() {
 
-    destDir=${WORKSPACE}/dist/${CD_ZIPROOT}
+    destDir=${WORKSPACE}/dist/${CD_ZIP_ROOT}
     mkdir -p ${destDir}
 
     OLD_IFS="$IFS"
     IFS=","
-    apps=(${CD_APPLIST})
+    apps=(${CD_SELECTED_APPS})
     IFS="$OLD_IFS"
     for app in ${apps[@]}; do
 
@@ -148,14 +148,14 @@ function avalon_web_cd_build_app() {
     #生成readme和Version.txt
     cd "${WORKSPACE}/build" || exit 1
     local version=$(echo "git rev-parse --short HEAD")
-    cd "${WORKSPACE}/dist/${CD_ZIPROOT}" || exit 1
+    cd "${WORKSPACE}/dist/${CD_ZIP_ROOT}" || exit 1
     echo "${CD_REAMME}" | sed 's: :\n:g' >readme.txt
     echo "${version}" >Version.txt
 
     #压缩并生成md5
     cd "${WORKSPACE}/dist" || exit 1
-    zipname=${zipPrefix}_${CD_APPVERSION}_${version}_${BUILD_NUMBER}.zip
+    zipname=${zipPrefix}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
     txtname=${zipname}.txt
-    zip -r -q "${zipname}" ${CD_ZIPROOT}/
+    zip -r -q "${zipname}" ${CD_ZIP_ROOT}/
     md5sum "${zipname}" | cut -d ' ' -f1 | tee "${txtname}"
 }

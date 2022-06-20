@@ -4,11 +4,11 @@ properties(
         parameters([
             [
                 $class: 'JiraVersionParameterDefinition', 
-                jiraProjectKey: env.CD_JIRAKEY, 
+                jiraProjectKey: env.CD_JIRA_KEY, 
                 jiraReleasePattern: '', 
                 jiraShowArchived: 'false', 
                 jiraShowReleased: 'false', 
-                name: 'CD_APPVERSION'
+                name: 'CD_APP_VERSION'
             ]
         ])
     ]
@@ -46,7 +46,7 @@ pipeline {
         extendedChoice(
             description: '应用列表',
             multiSelectDelimiter: ',',
-            name: 'CD_SELECTED_APPLIST',
+            name: 'CD_SELECTED_APPS',
             quoteValue: false,
             saveJSONParameterToFile: false,
             type: 'PT_CHECKBOX',
@@ -76,7 +76,7 @@ pipeline {
                         echo '未设置svn版本号'
                         return 1
                     }
-                    if (env.CD_APPLIST == '') {
+                    if (env.CD_APPS == '') {
                         echo '未设置应用列表'
                         return 1
                     }
@@ -86,19 +86,19 @@ pipeline {
 
         stage('清理构建历史') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_clear_build ${CD_REPO}'
+                sh 'source ./util.sh && avalon_web_cd_clear_build'
             }
         }
 
         stage('拉取项目仓库') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}'
+                sh 'source ./util.sh && avalon_web_cd_pull_repo'
             }
         }
 
         stage('构建应用') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_build_app -a ${CD_SELECTED_APPLIST} -z ${CD_ZIP_ROOT_DIR_NAME} -r ${CD_REAMME}'
+                sh 'source ./util.sh && avalon_web_cd_build_app'
             }
         }
     }

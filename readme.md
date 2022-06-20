@@ -26,10 +26,10 @@
 #仓库地址，git仓库末尾需要包含.git
 CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git
 #应用列表，根目录为仓库
-CD_APPLIST=FrontEnd,OaToolsManage
+CD_APPS=FrontEnd,OaToolsManage
 #zip包的根目录
-CD_ZIPROOT=web
+CD_ZIP_ROOT=web
 #jira项目的key
-CD_JIRAKEY=OA
+CD_JIRA_KEY=OA
 #服务器列表
-CD_SERVERLIST=内网测试(ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)
+CD_SERVERS=内网测试(ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)
