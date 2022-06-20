@@ -118,6 +118,30 @@ pipeline {
                 sh 'source ./util.sh && avalon_web_cd_update_to_server'
             }
         }        
+
+        stage('测试结果') {
+            // input {
+            //     message: "测试是否通过"
+            //     parameters {
+            //         booleanParam(name: 'CD_TEST_SUCCESS', defaultValue: true, description: '测试通过')
+            //     }
+            // }
+            steps {
+                script {
+                    def CD_TEST_SUCCESS = input(
+                        message: '测试是否通过',
+                        parameters : [
+                            [
+                                $class: "BooleanParameterDefinition",
+                                name: 'CD_TEST_SUCCESS',
+                                description: '测试通过'
+                            ]
+                        ]
+                    )
+                }
+                sh 'echo 1'
+            }
+        }
     }
 
     // post {
