@@ -47,10 +47,22 @@ function avalon_web_cd_pull_repo() {
 
 # 构建应用,构建后的文件位于 ${workDir}/dist/${zipRootDirName} 目录下
 function avalon_web_cd_build_app() {
-    local workDir="$1"
-    local appList="$2"
-    local zipRootDirName="$3"
-    local readme="$4"
+    while getopts "workDir:appList:zipRootDirName:readme:" arg; do
+        case $arg in
+        workDir)
+            local workDir=$OPTARG
+            ;;
+        appList)
+            local appList=$OPTARG
+            ;;
+        zipRootDirName)
+            local zipRootDirName=$OPTARG
+            ;;
+        readme)
+            local readme=$OPTARG
+            ;;
+        esac
+    done
 
     destDir=${workDir}/dist/${zipRootDirName}
     mkdir -p ${destDir}

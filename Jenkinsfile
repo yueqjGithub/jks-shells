@@ -76,7 +76,7 @@ pipeline {
 
         stage('构建应用') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_build_app ${WORKSPACE} ${CD_SELECTED_APPLIST} ${CD_ZIP_ROOT_DIR_NAME} ${CD_REAMME}'
+                sh 'source ./util.sh && avalon_web_cd_build_app -workDir ${WORKSPACE} -appList ${CD_SELECTED_APPLIST} -zipRootDirName ${CD_ZIP_ROOT_DIR_NAME} -readme ${CD_REAMME}'
             }
         }
     }
