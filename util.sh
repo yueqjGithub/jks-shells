@@ -154,10 +154,10 @@ function avalon_web_cd_build_app() {
 
     #压缩并生成md5
     cd "${WORKSPACE}/dist" || exit 1
-    zipname=${JOB_BASE_NAME}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
-    txtname=${zipname}.txt
-    zip -r -q "${zipname}" ${CD_ZIP_ROOT}/
-    md5sum "${zipname}" | cut -d ' ' -f1 | tee "${txtname}"
+    cd_run_zipname=${JOB_BASE_NAME}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
+    cd_run_txtname=${cd_run_zipname}.txt
+    zip -r -q "${cd_run_zipname}" ${CD_ZIP_ROOT}/
+    md5sum "${cd_run_zipname}" | cut -d ' ' -f1 | tee "${cd_run_txtname}"
 }
 
 # 更新到服务器
@@ -176,16 +176,16 @@ function avalon_web_cd_update_to_server(){
         local willSudo=$(echo "${paramStr}" | sed "s/.*是否sudo://g" | sed "s/，.*//g")
         local deployDir=$(echo "${paramStr}" | sed "s/.*部署目录://g" | sed "s/，.*//g")
 
-        scp -P ${port} ${WORKSPACE}/dist/${zipname} ${user}@${ip}:/tmp/
+        scp -P ${port} ${WORKSPACE}/dist/${cd_run_zipname} ${user}@${ip}:/tmp/
 cat >${WORKSPACE}/dist/update_${JOB_BASE_NAME}.sh <<EOF
 #!/usr/bin/env bash
 echo "#解压并移动到指定目录"
-mv -f /tmp/${zipname} ${deployDir}/
+mv -f /tmp/${cd_run_zipname} ${deployDir}/
 cd ${deployDir}
-unzip -o ${zipname}
+unzip -o ${cd_run_zipname}
 mv -f ${deployDir}/web/*.zip ${deployDir}/
 rm -rf ${deployDir}/web/
-rm -f ${zipname}
+rm -f ${cd_run_zipname}
 
 echo "#遍历目录"
 for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
@@ -259,12 +259,12 @@ function avalon_web_cd_upload_ftp(){
     ftp -n <<-EOF
   open ftp.avalongames.com
   user ${ftpUser} ${ftpPassword}
-  cd ${ftpPath}
+  cd ${CD_FTP_PATH}
   bin
-  put ${zipname}
-  put ${txtname}
+  put ${cd_run_zipname}
+  put ${cd_run_txtname}
   bye
-  EOF
+EOF
     #检查ftp上传是否成功
     if [[ $? > 0 ]]; then
       exit 1
@@ -276,8 +276,8 @@ function avalon_web_cd_upload_ftp(){
     if [[ ${#appList[@]} > 0 ]]; then
       cat >>${archivePath} <<EOF
   更新包名:
-    ${zipname}  
-  EOF
+    ${cd_run_zipname}  
+EOF
     fi
     if [[ -n ${readme} ]]; then
       cat >>${archivePath} <<EOF
@@ -286,5 +286,5 @@ function avalon_web_cd_upload_ftp(){
 EOF
     fi
     echo "web归档文件【build号】= ${BUILD_NUMBER} ，【文件名】= ${releaseinfoName} "
-    echo "包名：${zipname}"
+    echo "包名：${cd_run_zipname}"
 }
