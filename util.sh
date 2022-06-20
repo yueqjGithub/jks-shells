@@ -52,7 +52,7 @@ function avalon_web_cd_build_app() {
     local zipRootDirName
     local readme
 
-    while getopts ":w:a:z:r::" arg; do
+    while getopts ":w:a:z:r" arg; do
         case $arg in
         w)
             workDir=$OPTARG
