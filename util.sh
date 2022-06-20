@@ -3,7 +3,7 @@
 
 #清空上一次的构建残留
 function avalon_web_cd_clear_build() {
-    local repo="$2"
+    local repo="$1"
     local projectName=$(echo "${repo}" | sed "s/.*\///g" | sed "s/\.git//g")
     rm -rf ${WORKSPACE}/build
     rm -rf ${WORKSPACE}/dist
