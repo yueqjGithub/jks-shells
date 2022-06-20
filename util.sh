@@ -250,3 +250,41 @@ EOF
         ssh -p ${port} -T ${user}@${ip} "${sudoStr} bash /tmp/update_${JOB_BASE_NAME}.sh" || exit 1
     done
 }
+
+# 上传ftp
+function avalon_web_cd_upload_ftp(){
+  local ftpUser=webuser
+  local ftpPassword=vy6Ks348a7s88
+
+    ftp -n <<-EOF
+  open ftp.avalongames.com
+  user ${ftpUser} ${ftpPassword}
+  cd ${ftpPath}
+  bin
+  put ${zipname}
+  put ${txtname}
+  bye
+  EOF
+    #检查ftp上传是否成功
+    if [[ $? > 0 ]]; then
+      exit 1
+    fi
+
+    echo "写入归档文件"
+    releaseinfoName=${appVersion}.releaseinfo
+    archivePath=${WORKSPACE}/dist/${releaseinfoName}
+    if [[ ${#appList[@]} > 0 ]]; then
+      cat >>${archivePath} <<EOF
+  更新包名:
+    ${zipname}  
+  EOF
+    fi
+    if [[ -n ${readme} ]]; then
+      cat >>${archivePath} <<EOF
+  配置更新:
+    ${readme}  
+EOF
+    fi
+    echo "web归档文件【build号】= ${BUILD_NUMBER} ，【文件名】= ${releaseinfoName} "
+    echo "包名：${zipname}"
+}

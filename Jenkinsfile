@@ -121,26 +121,13 @@ pipeline {
         }        
 
         stage('测试结果') {
-            // input {
-            //     message: "测试是否通过"
-            //     parameters {
-            //         booleanParam(name: 'CD_TEST_SUCCESS', defaultValue: true, description: '测试通过')
-            //     }
-            // }
             steps {
                 script {
-                    def CD_TEST_SUCCESS = input(
-                        message: '测试是否通过',
-                        // parameters : [
-                        //     [
-                        //         $class: "BooleanParameterDefinition",
-                        //         name: 'CD_TEST_SUCCESS',
-                        //         description: '测试通过'
-                        //     ]
-                        // ]
+                    input(
+                        message: '测试通过',
                     )
+                    sh 'source ./util.sh && avalon_web_cd_upload_ftp' 
                 }
-                sh 'echo 1'
             }
         }
     }

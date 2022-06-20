@@ -15,13 +15,6 @@
 
 ### 使用教程
 + 每个应用支持自定义脚本，执行路径为应用根目录/custom-build/build.sh，在压缩成zip前执行
-+ 需要根据项目实际情况，在打包工程设置以下环境变量
-    + ftpPath
-    + appSvnDir
-    + branch
-    + appList 应用列表，必须为相对分支路径的全路径，比如BackEnd/IAMManage和web/FrontEnd/avalon-gbs-util-client
-    + updateTarget 注意冒号为英文逗号，逗号为中文逗号
-    + customShellPath 自定义脚本路径，可选参数，在压缩成zip和生成md5前执行
 
 #仓库地址，git仓库末尾需要包含.git
 CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git
@@ -33,3 +26,5 @@ CD_ZIP_ROOT=web
 CD_JIRA_KEY=OA
 #服务器列表
 CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)
+#ftp上传地址
+CD_FTP_PATH=corp/OaTools
