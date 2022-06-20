@@ -50,7 +50,18 @@ pipeline {
             quoteValue: false,
             saveJSONParameterToFile: false,
             type: 'PT_CHECKBOX',
-            value: env.CD_APPLIST,
+            value: env.CD_APPS,
+            visibleItemCount: 20
+        )
+
+        extendedChoice(
+            description: '更新到服务器',
+            multiSelectDelimiter: ',',
+            name: 'CD_SELECTED_SERVERS',
+            quoteValue: false,
+            saveJSONParameterToFile: false,
+            type: 'PT_CHECKBOX',
+            value: env.CD_SERVERS,
             visibleItemCount: 20
         )
 
