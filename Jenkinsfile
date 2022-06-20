@@ -10,7 +10,8 @@ properties(
                 jiraShowReleased: 'false', 
                 name: 'CD_APP_VERSION'
             ]
-        ])
+        ]),
+        disableConcurrentBuilds()
     ]
 )
 
