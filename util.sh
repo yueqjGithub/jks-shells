@@ -50,6 +50,7 @@ function avalon_web_cd_build_app() {
     local workDir="$1"
     local appList="$2"
     local zipRootDirName="$3"
+    local readme="$4"
 
     destDir=${workDir}/dist/${zipRootDirName}
     mkdir -p ${destDir}
@@ -92,11 +93,7 @@ function avalon_web_cd_build_app() {
             echo "安装依赖库"
             npm install --unsafe-perm || exit 1
             echo "执行构建"
-            if [[ ${webpackMode} == '测试环境' ]]; then
-                npm run dev || exit 1
-            else
-                npm run release || exit 1
-            fi
+            npm run release || exit 1
         fi
 
         if [[ ${appType} == 'laravel' ]]; then
@@ -124,20 +121,11 @@ function avalon_web_cd_build_app() {
             npm install --unsafe-perm || exit 1
             #判断是否需要执行命令
             echo "执行构建"
-            if [[ ${webpackMode} == '测试环境' ]]; then
-                if [[ $(cat package.json | grep "\"dev\"") ]]; then
-                    echo 'package.json中存在dev命令，开始执行'
-                    npm run dev || exit 1
-                else
-                    echo 'package.json中不存在dev命令，无需执行'
-                fi
+            if [[ $(cat package.json | grep "\"release\"") ]]; then
+                echo 'package.json中存在release命令，开始执行'
+                npm run release || exit 1
             else
-                if [[ $(cat package.json | grep "\"release\"") ]]; then
-                    echo 'package.json中存在release命令，开始执行'
-                    npm run release || exit 1
-                else
-                    echo 'package.json中不存在release命令，无需执行'
-                fi
+                echo 'package.json中不存在release命令，无需执行'
             fi
         fi
 
@@ -165,4 +153,18 @@ function avalon_web_cd_build_app() {
         rm -rf "${destAppDir}"
 
     done
+
+    #生成readme和Version.txt
+    cd "${workDir}/build" || exit 1
+    local version=$(echo "git rev-parse --short HEAD")
+    cd "${workDir}/dist/${zipRootDirName}" || exit 1
+    echo "${CD_REAMME}" | sed 's: :\n:g' >readme.txt
+    echo "${version}" >Version.txt
+
+    #压缩并生成md5
+    cd "${workDir}/dist" || exit 1
+    zipname=${zipPrefix}_${appVersion}_${svnVersion}_${BUILD_NUMBER}.zip
+    txtname=${zipname}.txt
+    zip -r -q "${zipname}" ${zipRootDirName}/
+    md5sum "${zipname}" | cut -d ' ' -f1 | tee "${txtname}"
 }

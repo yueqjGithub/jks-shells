@@ -32,6 +32,10 @@ pipeline {
             visibleItemCount: 20
         )
 
+        text(
+            description: '更新说明', 
+            name: 'CD_REAMME'
+        )
     }
 
     stages {
@@ -72,7 +76,7 @@ pipeline {
 
         stage('构建应用') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_build_app ${WORKSPACE} ${CD_SELECTED_APPLIST} ${CD_ZIP_ROOT_DIR_NAME}'
+                sh 'source ./util.sh && avalon_web_cd_build_app ${WORKSPACE} ${CD_SELECTED_APPLIST} ${CD_ZIP_ROOT_DIR_NAME} ${CD_REAMME}'
             }
         }
     }
