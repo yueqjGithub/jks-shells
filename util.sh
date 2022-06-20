@@ -64,6 +64,10 @@ function avalon_web_cd_build_app() {
         esac
     done
 
+    if [[ ${workDir} == '' ]] || [[ ${appList} == '' ]] || [[ ${zipRootDirName} == '' ]] || [[ ${readme} == '' ]]; then
+        exit 1
+    fi
+
     destDir=${workDir}/dist/${zipRootDirName}
     mkdir -p ${destDir}
 
