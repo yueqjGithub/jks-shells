@@ -135,7 +135,9 @@ pipeline {
         }
 
         stage('通知') {
-
+            steps {
+                sh 'echo 111'
+            } 
         }
     }
 
