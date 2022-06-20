@@ -271,14 +271,13 @@ EOF
     fi
 
     echo "写入归档文件"
-    releaseinfoName=${appVersion}.releaseinfo
-    archivePath=${WORKSPACE}/dist/${releaseinfoName}
-    if [[ ${#appList[@]} > 0 ]]; then
-      cat >>${archivePath} <<EOF
+    local releaseinfoName=${CD_APP_VERSION}.releaseinfo
+    local archivePath=${WORKSPACE}/dist/${releaseinfoName}
+    cat >>${archivePath} <<EOF
   更新包名:
     ${cd_run_zipname}  
 EOF
-    fi
+
     if [[ -n ${readme} ]]; then
       cat >>${archivePath} <<EOF
   配置更新:

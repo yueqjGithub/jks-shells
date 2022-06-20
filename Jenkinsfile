@@ -122,13 +122,20 @@ pipeline {
 
         stage('测试结果') {
             steps {
-                script {
-                    input(
-                        message: '测试通过',
-                    )
-                    sh 'source ./util.sh && avalon_web_cd_upload_ftp' 
-                }
+                input(
+                    message: '测试通过',
+                )
             }
+        }
+
+        stage('上传ftp') {
+            steps {
+                sh 'source ./util.sh && avalon_web_cd_upload_ftp'
+            }            
+        }
+
+        stage('通知') {
+
         }
     }
 
