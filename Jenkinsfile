@@ -1,3 +1,5 @@
+properties([[$class: 'JiraProjectProperty'], parameters([[$class: 'JiraVersionParameterDefinition', jiraProjectKey: 'OA', jiraReleasePattern: '', jiraShowArchived: 'false', jiraShowReleased: 'false', name: 'appVersion']])])
+
 pipeline {
     agent {
         node {
@@ -20,6 +22,12 @@ pipeline {
             type: 'PT_BRANCH_TAG',
             listSize: '1'
         )
+
+        // jiraVersionParameterDefinition(
+        //     name: 'appVersion',
+        //     jiraProjectKey: env.CD_JIRA_KEY,
+        //     description: 'jira版本号'
+        // )
 
         extendedChoice(
             description: '应用列表',
@@ -64,19 +72,19 @@ pipeline {
 
         stage('清理构建历史') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_clear_build ${WORKSPACE} ${CD_REPO}'
+                sh 'source ./util.sh && avalon_web_cd_clear_build ${CD_REPO}'
             }
         }
 
         stage('拉取项目仓库') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${WORKSPACE} ${CD_SVN_VERSION}'
+                sh 'source ./util.sh && avalon_web_cd_pull_repo ${CD_REPO} ${CD_BRANCH} ${CD_SVN_VERSION}'
             }
         }
 
         stage('构建应用') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_build_app -w ${WORKSPACE} -a ${CD_SELECTED_APPLIST} -z ${CD_ZIP_ROOT_DIR_NAME} -r ${CD_REAMME}'
+                sh 'source ./util.sh && avalon_web_cd_build_app -a ${CD_SELECTED_APPLIST} -z ${CD_ZIP_ROOT_DIR_NAME} -r ${CD_REAMME}'
             }
         }
     }
