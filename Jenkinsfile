@@ -168,7 +168,26 @@ pipeline {
             parallel{
                 stage('通知1-钉钉群'){
                     steps {
-                        sh 'echo 111'
+                        script {
+                            def response = httpRequest url: env.CD_DINGDING_WEBHOOK,
+                                                    contentType: 'APPLICATION_JSON_UTF8',
+                                                    requestBody: '''{
+                                                            "msgtype": "actionCard",
+                                                            "actionCard": {
+                                                                "title": "${env.CD_APP_VERSION}版本测试通过", 
+                                                                "text": "111"
+                                                                "btnOrientation": "0", 
+                                                                "btns": [
+                                                                    {
+                                                                        "title": "jira版本链接", 
+                                                                        "actionURL": "https://www.dingtalk.com/"
+                                                                    }
+                                                                ]
+                                                            }                                                                  
+                                                    }'''
+                            println("Status: "+response.status)
+                            println("Content: "+response.content)
+                        }
                     } 
                 }
                 stage('通知2-邮件'){
