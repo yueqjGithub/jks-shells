@@ -158,6 +158,8 @@ function avalon_web_cd_build_app() {
     cd_run_txtname=${cd_run_zipname}.txt
     zip -r -q "${cd_run_zipname}" ${CD_ZIP_ROOT}/
     md5sum "${cd_run_zipname}" | cut -d ' ' -f1 | tee "${cd_run_txtname}"
+    export cd_run_zipname=${cd_run_zipname}
+    export cd_run_txtname=${cd_run_txtname}
 }
 
 # 更新到服务器
