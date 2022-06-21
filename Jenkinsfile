@@ -135,9 +135,19 @@ pipeline {
         }
 
         stage('通知') {
-            steps {
-                sh 'echo 111'
-            } 
+            parallel{
+                stage('钉钉群通知'){
+                    steps {
+                        sh 'echo 111'
+                    } 
+                }
+                stage('发邮件'){
+                    steps {
+                        sh 'echo 222'
+                    } 
+                }
+            }
+
         }
     }
 

@@ -28,3 +28,5 @@ CD_JIRA_KEY=OA
 CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)
 #ftp上传地址
 CD_FTP_PATH=corp/OaTools
+#钉钉webhook
+CD_DING_WEBHOOK=https://oapi.dingtalk.com/robot/send?access_token=827008164a19d4b265a4e3b4a47807764bc3bc9f3ecbc03a25c4087c75e5d0ac
