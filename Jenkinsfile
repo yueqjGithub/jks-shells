@@ -1,54 +1,3 @@
-properties(
-    [
-        [$class: 'JiraProjectProperty'], 
-        parameters([
-            listGitBranches(
-                name: 'CD_BRANCH',
-                description: 'git的tag/branch列表',
-                remoteURL: env.CD_REPO,
-                credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
-                defaultValue: 'main',
-                type: 'PT_BRANCH_TAG',
-                listSize: '1'
-            ),
-            [
-                $class: 'JiraVersionParameterDefinition', 
-                jiraProjectKey: env.CD_JIRA_KEY, 
-                jiraReleasePattern: '', 
-                jiraShowArchived: 'false', 
-                jiraShowReleased: 'false', 
-                name: 'CD_APP_VERSION',
-                description: 'jira版本号'
-            ],
-            extendedChoice(
-                description: '应用列表',
-                multiSelectDelimiter: ',',
-                name: 'CD_SELECTED_APPS',
-                quoteValue: false,
-                saveJSONParameterToFile: false,
-                type: 'PT_CHECKBOX',
-                value: env.CD_APPS,
-                visibleItemCount: 20
-            ),
-            extendedChoice(
-                description: '更新到服务器',
-                multiSelectDelimiter: ',',
-                name: 'CD_SELECTED_SERVERS',
-                quoteValue: false,
-                saveJSONParameterToFile: false,
-                type: 'PT_CHECKBOX',
-                value: env.CD_SERVERS,
-                visibleItemCount: 20
-            ),
-            text(
-                description: '更新说明', 
-                name: 'CD_REAMME'
-            ),
-        ]),
-        disableConcurrentBuilds()
-    ]
-)
-
 pipeline {
     agent {
         node {
@@ -67,6 +16,57 @@ pipeline {
         stage('参数检查') {
             steps {
                 script {
+                    properties(
+                        [
+                            [$class: 'JiraProjectProperty'], 
+                            parameters([
+                                listGitBranches(
+                                    name: 'CD_BRANCH',
+                                    description: 'git的tag/branch列表',
+                                    remoteURL: env.CD_REPO,
+                                    credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
+                                    defaultValue: 'main',
+                                    type: 'PT_BRANCH_TAG',
+                                    listSize: '1'
+                                ),
+                                [
+                                    $class: 'JiraVersionParameterDefinition', 
+                                    jiraProjectKey: env.CD_JIRA_KEY, 
+                                    jiraReleasePattern: '', 
+                                    jiraShowArchived: 'false', 
+                                    jiraShowReleased: 'false', 
+                                    name: 'CD_APP_VERSION',
+                                    description: 'jira版本号'
+                                ],
+                                extendedChoice(
+                                    description: '应用列表',
+                                    multiSelectDelimiter: ',',
+                                    name: 'CD_SELECTED_APPS',
+                                    quoteValue: false,
+                                    saveJSONParameterToFile: false,
+                                    type: 'PT_CHECKBOX',
+                                    value: env.CD_APPS,
+                                    visibleItemCount: 20
+                                ),
+                                extendedChoice(
+                                    description: '更新到服务器',
+                                    multiSelectDelimiter: ',',
+                                    name: 'CD_SELECTED_SERVERS',
+                                    quoteValue: false,
+                                    saveJSONParameterToFile: false,
+                                    type: 'PT_CHECKBOX',
+                                    value: env.CD_SERVERS,
+                                    visibleItemCount: 20
+                                ),
+                                text(
+                                    description: '更新说明', 
+                                    name: 'CD_REAMME'
+                                ),
+                            ]),
+                            disableConcurrentBuilds()
+                        ]
+                    )
+
                     if (env.CD_REPO == '') {
                         echo '未设置仓库http地址'
                         return 1
