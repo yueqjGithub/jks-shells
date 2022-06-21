@@ -12,6 +12,15 @@ properties(
                 description: 'jira版本号'
             ]
         ]),
+        listGitBranches(
+            name: 'CD_BRANCH',
+            description: 'git的tag/branch列表',
+            remoteURL: env.CD_REPO,
+            credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
+            defaultValue: 'main',
+            type: 'PT_BRANCH_TAG',
+            listSize: '1'
+        ),
         disableConcurrentBuilds()
     ]
 )
@@ -29,15 +38,7 @@ pipeline {
     // }
 
     parameters {
-        listGitBranches(
-            name: 'CD_BRANCH',
-            description: 'git的tag/branch列表',
-            remoteURL: env.CD_REPO,
-            credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
-            defaultValue: 'main',
-            type: 'PT_BRANCH_TAG',
-            listSize: '1'
-        )
+
 
         extendedChoice(
             description: '应用列表',
