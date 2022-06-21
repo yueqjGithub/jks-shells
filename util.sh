@@ -146,7 +146,7 @@ function avalon_web_cd_build_app() {
     cd "${WORKSPACE}/build" || exit 1
     local version=$(git rev-parse --short HEAD)
     cd "${WORKSPACE}/dist/${CD_ZIP_ROOT}" || exit 1
-    echo "${CD_REAMME}" | sed 's: :\n:g' >readme.txt
+    echo "${CD_README}" | sed 's: :\n:g' >readme.txt
     echo "${version}" >Version.txt
 
     #压缩并生成md5
