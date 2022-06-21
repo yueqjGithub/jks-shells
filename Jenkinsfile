@@ -172,7 +172,7 @@ pipeline {
                             def response = httpRequest url: env.CD_DINGDING_WEBHOOK,
                                                        httpMode: 'POST',
                                                        contentType: 'APPLICATION_JSON_UTF8',
-                                                       requestBody: '{
+                                                       requestBody: '''{
                                                             "msgtype": "actionCard",
                                                             "actionCard": {
                                                                 "title": "${env.CD_APP_VERSION}版本测试通过", 
@@ -185,7 +185,7 @@ pipeline {
                                                                     }
                                                                 ]
                                                             }                                                                  
-                                                       }'
+                                                       }'''
                             println("Status: "+response.status)
                             println("Content: "+response.content)
                         }
