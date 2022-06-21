@@ -256,13 +256,12 @@ EOF
 # 上传ftp
 function avalon_web_cd_upload_ftp(){
   cd "${WORKSPACE}/dist" || exit 1
-  local ftpUser=webuser
-  local ftpPassword=vy6Ks348a7s88
+
   zipname=$(cat ${WORKSPACE}/dist/zipname.txt)
 
   ftp -n <<-EOF
-  open ftp.avalongames.com
-  user ${ftpUser} ${ftpPassword}
+  open ${CD_FTP_HOST}
+  user ${CD_FTP_USER} ${CD_FTP_PASS}
   cd ${CD_FTP_PATH}
   bin
   put ${zipname}

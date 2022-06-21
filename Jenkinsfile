@@ -7,6 +7,9 @@ pipeline {
 
     environment {
         CD_RELEASE_CRED = 'e2972996-6557-42ba-8f14-045b927e177e'
+        CD_FTP_HOST = 'ftp.avalongames.com'
+        CD_FTP_USER = 'webuser'
+        CD_FTP_PASS = 'vy6Ks348a7s88'
         // CD_ZIP_ROOT_DIR_NAME= "web"
     }
 
