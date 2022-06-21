@@ -169,23 +169,27 @@ pipeline {
                 stage('通知1-钉钉群'){
                     steps {
                         script {
+                            def requestBody = """
+                                {
+                                    "msgtype": "actionCard",
+                                    "actionCard": {
+                                        "title": "${env.CD_APP_VERSION}版本测试通过", 
+                                        "text": "111"
+                                        "btnOrientation": "0", 
+                                        "btns": [
+                                            {
+                                                "title": "jira版本链接", 
+                                                "actionURL": "https://www.dingtalk.com/"
+                                            }
+                                        ]
+                                    }                                                                  
+                                }
+                            """
+
                             def response = httpRequest url: env.CD_DINGDING_WEBHOOK,
                                                        httpMode: 'POST',
-                                                       contentType: 'APPLICATION_JSON_UTF8',
-                                                       requestBody: '''{
-                                                            "msgtype": "actionCard",
-                                                            "actionCard": {
-                                                                "title": "${env.CD_APP_VERSION}版本测试通过", 
-                                                                "text": "111"
-                                                                "btnOrientation": "0", 
-                                                                "btns": [
-                                                                    {
-                                                                        "title": "jira版本链接", 
-                                                                        "actionURL": "https://www.dingtalk.com/"
-                                                                    }
-                                                                ]
-                                                            }                                                                  
-                                                       }'''
+                                                       contentType: 'APPLICATION_JSON',
+                                                       requestBody: requestBody
                             println("Status: "+response.status)
                             println("Content: "+response.content)
                         }
