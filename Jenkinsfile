@@ -170,7 +170,7 @@ pipeline {
         stage('邮件通知') {
             steps {
                 script {
-                    emailext body: '发生发撒', subject: '222', to: 'yangxu.lv@avalongames.cn'
+                    emailext body: '发生发撒', subject: '222', to: 'lvyangxu@avalongames.cn'
                 }
             }
         }
