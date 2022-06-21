@@ -137,12 +137,9 @@ function avalon_web_cd_build_app() {
         mv ${buildFile} "${destAppDir}" || exit 1
 
         #压缩并移动
-        cd "${WORKSPACE}/build" || exit 1
+        cd "${destDir}" || exit 1
         zip -r -q "${appName}.zip" "${appName}/"
-        [[ -d ${destDir} ]] || mkdir "${destDir}"
-        mv "${appName}.zip" "${destDir}" || exit 1
         rm -rf "${destAppDir}"
-
     done
 
     #生成readme和Version.txt
