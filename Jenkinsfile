@@ -2,14 +2,48 @@ properties(
     [
         [$class: 'JiraProjectProperty'], 
         parameters([
+            listGitBranches(
+                name: 'CD_BRANCH',
+                description: 'git的tag/branch列表',
+                remoteURL: env.CD_REPO,
+                credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
+                defaultValue: 'main',
+                type: 'PT_BRANCH_TAG',
+                listSize: '1'
+            ),
             [
                 $class: 'JiraVersionParameterDefinition', 
                 jiraProjectKey: env.CD_JIRA_KEY, 
                 jiraReleasePattern: '', 
                 jiraShowArchived: 'false', 
                 jiraShowReleased: 'false', 
-                name: 'CD_APP_VERSION'
-            ]
+                name: 'CD_APP_VERSION',
+                description: 'jira版本号'
+            ],
+            extendedChoice(
+                description: '应用列表',
+                multiSelectDelimiter: ',',
+                name: 'CD_SELECTED_APPS',
+                quoteValue: false,
+                saveJSONParameterToFile: false,
+                type: 'PT_CHECKBOX',
+                value: env.CD_APPS,
+                visibleItemCount: 20
+            ),
+            extendedChoice(
+                description: '更新到服务器',
+                multiSelectDelimiter: ',',
+                name: 'CD_SELECTED_SERVERS',
+                quoteValue: false,
+                saveJSONParameterToFile: false,
+                type: 'PT_CHECKBOX',
+                value: env.CD_SERVERS,
+                visibleItemCount: 20
+            ),
+            text(
+                description: '更新说明', 
+                name: 'CD_REAMME'
+            ),
         ]),
         disableConcurrentBuilds()
     ]
@@ -26,51 +60,6 @@ pipeline {
     // // CD_GIT_CRED = 'e2972996-6557-42ba-8f14-045b927e177e'
     //     CD_ZIP_ROOT_DIR_NAME= "web"
     // }
-
-    parameters {
-        listGitBranches(
-            name: 'CD_BRANCH',
-            description: 'git的tag/branch列表',
-            remoteURL: env.CD_REPO,
-            credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
-            defaultValue: 'main',
-            type: 'PT_BRANCH_TAG',
-            listSize: '1'
-        )
-
-        // jiraVersionParameterDefinition(
-        //     name: 'appVersion',
-        //     jiraProjectKey: env.CD_JIRA_KEY,
-        //     description: 'jira版本号'
-        // )
-
-        extendedChoice(
-            description: '应用列表',
-            multiSelectDelimiter: ',',
-            name: 'CD_SELECTED_APPS',
-            quoteValue: false,
-            saveJSONParameterToFile: false,
-            type: 'PT_CHECKBOX',
-            value: env.CD_APPS,
-            visibleItemCount: 20
-        )
-
-        extendedChoice(
-            description: '更新到服务器',
-            multiSelectDelimiter: ',',
-            name: 'CD_SELECTED_SERVERS',
-            quoteValue: false,
-            saveJSONParameterToFile: false,
-            type: 'PT_CHECKBOX',
-            value: env.CD_SERVERS,
-            visibleItemCount: 20
-        )
-
-        text(
-            description: '更新说明', 
-            name: 'CD_REAMME'
-        )
-    }
 
     stages {
         stage('参数检查') {
@@ -92,6 +81,15 @@ pipeline {
                         echo '未设置应用列表'
                         return 1
                     }
+                    if (env.CD_SERVERS == '') {
+                        echo '未设置更新服务器列表'
+                        return 1
+                    }
+                    if (env.CD_JIRA_KEY == '') {
+                        echo '未设置jira项目key'
+                        return 1
+                    }
+                    
                 }
             }
         }
