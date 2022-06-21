@@ -136,18 +136,17 @@ pipeline {
 
         stage('通知') {
             parallel{
-                stage('钉钉群通知'){
+                stage('通知1-钉钉群'){
                     steps {
                         sh 'echo 111'
                     } 
                 }
-                stage('发邮件'){
+                stage('通知2-邮件'){
                     steps {
                         sh 'echo 222'
                     } 
                 }
             }
-
         }
     }
 
