@@ -154,7 +154,7 @@ function avalon_web_cd_build_app() {
 
     #压缩并生成md5
     zipname=${JOB_BASE_NAME}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
-    echo zipname > ${WORKSPACE}/dist/zipname.txt
+    echo "${zipname}" > ${WORKSPACE}/dist/zipname.txt
 
     cd "${WORKSPACE}/dist" || exit 1
     zipname=${JOB_BASE_NAME}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
