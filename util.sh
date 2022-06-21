@@ -253,8 +253,10 @@ EOF
 
 # 上传ftp
 function avalon_web_cd_upload_ftp(){
+  cd "${WORKSPACE}/dist" || exit 1
   local ftpUser=webuser
   local ftpPassword=vy6Ks348a7s88
+  echo ${cd_run_zipname}
 
     ftp -n <<-EOF
   open ftp.avalongames.com
