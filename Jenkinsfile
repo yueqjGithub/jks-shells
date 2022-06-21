@@ -61,9 +61,7 @@ pipeline {
     //     CD_ZIP_ROOT_DIR_NAME= "web"
     // }
 
-    parameters {
-
-    }
+  
 
     stages {
         stage('参数检查') {
