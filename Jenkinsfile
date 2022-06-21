@@ -41,6 +41,13 @@ pipeline {
                         return 1
                     }
 
+                    if(env.CD_REPO ==~ '.*svn.avalongames.com.*') {
+                        eho "仓库类型=svn"
+                    }
+                    if(env.CD_REPO ==~ '.*git.avalongames.com.*') {
+                        eho "仓库类型=git"
+                    }
+
                     def propArr = [
                             [$class: 'JiraProjectProperty'], 
                             parameters([
