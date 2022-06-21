@@ -5,12 +5,10 @@ pipeline {
         }
     }
 
-    // environment {
-    // // CD_GIT_CRED = 'e2972996-6557-42ba-8f14-045b927e177e'
-    //     CD_ZIP_ROOT_DIR_NAME= "web"
-    // }
-
-  
+    environment {
+        CD_RELEASE_CRED = 'e2972996-6557-42ba-8f14-045b927e177e'
+        // CD_ZIP_ROOT_DIR_NAME= "web"
+    }
 
     stages {
         stage('参数设置') {
@@ -43,61 +41,86 @@ pipeline {
 
                     if(env.CD_REPO ==~ '.*svn.avalongames.com.*') {
                         echo "仓库类型=svn"
+                        env.CD_REPO_TYPE = "svn"
                     }
                     if(env.CD_REPO ==~ '.*git.avalongames.com.*') {
                         echo "仓库类型=git"
+                        env.CD_REPO_TYPE = "git"
                     }
 
-                    def propArr = [
-                            [$class: 'JiraProjectProperty'], 
-                            parameters([
-                                listGitBranches(
-                                    name: 'CD_BRANCH',
-                                    description: 'git的tag/branch列表',
-                                    remoteURL: env.CD_REPO,
-                                    credentialsId: 'e2972996-6557-42ba-8f14-045b927e177e',
-                                    defaultValue: 'main',
-                                    type: 'PT_BRANCH_TAG',
-                                    listSize: '1'
-                                ),
-                                [
-                                    $class: 'JiraVersionParameterDefinition', 
-                                    jiraProjectKey: env.CD_JIRA_KEY, 
-                                    jiraReleasePattern: '', 
-                                    jiraShowArchived: 'false', 
-                                    jiraShowReleased: 'false', 
-                                    name: 'CD_APP_VERSION',
-                                    description: 'jira版本号'
-                                ],
-                                extendedChoice(
-                                    description: '应用列表',
-                                    multiSelectDelimiter: ',',
-                                    name: 'CD_SELECTED_APPS',
-                                    quoteValue: false,
-                                    saveJSONParameterToFile: false,
-                                    type: 'PT_CHECKBOX',
-                                    value: env.CD_APPS,
-                                    visibleItemCount: 20
-                                ),
-                                extendedChoice(
-                                    description: '更新到服务器',
-                                    multiSelectDelimiter: ',',
-                                    name: 'CD_SELECTED_SERVERS',
-                                    quoteValue: false,
-                                    saveJSONParameterToFile: false,
-                                    type: 'PT_CHECKBOX',
-                                    value: env.CD_SERVERS,
-                                    visibleItemCount: 20
-                                ),
-                                text(
-                                    description: '更新说明', 
-                                    name: 'CD_README'
-                                ),
-                            ]),
-                            disableConcurrentBuilds()
-                        ]
+                    def buildParams = []
 
-                    properties(propArr)
+                    if (env.CD_REPO_TYPE == 'git'){
+                        buildParams.add(
+                            listGitBranches(
+                                name: 'CD_BRANCH',
+                                description: 'git的tag/branch列表',
+                                remoteURL: env.CD_REPO,
+                                credentialsId: env.CD_RELEASE_CRED,
+                                defaultValue: 'main',
+                                type: 'PT_BRANCH_TAG',
+                                listSize: '1'
+                            )
+                        )
+                    }
+                    if (env.CD_REPO_TYPE == 'svn'){
+                        buildParams.addAll(
+                            [
+                                $class: 'ListSubversionTagsParameterDefinition', 
+                                credentialsId: env.CD_RELEASE_CRED, 
+                                defaultValue: '', 
+                                maxTags: '', 
+                                name: 'CD_BRANCH', 
+                                reverseByDate: false, 
+                                reverseByName: false, 
+                                tagsDir: env.CD_REPO, 
+                                tagsFilter: ''
+                            ],
+                            string(defaultValue: 'latest', description: 'svn版本号,latest=最新', name: 'CD_SVN_VERSION')
+                        )                        
+                    }                    
+
+                    buildParams.addAll(
+                        [
+                            $class: 'JiraVersionParameterDefinition', 
+                            jiraProjectKey: env.CD_JIRA_KEY, 
+                            jiraReleasePattern: '', 
+                            jiraShowArchived: 'false', 
+                            jiraShowReleased: 'false', 
+                            name: 'CD_APP_VERSION',
+                            description: 'jira版本号'
+                        ],
+                        extendedChoice(
+                            description: '应用列表',
+                            multiSelectDelimiter: ',',
+                            name: 'CD_SELECTED_APPS',
+                            quoteValue: false,
+                            saveJSONParameterToFile: false,
+                            type: 'PT_CHECKBOX',
+                            value: env.CD_APPS,
+                            visibleItemCount: 20
+                        ),
+                        extendedChoice(
+                            description: '更新到服务器',
+                            multiSelectDelimiter: ',',
+                            name: 'CD_SELECTED_SERVERS',
+                            quoteValue: false,
+                            saveJSONParameterToFile: false,
+                            type: 'PT_CHECKBOX',
+                            value: env.CD_SERVERS,
+                            visibleItemCount: 20
+                        ),
+                        text(
+                            description: '更新说明', 
+                            name: 'CD_README'
+                        )
+                    )
+
+                    properties([
+                        [$class: 'JiraProjectProperty'], 
+                        parameters(buildParams),
+                        disableConcurrentBuilds(),
+                    ])
                
                 }
             }

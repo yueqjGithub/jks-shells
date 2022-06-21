@@ -11,7 +11,7 @@ function avalon_web_cd_clear_build() {
 
 # 拉取仓库代码,应用列表位于 ${WORKSPACE}/build/ 目录下
 function avalon_web_cd_pull_repo() {
-    if [[ ${CD_REPO} == *git.avalongames.com* ]]; then
+    if [[ ${CD_REPO_TYPE} == "git" ]]; then
         echo '从公司内网git拉取代码'
         #http协议转为git协议
         local gitProtocolUrl=$(echo "${CD_REPO}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g")
@@ -21,7 +21,7 @@ function avalon_web_cd_pull_repo() {
         mv ${WORKSPACE}/${projectName} ${WORKSPACE}/build
         cd ${WORKSPACE}/build || exit 1
         return 0
-    elif [[ ${CD_REPO} == *svn.avalongames.com* ]]; then
+    elif [[ ${CD_REPO_TYPE} == "svn" ]]; then
         echo '从公司内网svn拉取代码'
         mkdir ${WORKSPACE}/build
         cd ${WORKSPACE}/build || exit 1
