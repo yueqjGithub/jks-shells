@@ -19,7 +19,31 @@ properties(
                 jiraShowReleased: 'false', 
                 name: 'CD_APP_VERSION',
                 description: 'jira版本号'
-            ]
+            ],
+            extendedChoice(
+                description: '应用列表',
+                multiSelectDelimiter: ',',
+                name: 'CD_SELECTED_APPS',
+                quoteValue: false,
+                saveJSONParameterToFile: false,
+                type: 'PT_CHECKBOX',
+                value: env.CD_APPS,
+                visibleItemCount: 20
+            ),
+            extendedChoice(
+                description: '更新到服务器',
+                multiSelectDelimiter: ',',
+                name: 'CD_SELECTED_SERVERS',
+                quoteValue: false,
+                saveJSONParameterToFile: false,
+                type: 'PT_CHECKBOX',
+                value: env.CD_SERVERS,
+                visibleItemCount: 20
+            ),
+            text(
+                description: '更新说明', 
+                name: 'CD_REAMME'
+            ),
         ]),
         disableConcurrentBuilds()
     ]
@@ -39,33 +63,6 @@ pipeline {
 
     parameters {
 
-
-        extendedChoice(
-            description: '应用列表',
-            multiSelectDelimiter: ',',
-            name: 'CD_SELECTED_APPS',
-            quoteValue: false,
-            saveJSONParameterToFile: false,
-            type: 'PT_CHECKBOX',
-            value: env.CD_APPS,
-            visibleItemCount: 20
-        )
-
-        extendedChoice(
-            description: '更新到服务器',
-            multiSelectDelimiter: ',',
-            name: 'CD_SELECTED_SERVERS',
-            quoteValue: false,
-            saveJSONParameterToFile: false,
-            type: 'PT_CHECKBOX',
-            value: env.CD_SERVERS,
-            visibleItemCount: 20
-        )
-
-        text(
-            description: '更新说明', 
-            name: 'CD_REAMME'
-        )
     }
 
     stages {
