@@ -153,13 +153,15 @@ function avalon_web_cd_build_app() {
     echo "${version}" >Version.txt
 
     #压缩并生成md5
+    zipname=${JOB_BASE_NAME}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
+    echo zipname > ${WORKSPACE}/dist/zipname.txt
+
     cd "${WORKSPACE}/dist" || exit 1
-    cd_run_zipname=${JOB_BASE_NAME}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
-    cd_run_txtname=${cd_run_zipname}.txt
-    zip -r -q "${cd_run_zipname}" ${CD_ZIP_ROOT}/
-    md5sum "${cd_run_zipname}" | cut -d ' ' -f1 | tee "${cd_run_txtname}"
-    export cd_run_zipname=${cd_run_zipname}
-    export cd_run_txtname=${cd_run_txtname}
+    zipname=${JOB_BASE_NAME}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}.zip
+    zip -r -q "${zipname}" ${CD_ZIP_ROOT}/
+    md5sum "${zipname}" | cut -d ' ' -f1 | tee "${zipname}.txt"
+
+
 }
 
 # 更新到服务器
@@ -168,6 +170,7 @@ function avalon_web_cd_update_to_server(){
     IFS=","
     updateTargetList=(${CD_SELECTED_SERVERS})
     IFS="$OLD_IFS"
+    zipname=$(cat ${WORKSPACE}/dist/zipname.txt)
     for ut in ${updateTargetList[@]}; do
         local targetName=$(echo "${ut}" | sed "s/(.*)//g")
         echo "#自动更新到"${targetName}
@@ -178,16 +181,16 @@ function avalon_web_cd_update_to_server(){
         local willSudo=$(echo "${paramStr}" | sed "s/.*是否sudo://g" | sed "s/，.*//g")
         local deployDir=$(echo "${paramStr}" | sed "s/.*部署目录://g" | sed "s/，.*//g")
 
-        scp -P ${port} ${WORKSPACE}/dist/${cd_run_zipname} ${user}@${ip}:/tmp/
+        scp -P ${port} ${WORKSPACE}/dist/${zipname} ${user}@${ip}:/tmp/
 cat >${WORKSPACE}/dist/update_${JOB_BASE_NAME}.sh <<EOF
 #!/usr/bin/env bash
 echo "#解压并移动到指定目录"
-mv -f /tmp/${cd_run_zipname} ${deployDir}/
+mv -f /tmp/${zipname} ${deployDir}/
 cd ${deployDir}
-unzip -o ${cd_run_zipname}
+unzip -o ${zipname}
 mv -f ${deployDir}/web/*.zip ${deployDir}/
 rm -rf ${deployDir}/web/
-rm -f ${cd_run_zipname}
+rm -f ${zipname}
 
 echo "#遍历目录"
 for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
@@ -258,15 +261,15 @@ function avalon_web_cd_upload_ftp(){
   cd "${WORKSPACE}/dist" || exit 1
   local ftpUser=webuser
   local ftpPassword=vy6Ks348a7s88
-  echo ${cd_run_zipname}
+  zipname=$(cat ${WORKSPACE}/dist/zipname.txt)
 
-    ftp -n <<-EOF
+  ftp -n <<-EOF
   open ftp.avalongames.com
   user ${ftpUser} ${ftpPassword}
   cd ${CD_FTP_PATH}
   bin
-  put ${cd_run_zipname}
-  put ${cd_run_txtname}
+  put ${zipname}
+  put ${zipname}.txt
   bye
 EOF
     #检查ftp上传是否成功
@@ -279,7 +282,7 @@ EOF
     local archivePath=${WORKSPACE}/dist/${releaseinfoName}
     cat >>${archivePath} <<EOF
   更新包名:
-    ${cd_run_zipname}  
+    ${zipname}  
 EOF
 
     if [[ -n ${readme} ]]; then
@@ -289,5 +292,5 @@ EOF
 EOF
     fi
     echo "web归档文件【build号】= ${BUILD_NUMBER} ，【文件名】= ${releaseinfoName} "
-    echo "包名：${cd_run_zipname}"
+    echo "包名：${zipname}"
 }
