@@ -154,9 +154,6 @@ pipeline {
         }        
 
         stage('测试结果') {
-            when {
-                expression { env.CD_HAS_TEST_RESULT != 'false' }
-            }
             steps {
                 input(
                     message: '测试通过',
@@ -176,7 +173,6 @@ pipeline {
                     expression { env.CD_MAIL_TO != null }
                     expression { env.CD_PROJECT_NAME != null }
                 }
-                
             }
             steps {
                 script {
@@ -191,7 +187,7 @@ pipeline {
 
         stage('归档'){
             steps {
-                archive 'dist/*.releaseinfo'
+                archiveArtifacts artifacts: 'dist/*.releaseinfo', defaultExcludes: false, followSymlinks: false
             }
         }
     }
