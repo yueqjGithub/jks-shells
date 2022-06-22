@@ -167,23 +167,23 @@ pipeline {
             }            
         }
 
-        stage('邮件通知') {
-            when {
-                allOf {
-                    expression { env.CD_MAIL_TO != null }
-                    expression { env.CD_PROJECT_NAME != null }
-                }
-            }
-            steps {
-                script {
-                    def body = readFile file: 'email_body.html'
-                    mail body: body, 
-                         subject: "【${env.CD_PROJECT_NAME}】${env.CD_APP_VERSION}版本Releasenotes", 
-                         to: env.CD_MAIL_TO,
-                         cc: env.CD_MAIL_CC
-                }
-            }
-        }
+        // stage('邮件通知') {
+        //     when {
+        //         allOf {
+        //             expression { env.CD_MAIL_TO != null }
+        //             expression { env.CD_PROJECT_NAME != null }
+        //         }
+        //     }
+        //     steps {
+        //         script {
+        //             def body = readFile file: 'email_body.html'
+        //             mail body: body, 
+        //                  subject: "【${env.CD_PROJECT_NAME}】${env.CD_APP_VERSION}版本Releasenotes", 
+        //                  to: env.CD_MAIL_TO,
+        //                  cc: env.CD_MAIL_CC
+        //         }
+        //     }
+        // }
 
         stage('归档'){
             steps {
