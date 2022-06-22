@@ -154,6 +154,9 @@ pipeline {
         }        
 
         stage('测试结果') {
+            when {
+                expression { env.CD_HAS_TEST_RESULT != 'false' }
+            }
             steps {
                 input(
                     message: '测试通过',
@@ -183,6 +186,12 @@ pipeline {
                          to: env.CD_MAIL_TO,
                          cc: env.CD_MAIL_CC
                 }
+            }
+        }
+
+        stage('归档'){
+            steps {
+                archive 'dist/*.releaseinfo'
             }
         }
     }
