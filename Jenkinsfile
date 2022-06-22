@@ -178,7 +178,7 @@ pipeline {
                         mail body: body, 
                              subject: "【${env.CD_PROJECT_NAME}】${env.CD_APP_VERSION}版本Releasenotes", 
                              to: env.CD_MAIL_TO,
-                             cc: env.CD_MAIL_CC,
+                             cc: env.CD_MAIL_CC
                             //  from: "${env.CD_PROJECT_NAME}Release"
                     }
                 }
