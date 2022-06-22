@@ -179,7 +179,7 @@ pipeline {
                              subject: "【${env.CD_PROJECT_NAME}】${env.CD_APP_VERSION}版本Releasenotes", 
                              to: env.CD_MAIL_TO,
                              cc: env.CD_MAIL_CC,
-                             from: "${env.CD_PROJECT_NAME}Release"
+                            //  from: "${env.CD_PROJECT_NAME}Release"
                     }
                 }
             }
