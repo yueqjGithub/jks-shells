@@ -169,10 +169,12 @@ pipeline {
 
         stage('邮件通知') {
             steps {
+                when {
+                    expression {
+                        return env.CD_MAIL_TO !== ""
+                    }
+                }
                 script {
-                    if(env.CD_MAIL_TO == '') {
-                        echo '未设置收件人,跳过邮件通知'
-                    }else{
                         // def body = 'cat ./email_body.html1的撒旦11'
                         def body = readFile file: 'email_body.html'
                         mail body: body, 
@@ -180,16 +182,9 @@ pipeline {
                              to: env.CD_MAIL_TO,
                              cc: env.CD_MAIL_CC
                             //  from: "${env.CD_PROJECT_NAME}Release"
-                    }
                 }
             }
         }
     }
 
-    // post {
-    //     // 构建后删除整个工作目录
-    //     always {
-    //         cleanWs()
-    //     }
-    // }
 }
