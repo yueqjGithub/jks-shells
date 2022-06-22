@@ -29,6 +29,4 @@ CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否su
 #ftp上传地址
 CD_FTP_PATH=corp/OaTools
 #收件人
-CD_MAIL_TO=webdev@avalongames.cn
-#抄送
-CD_MAIL_CC=lvyangxu@avalongames.cn
+CD_MAIL_TO=lvyangxu@avalongames.cn
