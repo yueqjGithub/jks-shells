@@ -28,9 +28,10 @@ CD_JIRA_KEY=OA
 CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)
 #ftp上传地址
 CD_FTP_PATH=corp/OaTools
-#项目名称,影响邮件标题和发件人(可选)
+
+<!-- #项目名称,影响邮件标题和发件人(可选)
 CD_PROJECT_NAME=OA工具
 #邮件收件人(可选)
 CD_MAIL_TO=lvyangxu@avalongames.cn
 #邮件抄送人(可选)
-CD_MAIL_CC=lvyangxu@avalongames.cn
+CD_MAIL_CC=lvyangxu@avalongames.cn -->
