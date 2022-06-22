@@ -169,10 +169,11 @@ pipeline {
 
         stage('邮件通知') {
             when {
-                expression {
-                    echo env.CD_MAIL_TO != ""
-                    return env.CD_MAIL_TO != ""
+                allOf {
+                    expression { env.CD_MAIL_TO != null }
+                    expression { env.CD_PROJECT_NAME != null }
                 }
+                
             }
             steps {
                 script {
