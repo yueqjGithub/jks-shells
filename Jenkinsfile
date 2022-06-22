@@ -172,7 +172,7 @@ pipeline {
                 script {
                     emailext body: '<div>发生发撒</div>\n<div>发生发ffsfs撒</div>', 
                              subject: '222', 
-                             to: 'yangxu.lv@avalongames.cn'
+                             to: 'lvyangxu@avalongames.cn'
                 }
             }
         }
