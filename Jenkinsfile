@@ -168,20 +168,18 @@ pipeline {
         }
 
         stage('邮件通知') {
-            steps {
-                when {
-                    expression {
-                        return env.CD_MAIL_TO != ""
-                    }
+            when {
+                expression {
+                    return env.CD_MAIL_TO != ""
                 }
+            }
+            steps {
                 script {
-                        // def body = 'cat ./email_body.html1的撒旦11'
-                        def body = readFile file: 'email_body.html'
-                        mail body: body, 
-                             subject: "【${env.CD_PROJECT_NAME}】${env.CD_APP_VERSION}版本Releasenotes", 
-                             to: env.CD_MAIL_TO,
-                             cc: env.CD_MAIL_CC
-                            //  from: "${env.CD_PROJECT_NAME}Release"
+                    def body = readFile file: 'email_body.html'
+                    mail body: body, 
+                         subject: "【${env.CD_PROJECT_NAME}】${env.CD_APP_VERSION}版本Releasenotes", 
+                         to: env.CD_MAIL_TO,
+                         cc: env.CD_MAIL_CC
                 }
             }
         }
