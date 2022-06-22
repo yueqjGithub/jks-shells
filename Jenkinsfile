@@ -171,7 +171,7 @@ pipeline {
             steps {
                 when {
                     expression {
-                        return env.CD_MAIL_TO !== ""
+                        return env.CD_MAIL_TO != ""
                     }
                 }
                 script {
