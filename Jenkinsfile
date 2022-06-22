@@ -170,6 +170,7 @@ pipeline {
         stage('邮件通知') {
             when {
                 expression {
+                    echo env.CD_MAIL_TO != ""
                     return env.CD_MAIL_TO != ""
                 }
             }
