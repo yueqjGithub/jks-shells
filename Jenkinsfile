@@ -10,7 +10,6 @@ pipeline {
         CD_FTP_HOST = 'ftp.avalongames.com'
         CD_FTP_USER = 'webuser'
         CD_FTP_PASS = 'vy6Ks348a7s88'
-        // CD_ZIP_ROOT_DIR_NAME= "web"
     }
 
     stages {
