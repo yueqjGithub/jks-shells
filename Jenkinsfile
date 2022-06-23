@@ -16,27 +16,24 @@ pipeline {
         stage('参数设置') {
             steps {
                 script {
-                    if (env.CD_REPO == '') {
+                    if (env.CD_REPO == null || env.CD_REPO == '') {
                         echo '未设置仓库http地址'
                         return 1
                     }
-                    if (env.CD_BRANCH == '') {
+                    if (env.CD_BRANCH == null || env.CD_BRANCH == '') {
                         echo '未设置仓库分支'
                         return 1
                     }
-                    if (env.CD_REPO == 'https://svn*' && env.CD_SVN_VERSION == '' ) {
-                        echo '未设置svn版本号'
-                        return 1
-                    }
-                    if (env.CD_APPS == '') {
+
+                    if (env.CD_APPS == null || env.CD_APPS == '') {
                         echo '未设置应用列表'
                         return 1
                     }
-                    if (env.CD_SERVERS == '') {
+                    if (env.CD_SERVERS == null || env.CD_SERVERS == '') {
                         echo '未设置更新服务器列表'
                         return 1
                     }
-                    if (env.CD_JIRA_KEY == '') {
+                    if (env.CD_JIRA_KEY == null || env.CD_JIRA_KEY == '') {
                         echo '未设置jira项目key'
                         return 1
                     }
@@ -44,6 +41,10 @@ pipeline {
                     if(env.CD_REPO ==~ '.*svn.avalongames.com.*') {
                         echo "仓库类型=svn"
                         env.CD_REPO_TYPE = "svn"
+                        if (env.CD_SVN_VERSION == null || env.CD_SVN_VERSION == '') {
+                            echo '未设置svn版本号'
+                            return 1
+                        }
                     }
                     if(env.CD_REPO ==~ '.*git.avalongames.com.*') {
                         echo "仓库类型=git"
