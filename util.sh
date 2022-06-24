@@ -199,16 +199,16 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
       local configFileType="json"
       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
       echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
-      pm2 delete \${appName}.\${configFileType} >/dev/null 2>&1
+      pm2 delete \${appName}.\${configFileType}
       echo "删除原目录"
       rm -rf \${appName}
-      unzip -o \${appName}.zip >/dev/null 2>&1
-      pm2 start \${appName}.\${configFileType} >/dev/null 2>&1
+      unzip -o \${appName}.zip
+      pm2 start \${appName}.\${configFileType}
     elif [[ -f \${appName}/.env ]]; then
       echo "laravel应用需要备份.env文件"
       mv \${appName}/.env \${appName}.env
       rm -rf \${appName}
-      unzip -o \${appName}.zip >/dev/null 2>&1
+      unzip -o \${appName}.zip
       mv \${appName}.env \${appName}/.env 
     elif [[ -f \${appName}/\${appName}.jar ]]; then
       echo "java应用需要备份.properties文件"
@@ -220,12 +220,12 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
       fi
       mv \${appName}/\${appName}.properties \${appName}.properties
       rm -rf \${appName}
-      unzip -o \${appName}.zip >/dev/null 2>&1
+      unzip -o \${appName}.zip
       mv \${appName}.properties \${appName}/\${appName}.properties       
-      nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${appName}.jar --config-path=\${appName}/\${appName}.properties  >/dev/null 2>&1 &
+      nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${appName}.jar --config-path=\${appName}/\${appName}.properties &
     else
       rm -rf \${appName}
-      unzip -o \${appName}.zip >/dev/null 2>&1
+      unzip -o \${appName}.zip
     fi
 
     if [[ -f \${appName}/custom-build/before-app-start.sh ]]
