@@ -195,13 +195,15 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
     appName=\`echo \${i} | cut -f 1 -d .\`
 
     echo "#开始更新\${appName}应用"
-    if [[ -f \${appName}.json ]]; then
-      echo "检测到文件\${appName}.json,判断为node应用,使用pm2更新"
-      pm2 delete \${appName}.json >/dev/null 2>&1
+    if [[ -f \${appName}.json ]] || [[ -f \${appName}.yaml ]]; then
+      local configFileType="json"
+      configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
+      echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
+      pm2 delete \${appName}.\${configFileType} >/dev/null 2>&1
       echo "删除原目录"
       rm -rf \${appName}
       unzip -o \${appName}.zip >/dev/null 2>&1
-      pm2 start \${appName}.json >/dev/null 2>&1
+      pm2 start \${appName}.\${configFileType} >/dev/null 2>&1
     elif [[ -f \${appName}/.env ]]; then
       echo "laravel应用需要备份.env文件"
       mv \${appName}/.env \${appName}.env
