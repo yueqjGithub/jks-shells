@@ -159,7 +159,7 @@ pipeline {
                     message: '测试通过',
                 )
 
-                buildName "${env.BUILD_NUMBER}-release-${env.CD_APP_VERSION}"
+                buildName "${env.BUILD_NUMBER}-${env.CD_APP_VERSION}.release"
             }
         }
 
