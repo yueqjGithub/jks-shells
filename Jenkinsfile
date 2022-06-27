@@ -125,6 +125,7 @@ pipeline {
                         disableConcurrentBuilds(),
                     ])
                
+                    buildName "${BUILD_NUMNER}-${CD_APP_VERSION}"
                 }
             }
         }
