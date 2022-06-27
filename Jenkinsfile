@@ -125,7 +125,7 @@ pipeline {
                         disableConcurrentBuilds(),
                     ])
                
-                    buildName "${env.BUILD_NUMNER}-${env.CD_APP_VERSION}"
+                    buildName "${env.BUILD_NUMBER}-${env.CD_APP_VERSION}"
                 }
             }
         }
