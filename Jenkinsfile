@@ -125,7 +125,6 @@ pipeline {
                         disableConcurrentBuilds(),
                     ])
                
-                    buildName "${env.BUILD_NUMBER}-${env.CD_APP_VERSION}"
                 }
             }
         }
@@ -159,6 +158,8 @@ pipeline {
                 input(
                     message: '测试通过',
                 )
+
+                buildName "${env.BUILD_NUMBER}-release-${env.CD_APP_VERSION}"
             }
         }
 
