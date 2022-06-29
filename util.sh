@@ -144,7 +144,7 @@ function avalon_web_cd_build_app() {
 
     #生成readme和Version.txt
     cd "${WORKSPACE}/build" || exit 1
-    local version=$(git rev-parse --short HEAD)
+    local version=$(git rev-list --all \| wc -l)
     cd "${WORKSPACE}/dist/${CD_ZIP_ROOT}" || exit 1
     echo "${CD_README}" | sed 's: :\n:g' >readme.txt
     echo "${version}" >Version.txt
