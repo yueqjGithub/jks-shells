@@ -196,7 +196,7 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
 
     echo "#开始更新\${appName}应用"
     if [[ -f \${appName}.json ]] || [[ -f \${appName}.yaml ]]; then
-      local configFileType="json"
+      configFileType="json"
       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
       echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
       pm2 delete \${appName}.\${configFileType}
