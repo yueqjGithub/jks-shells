@@ -51,6 +51,11 @@ pipeline {
                         env.CD_REPO_TYPE = "git"
                     }
 
+                    if(env.CD_ZIP_PREFIX == null || env.CD_ZIP_PREFIX == ''){
+                        echo "未配置包名前缀，默认使用jenkins工程名称${env.JOB_BASE_NAME}"
+                        env.CD_ZIP_PREFIX=env.JOB_BASE_NAME
+                    }
+
                     def buildParams = []
 
                     if (env.CD_REPO_TYPE == 'git'){
