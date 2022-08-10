@@ -95,8 +95,7 @@ pipeline {
                         echo '未配置版本号W位，包名不追加该段'
                     }else{
                         def arr = []
-                        echo env.CD_VERSION_W_DATA
-                        arr = env.CD_VERSION_W_DATA.split(',')
+                        arr = env.CD_VERSION_W_DATA.tokenize(",")
                         buildParams.add(
                             choice(
                                 choices: arr, 
