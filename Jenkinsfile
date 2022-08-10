@@ -79,7 +79,7 @@ pipeline {
                         )                        
                     }                    
 
-                    buildParams.addAll(
+                    buildParams.add(
                         [
                             $class: 'JiraVersionParameterDefinition', 
                             jiraProjectKey: env.CD_JIRA_KEY, 
@@ -95,7 +95,11 @@ pipeline {
                         echo '未配置版本号W位，包名不追加该段'
                     }else{
                         buildParams.addAll(
-                            choice(choices: env.CD_VERSION_W_DATA, description: '版本号W位', name: 'CD_VERSION_W')
+                            choice(
+                                choices: env.CD_VERSION_W_DATA, 
+                                description: '版本号W位', 
+                                name: 'CD_VERSION_W'
+                            )
                         )
                     }
 
