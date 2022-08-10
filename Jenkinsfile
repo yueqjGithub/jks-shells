@@ -192,6 +192,13 @@ pipeline {
         //     }
         // }
 
+//         <!-- #项目名称,影响邮件标题和发件人(可选)
+// CD_PROJECT_NAME=OA工具
+// #邮件收件人(可选)
+// CD_MAIL_TO=lvyangxu@avalongames.cn
+// #邮件抄送人(可选)
+// CD_MAIL_CC=lvyangxu@avalongames.cn -->
+
         stage('归档'){
             steps {
                 archiveArtifacts artifacts: 'dist/*.releaseinfo', defaultExcludes: false, followSymlinks: false

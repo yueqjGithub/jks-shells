@@ -16,6 +16,7 @@
 ### 使用教程
 + 每个应用支持自定义脚本，执行路径为应用根目录/custom-build/build.sh，在压缩成zip前执行
 
+```
 #仓库地址，git仓库末尾需要包含.git
 CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git
 #应用列表，根目录为仓库
@@ -31,9 +32,5 @@ CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否su
 #ftp上传地址
 CD_FTP_PATH=corp/OaTools
 
-<!-- #项目名称,影响邮件标题和发件人(可选)
-CD_PROJECT_NAME=OA工具
-#邮件收件人(可选)
-CD_MAIL_TO=lvyangxu@avalongames.cn
-#邮件抄送人(可选)
-CD_MAIL_CC=lvyangxu@avalongames.cn -->
+
+```
