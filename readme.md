@@ -7,7 +7,10 @@
 ## 开始使用
 
 ### 使用条件
-+ jenkins项目必须时pipeline类型的，配置从git拉取脚本，仓库地址http://git.avalongames.com/web_util/avalon_web_cd.git，凭据选web，分支选main
++ jenkins项目必须时pipeline类型的，配置从git拉取脚本
+> 仓库地址 http://git.avalongames.com/web_util/avalon_web_cd.git
+> 凭据选 web
+> 分支选 main
 + 只适应于web平台内部项目，目前支持web前端，node后端应用，laravel应用，java应用，未识别的类型不做额外处理
 + 代码仓库只支持公司svn或公司git
 + 更新应用时，node应用需要在应用同级目录配置一个同名的pm2配置文件*.json作为启动/停止脚本，比如IAMManage和IAMManage.json
