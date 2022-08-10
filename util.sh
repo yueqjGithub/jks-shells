@@ -156,6 +156,7 @@ function avalon_web_cd_build_app() {
     fi
     zipname="${zipname}.zip"
     echo "${zipname}"
+    echo "${CD_VERSION_W}"
 
     echo "${zipname}" > ${WORKSPACE}/dist/zipname.txt
 
