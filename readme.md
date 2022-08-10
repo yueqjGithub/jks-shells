@@ -27,7 +27,7 @@ CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git
 CD_APPS=FrontEnd,OaToolsManage
 #zip包的根目录
 CD_ZIP_ROOT=web
-#zip包的前缀，运维有强制要求，不配置时默认使用jenkins工程名
+#zip包的前缀，可选参数，运维有强制要求，不配置时默认使用jenkins工程名
 CD_ZIP_PREFIX=Web-OaTools
 #jira项目的key
 CD_JIRA_KEY=OA
@@ -35,7 +35,7 @@ CD_JIRA_KEY=OA
 CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)
 #ftp上传地址
 CD_FTP_PATH=corp/OaTools
-#版本号W位，影响包名
+#版本号W位，可选参数，影响包名
 CD_VERSION_W_DATA=release,cn,global,dev
 
 ```
