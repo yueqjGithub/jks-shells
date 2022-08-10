@@ -96,7 +96,7 @@ pipeline {
                     }else{
                         def arr = []
                         echo env.CD_VERSION_W_DATA
-                        arr = env.CD_VERSION_W_DATA.split(",")
+                        arr = "release,cn,global,dev".split(",")
                         buildParams.add(
                             choice(
                                 choices: arr, 
