@@ -19,9 +19,6 @@ pipeline {
                     if (env.CD_REPO == null || env.CD_REPO == '') {
                         error '未设置仓库http地址'
                     }
-                    if (env.CD_BRANCH == null || env.CD_BRANCH == '') {
-                        error '未设置仓库分支'
-                    }
 
                     if (env.CD_APPS == null || env.CD_APPS == '') {
                         error '未设置应用列表'
@@ -124,6 +121,11 @@ pipeline {
                         disableConcurrentBuilds(),
                     ])
                
+                    // 分支是参数化构建传递的
+                    if (env.CD_BRANCH == null || env.CD_BRANCH == '') {
+                        error '未设置仓库分支'
+                    }            
+
                 }
             }
         }
