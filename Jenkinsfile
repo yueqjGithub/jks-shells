@@ -89,6 +89,17 @@ pipeline {
                             name: 'CD_APP_VERSION',
                             description: 'jira版本号'
                         ],
+                    )
+
+                    if (env.CD_VERSION_W == null | env.CD_VERSION_W == ''){
+                        echo '未配置版本号W位，包名不追加该段'
+                    }else{
+                        buildParams.addAll(
+                            parameters([choice(choices: env.CD_VERSION_W_DATA, description: '版本号W位', name: 'CD_VERSION_W')])
+                        )
+                    }
+
+                    buildParams.addAll(
                         extendedChoice(
                             description: '应用列表',
                             multiSelectDelimiter: ',',

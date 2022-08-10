@@ -36,6 +36,6 @@ CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否su
 #ftp上传地址
 CD_FTP_PATH=corp/OaTools
 #版本号W位，影响包名
-CD_VERSION_W=release,cn,global,dev
+CD_VERSION_W_DATA=release,cn,global,dev
 
 ```
