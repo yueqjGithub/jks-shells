@@ -195,22 +195,25 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
     appName=\`echo \${i} | cut -f 1 -d .\`
 
     echo "#开始更新\${appName}应用"
+    appType=
     if [[ -f \${appName}.json ]] || [[ -f \${appName}.yaml ]]; then
       configFileType="json"
       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
+      appType=pm2
       echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
       pm2 delete \${appName}.\${configFileType}
       echo "删除原目录"
       rm -rf \${appName}
       unzip -o \${appName}.zip
-      pm2 start \${appName}.\${configFileType}
     elif [[ -f \${appName}/.env ]]; then
+      appType=php
       echo "laravel应用需要备份.env文件"
       mv \${appName}/.env \${appName}.env
       rm -rf \${appName}
       unzip -o \${appName}.zip
       mv \${appName}.env \${appName}/.env 
     elif [[ -f \${appName}/\${appName}.jar ]]; then
+      appType=java
       echo "java应用需要备份.properties文件"
       pid=$(ps ax | grep -i \${appName}.jar |grep java | grep -v grep | awk '{print $1}') || exit 1
       if [ -z "\$pid" ] ; then
@@ -222,7 +225,6 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
       rm -rf \${appName}
       unzip -o \${appName}.zip
       mv \${appName}.properties \${appName}/\${appName}.properties       
-      nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${appName}.jar --config-path=\${appName}/\${appName}.properties &
     else
       rm -rf \${appName}
       unzip -o \${appName}.zip
@@ -238,6 +240,13 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
       echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
     fi
 
+    # 启动服务器，仅pm2和java需要执行启动
+    if [[ \${appType} == 'pm2' ]]; then
+      pm2 start \${appName}.\${configFileType}
+    elif [[ \${appType} == 'java' ]]
+      nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${appName}.jar --config-path=\${appName}/\${appName}.properties &
+    fi
+  
     rm -f \${appName}.zip
   done
 
