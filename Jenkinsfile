@@ -96,7 +96,7 @@ pipeline {
                     }else{
                         buildParams.add(
                             choice(
-                                choices: env.CD_VERSION_W_DATA, 
+                                choices: env.CD_VERSION_W_DATA.split(","), 
                                 description: '版本号W位', 
                                 name: 'CD_VERSION_W'
                             )
