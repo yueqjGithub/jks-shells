@@ -94,7 +94,7 @@ pipeline {
                     if (env.CD_VERSION_W_DATA == null | env.CD_VERSION_W_DATA == ''){
                         echo '未配置版本号W位，包名不追加该段'
                     }else{
-                        buildParams.addAll(
+                        buildParams.add(
                             choice(
                                 choices: env.CD_VERSION_W_DATA, 
                                 description: '版本号W位', 
