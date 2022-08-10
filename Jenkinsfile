@@ -94,7 +94,9 @@ pipeline {
                     if (env.CD_VERSION_W_DATA == null | env.CD_VERSION_W_DATA == ''){
                         echo '未配置版本号W位，包名不追加该段'
                     }else{
-                        def arr = env.CD_VERSION_W_DATA.split(",")
+                        def arr = []
+                        echo env.CD_VERSION_W_DATA
+                        arr = env.CD_VERSION_W_DATA.split(",")
                         buildParams.add(
                             choice(
                                 choices: arr, 
