@@ -243,7 +243,7 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
     # 启动服务器，仅pm2和java需要执行启动
     if [[ \${appType} == 'pm2' ]]; then
       pm2 start \${appName}.\${configFileType}
-    elif [[ \${appType} == 'java' ]]
+    elif [[ \${appType} == 'java' ]]; then
       nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${appName}.jar --config-path=\${appName}/\${appName}.properties &
     fi
   

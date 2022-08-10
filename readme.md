@@ -17,7 +17,8 @@
 + java应用需要在应用的根目录下配置一个同名的业务配置文件*.properties，比如SuperSDK/SuperSDK.jar和SuperSDK/SuperSDK.properties
 
 ### 使用教程
-+ 每个应用支持自定义脚本，执行路径为应用根目录/custom-build/build.sh，在压缩成zip前执行
++ 每个应用支持自定义构建脚本，执行路径为应用根目录/custom-build/build.sh，在压缩成zip前执行
++ 每个应用支持自定义更新脚本，执行路径为应用根目录custom-build/before-app-start.sh，在目标服务器应用启动前执行
 
 ```
 #仓库地址，git仓库末尾需要包含.git
@@ -34,6 +35,7 @@ CD_JIRA_KEY=OA
 CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)
 #ftp上传地址
 CD_FTP_PATH=corp/OaTools
-
+#版本号W位，影响包名
+CD_VERSION_W=release,cn,global,dev
 
 ```
