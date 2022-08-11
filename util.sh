@@ -214,14 +214,18 @@ function avalon_web_cd_update_to_server(){
     IFS="$OLD_IFS"
     zipname=$(cat ${WORKSPACE}/build/zipname.txt)
     for ut in ${updateTargetList[@]}; do
-        local targetName=$(echo "${ut}" | sed "s/(.*)//g")
+        local targetName=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut})
         echo "#自动更新到"${targetName}
         local paramStr=$(echo "${ut}" | sed "s/.*(//g" | sed "s/).*//g")
-        local user=$(echo "${paramStr}" | sed "s/.*user://g" | sed "s/，.*//g")        
-        local ip=$(echo "${paramStr}" | sed "s/.*ip://g" | sed "s/，.*//g")
-        local port=$(echo "${paramStr}" | sed "s/.*端口://g" | sed "s/，.*//g")
-        local willSudo=$(echo "${paramStr}" | sed "s/.*是否sudo://g" | sed "s/，.*//g")
-        local deployDir=$(echo "${paramStr}" | sed "s/.*部署目录://g" | sed "s/，.*//g")
+        local user=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} user)
+        if [[ ${user} == "" ]]; then
+            user="webuser"
+        fi
+
+        local ip=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} ip)
+        local port=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} 端口)
+        local willSudo=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} 是否sudo)
+        local deployDir=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} 部署目录)
 
         scp -P ${port} ${WORKSPACE}/dist/${zipname} ${user}@${ip}:/tmp/
 cat >${WORKSPACE}/dist/update_${JOB_BASE_NAME}.sh <<EOF
