@@ -152,6 +152,11 @@ function avalon_web_cd_build_app() {
             #java应用
             echo "安装依赖库"
             mvn clean install -DskipTests || exit 1
+            # 复制sql与properties文件
+            mkdir ${WORKSPACE}/build/${appName}/sql
+            mv ${WORKSPACE}/build/config/* ${WORKSPACE}/build/${appName}/sql/
+            mv ${WORKSPACE}/build/sql/application.* ${WORKSPACE}/build/${appName}/
+
         fi
 
         if [[ -f "${WORKSPACE}/build/${appPath}/custom-build/build.sh" ]]; then
