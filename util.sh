@@ -154,8 +154,8 @@ function avalon_web_cd_build_app() {
             mvn clean install -DskipTests || exit 1
             # 复制sql与properties文件
             mkdir ${destAppDir}/sql
-            mv ${WORKSPACE}/build/config/* ${destAppDir}/sql
-            mv ${WORKSPACE}/build/sql/application.* ${destAppDir}
+            mv ${WORKSPACE}/build/${appPath}/config/* ${destAppDir}/sql
+            mv ${destAppDir}/sql/application.* ${destAppDir}
         fi
 
         if [[ -f "${WORKSPACE}/build/${appPath}/custom-build/build.sh" ]]; then
