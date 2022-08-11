@@ -74,14 +74,20 @@ function avalon_web_cd_build_app() {
         elif [[ -f 'pom.xml' ]]; then
             appType='java'
             #获取pom.xml中的包名
+            jarPath=$(bash ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} jar包路径)
+            if [[ jarPath == "" ]]; then
+                echo "未配置jar包路径"
+                exit 1
+            fi
+
             finalName=$(bash ${WORKSPACE}/pom_final_name_parse.sh ${WORKSPACE}/build/${appPath}/pom.xml)
-            buildFile="${WORKSPACE}/build/${appPath}/target/${finalName}.jar"
+            buildFile="${WORKSPACE}/build/${jarPath}"
             # 如果java应用的仓库根目录就是应用，则使用jar名称作为应用名
             if [[ appName == "" ]]; then
                 appName="${finalName}"
             fi
         fi
-        
+
         destAppDir=${destDir}/${appName}
         [[ -d "${destAppDir}" ]] || mkdir "${destAppDir}" || exit 1
 
