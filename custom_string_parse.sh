@@ -16,7 +16,7 @@ fi
 
 matchResult=$(echo "${str}" | sed -rn "s/^.*${propsId}:([^，()]+).*$/\1/p")
 if [[ ${#matchResult[*]} == 1 ]]; then
-    echo matchResult[0]
+    echo "${matchResult[0]}"
 else
     echo ""
 fi
