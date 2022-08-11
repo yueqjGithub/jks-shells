@@ -156,7 +156,7 @@ function avalon_web_cd_build_app() {
 
         #压缩并移动
         cd "${destDir}" || exit 1
-        zip -r -q "${appName}.zip" "${WORKSPACE}/build/${appPath}/"
+        zip -r -q "${appName}.zip" "${appPath}/"
         rm -rf "${destAppDir}"
     done
 
@@ -179,7 +179,7 @@ function avalon_web_cd_build_app() {
     echo "${zipname}" > ${WORKSPACE}/dist/zipname.txt
 
     cd "${WORKSPACE}/dist" || exit 1
-    zip -r -q "${zipname}" "${WORKSPACE}/dist/${CD_ZIP_ROOT}"
+    zip -r -q "${zipname}" "${CD_ZIP_ROOT}"
     md5sum "${zipname}" | cut -d ' ' -f1 | tee "${zipname}.txt"
 
 
