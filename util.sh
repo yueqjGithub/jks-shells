@@ -78,8 +78,11 @@ function avalon_web_cd_build_app() {
             appType='java'
             #获取pom.xml中的包名
             finalName=$(bash ${WORKSPACE}/pom_final_name_parse.sh ${WORKSPACE}/build/${appPath}/pom.xml)
-            echo "${finalName}"
             buildFile="${WORKSPACE}/build/${appPath}/target/${finalName}.jar"
+            # 如果java应用的仓库根目录就是应用，则使用jar名称作为应用名
+            if [[ appName == "" ]]; then
+                appName="${finalName}"
+            fi
         fi
 
         echo "${appName}应用类型=${appType}"
