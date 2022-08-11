@@ -52,8 +52,9 @@ function avalon_web_cd_build_app() {
     IFS="$OLD_IFS"
     for app in ${apps[@]}; do
 
-        appPath=${app##*/}
-        appName=$(bash ${WORKSPACE}/custom_string_parse.sh ${appPath})
+        appConfigStr=${app##*/}
+        appPath=$(bash ${WORKSPACE}/custom_string_parse.sh ${appConfigStr})
+        appName=$(echo "${appPath}" | sed -r 's/.+\///g')
 
         destAppDir=${destDir}/${appPath}
         mkdir "${destAppDir}" || exit 1
