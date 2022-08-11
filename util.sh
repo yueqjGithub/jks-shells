@@ -153,10 +153,9 @@ function avalon_web_cd_build_app() {
             echo "安装依赖库"
             mvn clean install -DskipTests || exit 1
             # 复制sql与properties文件
-            mkdir ${WORKSPACE}/build/${appName}/sql
-            mv ${WORKSPACE}/build/config/* ${WORKSPACE}/build/${appName}/sql/
-            mv ${WORKSPACE}/build/sql/application.* ${WORKSPACE}/build/${appName}/
-
+            mkdir ${destAppDir}/sql
+            mv ${WORKSPACE}/build/config/* ${destAppDir}/sql
+            mv ${WORKSPACE}/build/sql/application.* ${destAppDir}
         fi
 
         if [[ -f "${WORKSPACE}/build/${appPath}/custom-build/build.sh" ]]; then
@@ -270,7 +269,7 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
       mv \${appName}/\${appName}.properties \${appName}.properties
       rm -rf \${appName}
       unzip -o \${appName}.zip
-      mv \${appName}.properties \${appName}/\${appName}.properties       
+      mv \${appName}.properties \${appName}/\${appName}.properties    
     else
       rm -rf \${appName}
       unzip -o \${appName}.zip
