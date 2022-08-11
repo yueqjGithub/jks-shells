@@ -5,11 +5,11 @@
 
 str=$1
 propId=$2
-if [[ $1 == "" ]]; then
+if [[ $str == "" ]]; then
     exit 1
 fi
 
-if [[ $2 == "" ]]; then
+if [[ $propId == "" ]]; then
     echo "${str}" | sed -r 's/\(.+\)//g'
     exit 0
 fi

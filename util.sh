@@ -77,7 +77,7 @@ function avalon_web_cd_build_app() {
         elif [[ -f 'pom.xml' ]]; then
             appType='java'
             #获取pom.xml中的包名
-            finalName=$(cat ${WORKSPACE}/build/${appPath}/pom.xml | sed -r "s/.*<finalName>\s*(.+)<\/finalName>.*/\1/g")
+            finalName=$(bash ${WORKSPACE}/pom_final_name_parse.sh cat ${WORKSPACE}/build/${appPath}/pom.xml)
             echo "${finalName}"
             buildFile="${WORKSPACE}/build/${appPath}/target/${finalName}.jar"
         fi
