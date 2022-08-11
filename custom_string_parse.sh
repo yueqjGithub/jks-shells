@@ -14,7 +14,7 @@ if [[ $propId == "" ]]; then
     exit 0
 fi
 
-matchResult=$(echo "${str}" | sed -rn "s/^.*${propsId}:([^，()]+).*$/\1/p")
+matchResult=$(echo "${str}" | sed -rn "s/^.*${propId}:([^，()]+).*$/\1/p")
 if [[ ${#matchResult[*]} == 1 ]]; then
     echo "${matchResult[0]}"
 else
