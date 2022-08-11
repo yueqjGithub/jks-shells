@@ -53,8 +53,8 @@ function avalon_web_cd_build_app() {
     for app in ${apps[@]}; do
 
         appConfigStr=${app##*/}
-        appPath=$(bash ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} || exit 1)
-        appName=$(echo "${appPath}" | sed -r 's/.+\///g' || exit 1)
+        appPath=$(bash ${WORKSPACE}/custom_string_parse.sh ${appConfigStr})
+        appName=$(echo "${appPath}" | sed -r 's/.+\///g')
 
         destAppDir=${destDir}/${appPath}
         mkdir "${destAppDir}" || exit 1
@@ -77,7 +77,7 @@ function avalon_web_cd_build_app() {
         elif [[ -f 'pom.xml' ]]; then
             appType='java'
             #获取pom.xml中的包名
-            finalName=$(bash ${WORKSPACE}/pom_final_name_parse.sh "${WORKSPACE}/build/${appPath}/pom.xml" || exit 1)
+            finalName=$(bash ${WORKSPACE}/pom_final_name_parse.sh ${WORKSPACE}/build/${appPath}/pom.xml)
             echo "${finalName}"
             buildFile="${WORKSPACE}/build/${appPath}/target/${finalName}.jar"
         fi

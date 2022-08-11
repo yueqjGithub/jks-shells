@@ -14,4 +14,3 @@ if [[ ${#matchResult[*]} == 2 ]]; then
 else
     exit 1
 fi
-exit 0
