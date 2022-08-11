@@ -56,9 +56,6 @@ function avalon_web_cd_build_app() {
         appPath=$(bash ${WORKSPACE}/custom_string_parse.sh ${appConfigStr})
         appName=$(echo "${appPath}" | sed -r 's/.+\///g')
 
-        destAppDir=${destDir}/${appPath}
-        mkdir "${destAppDir}" || exit 1
-
         echo "开始构建应用${appName}"
 
         cd "${WORKSPACE}/build/${appPath}" || exit 1
@@ -84,6 +81,10 @@ function avalon_web_cd_build_app() {
                 appName="${finalName}"
             fi
         fi
+        
+        destAppDir=${destDir}/${appName}
+        [[ -d "${destAppDir}" ]] || mkdir "${destAppDir}" || exit 1
+
 
         echo "${appName}应用类型=${appType}"
 
