@@ -8,6 +8,7 @@ if [[ $1 == "" ]]; then
 fi
 
 str=$(cat "${pomPath}")
+echo "${str}"
 matchResult=$(echo "${str}" | sed -r 's/^.*<finalName>\s*([^<>]+)\s*<\/finalName>.*$/\1/p')
 if [[ ${#matchResult[*]} == 2 ]]; then
     echo matchResult[1]
