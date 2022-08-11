@@ -55,6 +55,8 @@ function avalon_web_cd_build_app() {
         appConfigStr=${app}
         appPath=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr})
         appName=$(echo "${appPath}" | sed -r 's/.+\///g')
+        # 是否压缩应用，运维标准不统一，遗留问题
+        willZipApp=true
 
         echo "开始构建应用${appName}"
 
@@ -69,10 +71,18 @@ function avalon_web_cd_build_app() {
         elif [[ -f 'webpack.config.custom.js' ]]; then
             appType='front'
             buildFile="${WORKSPACE}/build/${appPath}/dist/*"
+            if [[ -f "${WORKSPACE}/build/${appPath}/next.config.js" ]] || [[ -f "${WORKSPACE}/build/${appPath}/vite.confit.ts" ]]; then
+                willZipApp=false
+            fi
         elif [[ -f 'package.json' ]]; then
             appType='node'
+            if [[ -f "${WORKSPACE}/build/${appPath}/next.config.js" ]] || [[ -f "${WORKSPACE}/build/${appPath}/vite.confit.ts" ]]; then
+                willZipApp=false
+            fi
         elif [[ -f 'pom.xml' ]]; then
             appType='java'
+            # java应用不压缩目录
+            willZipApp=false
             jarPath=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} jar包路径)
             if [[ jarPath == "" ]]; then
                 echo "未配置jar包路径"
@@ -154,10 +164,12 @@ function avalon_web_cd_build_app() {
 
         mv ${buildFile} "${destAppDir}" || exit 1
 
-        #压缩并移动
-        cd "${destDir}" || exit 1
-        zip -r -q "${appName}.zip" "${appName}/"
-        rm -rf "${destAppDir}"
+        if [[ ${willZipApp} == "true" ]]; then
+            #压缩
+            cd "${destDir}" || exit 1
+            zip -r -q "${appName}.zip" "${appName}/"
+            rm -rf "${destAppDir}"
+        fi
     done
 
     #生成readme和Version.txt
@@ -169,7 +181,7 @@ function avalon_web_cd_build_app() {
 
     #压缩并生成md5
     zipname=${CD_ZIP_PREFIX}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}
-    if [[ CD_VERSION_W != "" ]]; then
+    if [[ ${CD_VERSION_W} != "" ]]; then
       zipname="${zipname}_${CD_VERSION_W}"
     fi
     zipname="${zipname}.zip"
