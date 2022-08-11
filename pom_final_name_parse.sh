@@ -10,7 +10,7 @@ fi
 str=$(cat "${pomPath}")
 
 matchResult=$(echo "${str}" | sed -rn 's/^.*<finalName>\s*([^<>]+)\s*<\/finalName>.*$/\1/p')
-echo matchResult
+echo "$matchResult"
 if [[ ${#matchResult[*]} == 2 ]]; then
     echo matchResult[1]
 else
