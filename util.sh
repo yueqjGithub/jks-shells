@@ -82,9 +82,9 @@ function avalon_web_cd_build_app() {
 
             buildFile="${WORKSPACE}/build/${jarPath}"
             # 如果java应用的仓库根目录就是应用，则使用jar名称作为应用名
-            if [[ appName == "" ]]; then
+            if [[ ${appName} == "" ]]; then
                 deployAppName=$(bash ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} 部署名称)
-                if [[ deployAppName == "" ]]; then
+                if [[ ${deployAppName} == "" ]]; then
                     echo "未配置部署名称"
                     exit 1
                 fi
