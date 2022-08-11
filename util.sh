@@ -52,32 +52,33 @@ function avalon_web_cd_build_app() {
     IFS="$OLD_IFS"
     for app in ${apps[@]}; do
 
-        appName=${app##*/}
+        appPath=${app##*/}
+        appName=$(bash ${WORKSPACE}/custom_string_parse.sh ${appPath})
 
-        destAppDir=${destDir}/${appName}
+        destAppDir=${destDir}/${appPath}
         mkdir "${destAppDir}" || exit 1
 
         echo "开始构建应用${appName}"
 
-        cd "${WORKSPACE}/build/${appName}" || exit 1
+        cd "${WORKSPACE}/build/${appPath}" || exit 1
 
-        [[ -d "${WORKSPACE}/build/${appName}" ]] || mkdir "${WORKSPACE}/build/${appName}"
+        [[ -d "${WORKSPACE}/build/${appPath}" ]] || mkdir "${WORKSPACE}/build/${appPath}"
 
         appType='未知'
-        buildFile="${WORKSPACE}/build/${appName}/*"
+        buildFile="${WORKSPACE}/build/${appPath}/*"
         if [[ -f 'composer.json' ]] && [[ $(cat composer.json | grep "laravel/framework") ]]; then
             appType='laravel'
         elif [[ -f 'webpack.config.custom.js' ]]; then
             appType='front'
-            buildFile="${WORKSPACE}/build/${appName}/dist/*"
+            buildFile="${WORKSPACE}/build/${appPath}/dist/*"
         elif [[ -f 'package.json' ]]; then
             appType='node'
         elif [[ -f 'pom.xml' ]]; then
             appType='java'
             #获取pom.xml中的包名
-            finalName=$(cat ${WORKSPACE}/build/${appName}/pom.xml | sed -r "s/.*<finalName>\s*(.+)<\/finalName>.*/\1/g")
+            finalName=$(cat ${WORKSPACE}/build/${appPath}/pom.xml | sed -r "s/.*<finalName>\s*(.+)<\/finalName>.*/\1/g")
             echo "${finalName}"
-            buildFile="${WORKSPACE}/build/${appName}/target/${finalName}.jar"
+            buildFile="${WORKSPACE}/build/${appPath}/target/${finalName}.jar"
         fi
 
         echo "${appName}应用类型=${appType}"
@@ -129,10 +130,10 @@ function avalon_web_cd_build_app() {
             mvn clean install -DskipTests || exit 1
         fi
 
-        if [[ -f "${WORKSPACE}/build/${appName}/custom-build/build.sh" ]]; then
+        if [[ -f "${WORKSPACE}/build/${appPath}/custom-build/build.sh" ]]; then
             echo "${appName}检测到自定义脚本custom-build/build.sh，开始执行"
-            bash "${WORKSPACE}/build/${appName}/custom-build/build.sh" || exit 1
-            cd "${WORKSPACE}/build/${appName}" || exit 1
+            bash "${WORKSPACE}/build/${appPath}/custom-build/build.sh" || exit 1
+            cd "${WORKSPACE}/build/${appPath}" || exit 1
         else
             echo "${appName}未检测到自定义脚本custom-build/build.sh，无需执行"
         fi
@@ -141,7 +142,7 @@ function avalon_web_cd_build_app() {
 
         #压缩并移动
         cd "${destDir}" || exit 1
-        zip -r -q "${appName}.zip" "${appName}/"
+        zip -r -q "${appName}.zip" "${appPath}/"
         rm -rf "${destAppDir}"
     done
 
@@ -310,3 +311,4 @@ EOF
     echo "web归档文件【build号】= ${BUILD_NUMBER} ，【文件名】= ${releaseinfoName} "
     echo "包名：${zipname}"
 }
+
