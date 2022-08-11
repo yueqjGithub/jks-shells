@@ -188,10 +188,15 @@ function avalon_web_cd_build_app() {
     echo "${zipname}"
     echo "${CD_VERSION_W}"
 
-    echo "${zipname}" > ${WORKSPACE}/dist/zipname.txt
+    echo "${zipname}" > ${WORKSPACE}/build/zipname.txt
 
     cd "${WORKSPACE}/dist" || exit 1
-    zip -r -q "${zipname}" "${CD_ZIP_ROOT}"
+    if [[ ${CD_ZIP_ROOT} == "" ]];then
+        zip -r -q "${zipname}" *
+    else
+        zip -r -q "${zipname}" "${CD_ZIP_ROOT}"
+    fi
+
     md5sum "${zipname}" | cut -d ' ' -f1 | tee "${zipname}.txt"
 
 
@@ -203,7 +208,7 @@ function avalon_web_cd_update_to_server(){
     IFS=","
     updateTargetList=(${CD_SELECTED_SERVERS})
     IFS="$OLD_IFS"
-    zipname=$(cat ${WORKSPACE}/dist/zipname.txt)
+    zipname=$(cat ${WORKSPACE}/build/zipname.txt)
     for ut in ${updateTargetList[@]}; do
         local targetName=$(echo "${ut}" | sed "s/(.*)//g")
         echo "#自动更新到"${targetName}
@@ -304,7 +309,7 @@ EOF
 function avalon_web_cd_upload_ftp(){
   cd "${WORKSPACE}/dist" || exit 1
 
-  zipname=$(cat ${WORKSPACE}/dist/zipname.txt)
+  zipname=$(cat ${WORKSPACE}/build/zipname.txt)
 
   ftp -n <<-EOF
   open ${CD_FTP_HOST}
