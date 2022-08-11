@@ -74,7 +74,10 @@ function avalon_web_cd_build_app() {
             appType='node'
         elif [[ -f 'pom.xml' ]]; then
             appType='java'
-            buildFile="${WORKSPACE}/build/${appName}/target/${appName}.jar"
+            #获取pom.xml中的包名
+            finalName=$(cat ${WORKSPACE}/build/${appName}/pom.xml | sed -r "s/.*<finalName>\s*(.+)<\/finalName>.*/\1/g")
+            echo "${finalName}"
+            buildFile="${WORKSPACE}/build/${appName}/target/${finalName}.jar"
         fi
 
         echo "${appName}应用类型=${appType}"

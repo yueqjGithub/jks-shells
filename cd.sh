@@ -172,6 +172,8 @@ for app in ${apps[@]}; do
     #java应用
     echo "安装依赖库"
     mvn clean install -DskipTests || exit 1
+    
+
   fi
 
   if [[ -f "${WORKSPACE}/build/repo/${appName}/custom-build/build.sh" ]]; then
