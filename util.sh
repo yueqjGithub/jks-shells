@@ -156,7 +156,7 @@ function avalon_web_cd_build_app() {
 
         #压缩并移动
         cd "${destDir}" || exit 1
-        zip -r -q "${appName}.zip" "${appPath}/"
+        zip -r -q "${appName}.zip" "${appName}/"
         rm -rf "${destAppDir}"
     done
 
