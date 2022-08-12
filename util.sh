@@ -231,13 +231,13 @@ function avalon_web_cd_update_to_server(){
 cat >${WORKSPACE}/dist/update_${JOB_BASE_NAME}.sh <<EOF
 #!/usr/bin/env bash
 echo "#解压并移动到指定目录"
-mv -f /tmp/${zipname} ${deployDir}/
-cd ${deployDir}
-unzip -o ${zipname}
+mv -f /tmp/${zipname} ${deployDir}/ || exit 1
+cd ${deployDir} || exit 1
+unzip -o ${zipname} || exit 1
 
-mv -f ${deployDir}/${CD_ZIP_ROOT}/*.zip ${deployDir}/
-rm -rf ${deployDir}/${CD_ZIP_ROOT}/
-rm -f ${zipname}
+mv -f ${deployDir}/${CD_ZIP_ROOT}/*.zip ${deployDir}/ || exit 1
+rm -rf ${deployDir}/${CD_ZIP_ROOT}/ || exit 1
+rm -f ${zipname} || exit 1
 
 echo "#遍历目录"
 for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
