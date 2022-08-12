@@ -234,8 +234,9 @@ echo "#解压并移动到指定目录"
 mv -f /tmp/${zipname} ${deployDir}/
 cd ${deployDir}
 unzip -o ${zipname}
-mv -f ${deployDir}/web/*.zip ${deployDir}/
-rm -rf ${deployDir}/web/
+
+mv -f ${deployDir}/${CD_ZIP_ROOT}/*.zip ${deployDir}/
+rm -rf ${deployDir}/${CD_ZIP_ROOT}/
 rm -f ${zipname}
 
 echo "#遍历目录"
