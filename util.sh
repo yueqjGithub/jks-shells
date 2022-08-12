@@ -231,19 +231,28 @@ function avalon_web_cd_update_to_server(){
 cat >${WORKSPACE}/dist/update_${JOB_BASE_NAME}.sh <<EOF
 #!/usr/bin/env bash
 echo "#解压并移动到指定目录"
-mv -f /tmp/${zipname} ${deployDir}/ || exit 1
-cd ${deployDir} || exit 1
+# 创建用于更新的临时目录
+[[ -d ${deployDir}/update_tmp ]] || mkdir ${deployDir}/update_tmp
+mv -f /tmp/${zipname} ${deployDir}/update_tmp/ || exit 1
+cd ${deployDir}/update_tmp || exit 1
+# 查看目录结构，获取要更新的应用列表
+zipStruct=$(unzip -l ${zipname} | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/p")
+updateApps=$(echo \${zipStruct} | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p")
+
 unzip -o ${zipname} || exit 1
 
 if [[ "${CD_ZIP_ROOT}" != "" ]]; then
-    mv -f ${deployDir}/${CD_ZIP_ROOT}/*.zip ${deployDir}/ || exit 1
-    rm -rf ${deployDir}/${CD_ZIP_ROOT}/ || exit 1
+    mv -f ${deployDir}/update_tmp/${CD_ZIP_ROOT}/*.zip ${deployDir}/update_tmp/update_tmp || exit 1
+    rm -rf ${deployDir}/update_tmp/${CD_ZIP_ROOT}/ || exit 1
 fi
 
 rm -f ${zipname} || exit 1
+cd ${deployDir}/update_tmp
+# 尝试解压所有应用的zip
+unzip -o *.zip
+cd ${deployDir}
 
-echo "#遍历目录"
-for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
+for i in \${updateApps}
   do
     appName=\`echo \${i} | cut -f 1 -d .\`
 
@@ -257,13 +266,13 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
       pm2 delete \${appName}.\${configFileType}
       echo "删除原目录"
       rm -rf \${appName}
-      unzip -o \${appName}.zip
+      mv update_tmp/\${appName} ./
     elif [[ -f \${appName}/.env ]]; then
       appType=php
       echo "laravel应用需要备份.env文件"
       mv \${appName}/.env \${appName}.env
       rm -rf \${appName}
-      unzip -o \${appName}.zip
+      mv update_tmp/\${appName} ./
       mv \${appName}.env \${appName}/.env 
     elif [[ -f \${appName}/\${appName}.jar ]]; then
       appType=java
@@ -276,11 +285,11 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
       fi
       mv \${appName}/\${appName}.properties \${appName}.properties
       rm -rf \${appName}
-      unzip -o \${appName}.zip
+      mv update_tmp/\${appName} ./
       mv \${appName}.properties \${appName}/\${appName}.properties    
     else
       rm -rf \${appName}
-      unzip -o \${appName}.zip
+      mv update_tmp/\${appName} ./
     fi
 
     if [[ -f \${appName}/custom-build/before-app-start.sh ]]
@@ -302,6 +311,8 @@ for i in \`ls -l ${deployDir}/ | awk '/.zip$/{print \$NF}'\`
   
     rm -f \${appName}.zip
   done
+
+
 
 exit 0
 EOF
