@@ -235,7 +235,7 @@ mv -f /tmp/${zipname} ${deployDir}/ || exit 1
 cd ${deployDir} || exit 1
 unzip -o ${zipname} || exit 1
 
-if [[ ${CD_ZIP_ROOT} != "" ]]; then
+if [[ "${CD_ZIP_ROOT}" != "" ]]; then
     mv -f ${deployDir}/${CD_ZIP_ROOT}/*.zip ${deployDir}/ || exit 1
     rm -rf ${deployDir}/${CD_ZIP_ROOT}/ || exit 1
 fi
