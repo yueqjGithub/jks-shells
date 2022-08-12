@@ -240,7 +240,10 @@ zipStruct=$(unzip -l ${zipname} | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/
 updateApps=$(echo \${zipStruct} | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p")
 echo "更新的应用列表:${updateApps}"
 
-unzip -o ${zipname} || exit 1
+appZips=$(ls *.zip 2> /dev/null | wc -l)
+if [[ "\${appZips}" != "0 ]]; then
+    unzip -o ${zipname} || exit 1
+fi
 
 if [[ "${CD_ZIP_ROOT}" != "" ]]; then
     mv -f ${deployDir}/update_tmp/${CD_ZIP_ROOT}/*.zip ${deployDir}/update_tmp/update_tmp || exit 1
