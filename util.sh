@@ -241,7 +241,7 @@ updateApps=$(echo \${zipStruct} | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^
 echo "更新的应用列表:${updateApps}"
 
 appZips=$(ls *.zip 2> /dev/null | wc -l)
-if [[ "\${appZips}" != "0 ]]; then
+if [[ "\${appZips}" != "0" ]]; then
     unzip -o ${zipname} || exit 1
 fi
 
