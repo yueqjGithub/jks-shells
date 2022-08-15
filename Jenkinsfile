@@ -131,14 +131,55 @@ pipeline {
                         )
                     )
 
-                    // 自定义参数,(字段名:xx，描述:xx，表单类型:xx，参数值:xx)
+                    // 自定义参数,(字段名:xx，描述:xx，表单类型:xx，默认值:xx(仅input、checkbox时生效)，选项:xx)
                     if (env.CD_CUSTOM_PARAM == null | env.CD_CUSTOM_PARAM == ''){
                         echo "未配置自定义参数，跳过"
                     }else{
                         def arr = env.CD_CUSTOM_PARAM.tokenize(",")
-                        for (crow in arr) {
-                            def ctype = sh('bash ./custom_string_parse.sh 表单类型')
-                            echo ctype
+                        for (cRow in arr) {
+                            def cName = sh("bash ./custom_string_parse.sh ${cRow} 字段名")
+                            def cDesc = sh("bash ./custom_string_parse.sh ${cRow} 描述")                            
+                            def cType = sh("bash ./custom_string_parse.sh ${cRow} 表单类型")
+                            def cDefaultValue = sh("bash ./custom_string_parse.sh ${cRow} 默认值") 
+                            def cOption = sh("bash ./custom_string_parse.sh ${cRow} 选项")          
+                                                  
+                            if (ctype == 'input') {
+                                buildParams.add(
+                                    string(
+                                        defaultValue: cDefaultValue, 
+                                        description: cDesc, 
+                                        name: cName,
+                                        trim: true
+                                    )
+                                )
+                            } else if (ctype == 'single-select'){
+                                buildParams.add(
+                                    choice(
+                                        choices: cOption, 
+                                        description: cDesc, 
+                                        name: cName
+                                    )
+                                )
+                            } else if (ctype == 'multiple-select') {
+                                extendedChoice(
+                                    description: cDesc,
+                                    multiSelectDelimiter: ',',
+                                    name: cName,
+                                    quoteValue: false,
+                                    saveJSONParameterToFile: false,
+                                    type: 'PT_CHECKBOX',
+                                    value: cOption,
+                                    visibleItemCount: 20
+                                )
+                            } else if (ctype == 'checkbox'){
+                                buildParams.add(
+                                    booleanParam(
+                                        defaultValue: cDefaultValue == 'true', 
+                                        description: cDesc, 
+                                        name: cName
+                                    )
+                                )                                
+                            }
                         }
                     }
                     
