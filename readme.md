@@ -36,11 +36,13 @@ value(propId1:propValue1，propId2:propValue2)
 > 是否必填：是
 > 含义：应用列表，根目录为仓库
 > 解析类型：数组，元素格式=自定义格式，说明如下
+> 
 > | id | 是否必填 | 值 |
 > | -- | -- | -- |
 > | value | 否 | 应用的相对目录，如果应用是根目录为空字符串 |
 > | 部署名称 | 否 | 交付时应用的名字，默认使用相对目录的最后一段 |
 > | jar包路径 | 否 | mvn生成的jar包路径，仅java应用时生效，并且必须 |
+>
 > 示例：(部署名称:gameWebsiteServer，jar包路径:cat-global/target/catWebsite.jar)
 
 + CD_ZIP_ROOT
