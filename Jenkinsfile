@@ -137,11 +137,11 @@ pipeline {
                     }else{
                         def arr = env.CD_CUSTOM_PARAM.tokenize(",")
                         for (cRow in arr) {
-                            def cName = sh(script:"bash ./custom_string_parse.sh '${cRow}' 字段名",returnStdout:true)
-                            def cDesc = sh(script:"bash ./custom_string_parse.sh '${cRow}' 描述",returnStdout:true)                            
-                            def cType = sh(script:"bash ./custom_string_parse.sh '${cRow}' 表单类型",returnStdout:true)
-                            def cDefaultValue = sh(script:"bash ./custom_string_parse.sh '${cRow}' 默认值",returnStdout:true) 
-                            def cOption = sh(script:"bash ./custom_string_parse.sh '${cRow}' 选项",returnStdout:true)
+                            def cName = sh(script:"bash ./custom_string_parse.sh '${cRow}' 字段名",returnStdout:true).trim()
+                            def cDesc = sh(script:"bash ./custom_string_parse.sh '${cRow}' 描述",returnStdout:true).trim()                            
+                            def cType = sh(script:"bash ./custom_string_parse.sh '${cRow}' 表单类型",returnStdout:true).trim()
+                            def cDefaultValue = sh(script:"bash ./custom_string_parse.sh '${cRow}' 默认值",returnStdout:true).trim() 
+                            def cOption = sh(script:"bash ./custom_string_parse.sh '${cRow}' 选项",returnStdout:true).trim()
 
                             echo "自定义参数解析成功,字段名=${cName},描述=${cDesc},类型=${cType}，默认值=${cDefaultValue},选项=${cOption}"
 
