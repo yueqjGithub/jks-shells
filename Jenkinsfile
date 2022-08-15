@@ -131,13 +131,13 @@ pipeline {
                         )
                     )
 
-                    // 自定义参数,(字段名:xx，描述:xx，类型:xx，参数值:xx)
+                    // 自定义参数,(字段名:xx，描述:xx，表单类型:xx，参数值:xx)
                     if (env.CD_CUSTOM_PARAM == null | env.CD_CUSTOM_PARAM == ''){
                         echo "未配置自定义参数，跳过"
                     }else{
                         def arr = env.CD_CUSTOM_PARAM.tokenize(",")
                         for (crow in arr) {
-                            def ctype = sh('bash ./custom_string_parse.sh 类型')
+                            def ctype = sh('bash ./custom_string_parse.sh 表单类型')
                             echo ctype
                         }
                     }
