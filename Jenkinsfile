@@ -164,10 +164,12 @@ pipeline {
                                     )
                                 )
                             } else if (cType == 'multiple-select') {
+                                // 多选插件无法识别分隔符参数multiSelectDelimiter='|'，原因未知
+                                cOption = cOption.tokenize("|").join(",")
                                 buildParams.add(
                                     extendedChoice(
                                         description: cDesc,
-                                        multiSelectDelimiter: '|',
+                                        multiSelectDelimiter: ',',
                                         name: cName,
                                         quoteValue: false,
                                         saveJSONParameterToFile: false,
