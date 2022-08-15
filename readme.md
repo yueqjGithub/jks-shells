@@ -26,11 +26,11 @@ value(propId1:propValue1，propId2:propValue2)
 + 环境变量说明
 
 | 变量名称 | 是否必填 | 含义 | 解析类型 | 示例 |
-| --- | --- | --- | --- | --- | --- |
+| --- | --- | --- | --- | --- |
 | CD_REPO | 是 | 仓库地址<br>git仓库末尾需要包含.git | string | http://git.avalongames.com/website/gm_website_server.git |
 | CD_APPS | 是 | 应用列表<br>根目录为仓库| 数组，元素格式=自定义格式<br>value=应用的相对目录<br>部署名称=可选,交付时应用的名字，默认使用相对目录的最后一段<br>jar包路径=可选,jar包路径：参数，mvn生成的jar包路径，仅java应用时生效，并且必须)  | (部署名称:gameWebsiteServer，jar包路径:cat-global/target/catWebsite.jar) |
-| CD_ZIP_ROOT | 否 | zip包的根目录<br>默认空字符串 | string | |
-| CD_ZIP_PREFIX | 否 | zip包的前缀<br>运维有强制要求，不配置时默认使用jenkins工程名 | string | |
+| CD_ZIP_ROOT | 否 | zip包的根目录<br>默认空字符串 | string | web |
+| CD_ZIP_PREFIX | 否 | zip包的前缀<br>运维有强制要求，不配置时默认使用jenkins工程名 | string | Web-ConstConfig |
 | CD_JIRA_KEY | 是 | jira项目的key | string | GW |
 | CD_SERVERS | 是 | 服务器列表 | 数组，元素格式=自定义格式<br>value=显示名称<br>ip=ssh的ip<br>端口=ssh的端口<br>user=可选,运行应用的linux用户,默认为webuser<br>是否sudo=操作应用时是否sudo,true或false<br>部署目录=应用部署目录) | 内网开发(ip:192.168.200.157，端口:22，是否sudo:false，部署目录:/home/webuser/project/website) |
 | CD_FTP_PATH | 是 | ftp上传地址 | string | corp/SDK/global/server |
