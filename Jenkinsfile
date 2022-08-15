@@ -164,11 +164,10 @@ pipeline {
                                     )
                                 )
                             } else if (cType == 'multiple-select') {
-                                cOption = cOption.tokenize("|")
                                 buildParams.add(
                                     extendedChoice(
                                         description: cDesc,
-                                        multiSelectDelimiter: ',',
+                                        multiSelectDelimiter: '|',
                                         name: cName,
                                         quoteValue: false,
                                         saveJSONParameterToFile: false,
