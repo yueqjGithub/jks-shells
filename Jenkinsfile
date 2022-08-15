@@ -94,8 +94,7 @@ pipeline {
                     if (env.CD_VERSION_W_DATA == null | env.CD_VERSION_W_DATA == ''){
                         echo '未配置版本号W位，包名不追加该段'
                     }else{
-                        def arr = []
-                        arr = env.CD_VERSION_W_DATA.tokenize(",")
+                        def arr = env.CD_VERSION_W_DATA.tokenize(",")
                         buildParams.add(
                             choice(
                                 choices: arr, 
@@ -131,6 +130,18 @@ pipeline {
                             name: 'CD_README'
                         )
                     )
+
+                    // 自定义参数,(字段名:xx，描述:xx，类型:xx，参数值:xx)
+                    if (env.CD_CUSTOM_PARAM == null | env.CD_CUSTOM_PARAM == ''){
+                        echo "未配置自定义参数，跳过"
+                    }else{
+                        def arr = env.CD_CUSTOM_PARAM.tokenize(",")
+                        for (crow in arr) {
+                            def ctype = sh('bash ./custom_string_parse.sh 类型')
+                            echo ctype
+                        }
+                    }
+                    
 
                     properties([
                         [$class: 'JiraProjectProperty'], 
