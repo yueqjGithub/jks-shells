@@ -51,7 +51,7 @@ table th:nth-of-type(5) {
 | CD_ZIP_ROOT | 否 | zip包的根目录，默认空字符串 | string | |
 | CD_ZIP_PREFIX | 否 | zip包的前缀，运维有强制要求，不配置时默认使用jenkins工程名 | string | |
 | CD_JIRA_KEY | 是 | jira项目的key | string | GW |
-| CD_SERVERS | 是 | 服务器列表 | 数组，元素格式=显示名称(ip:ssh的ip,端口:ssh的端口,user:可选,运行应用的linux用户,默认=webuser,是否sudo:操作应用时是否sudo,true或false,部署目录:应用部署目录) | 1.ip:<br>2.端口:<br>3.user:参数,<br>4.是否sudo:<br>5.部署目录: | 内网开发(ip:192.168.200.157，端口:22，是否sudo:false，部署目录:/home/webuser/project/website) |
+| CD_SERVERS | 是 | 服务器列表 | 数组，元素格式=显示名称(ip:ssh的ip,端口:ssh的端口,user:可选,运行应用的linux用户,默认=webuser,是否sudo:操作应用时是否sudo,true或false,部署目录:应用部署目录) | 内网开发(ip:192.168.200.157，端口:22，是否sudo:false，部署目录:/home/webuser/project/website) |
 | CD_FTP_PATH | 是 | ftp上传地址 | string | corp/SDK/global/server |
 | CD_VERSION_W_DATA | 否 | 版本号W位，影响包名，默认包名不追加该段格式 | 数组，元素格式=string | release,cn,global,dev |
 | CD_CUSTOM_PARAM | 否 | 自定义参数，配合自定义构建脚本、自定义更新脚本使用 | 数组，元素格式=(字段名:表单id，描述:xx，表单类型:xx，默认值:xx，选项:xx) |  |
