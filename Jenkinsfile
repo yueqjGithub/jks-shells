@@ -137,11 +137,11 @@ pipeline {
                     }else{
                         def arr = env.CD_CUSTOM_PARAM.tokenize(",")
                         for (cRow in arr) {
-                            def cName = sh(script:"bash -x ./custom_string_parse.sh ${cRow} 字段名",returnStdout:true)
-                            def cDesc = sh(script:"bash -x ./custom_string_parse.sh ${cRow} 描述",returnStdout:true)                            
-                            def cType = sh(script:"bash -x ./custom_string_parse.sh ${cRow} 表单类型",returnStdout:true)
-                            def cDefaultValue = sh(script:"bash -x ./custom_string_parse.sh ${cRow} 默认值",returnStdout:true) 
-                            def cOption = sh(script:"bash -x ./custom_string_parse.sh ${cRow} 选项",returnStdout:true).tokenize("|")
+                            def cName = sh(script:"bash -x ./custom_string_parse.sh '${cRow}' 字段名",returnStdout:true)
+                            def cDesc = sh(script:"bash -x ./custom_string_parse.sh '${cRow}' 描述",returnStdout:true)                            
+                            def cType = sh(script:"bash -x ./custom_string_parse.sh '${cRow}' 表单类型",returnStdout:true)
+                            def cDefaultValue = sh(script:"bash -x ./custom_string_parse.sh '${cRow}' 默认值",returnStdout:true) 
+                            def cOption = sh(script:"bash -x ./custom_string_parse.sh '${cRow}' 选项",returnStdout:true).tokenize("|")
                                                   
                             if (ctype == 'input') {
                                 buildParams.add(
