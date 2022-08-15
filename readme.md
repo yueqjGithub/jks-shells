@@ -25,7 +25,9 @@ value(propId1:propValue1，propId2:propValue2)
 + 每个应用支持自定义更新脚本，执行路径为应用根目录custom-build/before-app-start.sh，在目标服务器应用启动前执行
 + 环境变量说明
 
-| <div style="width:80px">变量名称</div> | <div style="width:20px">是否必填</div> | 含义 | 解析类型 | <div style="width:80px">示例</div> |
+<div class="how-to-use">
+
+| 变量名称 | 是否必填 | 含义 | 解析类型 | 示例 |
 | --- | --- | --- | --- | --- |
 | CD_REPO | 是 | 仓库地址<br>git仓库末尾需要包含.git | string | http://git.avalongames.com/website/gm_website_server.git |
 | CD_APPS | 是 | 应用列表<br>根目录为仓库| 数组，元素格式=自定义格式<br>value=应用的相对目录<br>部署名称=可选,交付时应用的名字，默认使用相对目录的最后一段<br>jar包路径=可选,jar包路径：参数，mvn生成的jar包路径，仅java应用时生效，并且必须)  | (部署名称:gameWebsiteServer，jar包路径:cat-global/target/catWebsite.jar) |
@@ -36,6 +38,25 @@ value(propId1:propValue1，propId2:propValue2)
 | CD_FTP_PATH | 是 | ftp上传地址 | string | corp/SDK/global/server |
 | CD_VERSION_W_DATA | 否 | 版本号W位<br>影响包名，默认包名不追加该段格式 | 数组，元素格式=string | release,cn,global,dev |
 | CD_CUSTOM_PARAM | 否 | 自定义参数<br>配合自定义构建脚本、自定义更新脚本使用 | 数组，元素格式=自定义格式<br>字段名=表单id<br>描述=表单描述<br>表单类型=表单组件类型,支持input/single-select/multiple-select/checkbox，默认值:表单默认值,仅input、checkbox时生效，选项:以英文竖线隔开,仅single-select/multiple-select时生效 | (字段名:aaaa，描述:啊啊啊，表单类型:input，默认值:aaa),(字段名:bbbb，描述:不不不，表单类型:single-select，选项:dddd\|cccc),(字段名:cccc，描述:不不不，表单类型:multiple-select，选项:dddd\|cccc),(字段名:dddd，描述:啊啊啊，表单类型:checkbox，默认值:true) |
+
+</div>
+
+<style>
+    .how-to-use {
+        table th:first-of-type {
+            width: 80px;
+        }
+        table th:nth-of-type(2) {
+            width: 20px;
+        }
+        table th:nth-of-type(3) {
+            width: 50px;
+        }
+        table th:nth-of-type(5) {
+            width: 100px;
+        }        
+    }
+</style>
 
 + 示例：以下为OA工具的环境变量配置示例
 
