@@ -25,7 +25,7 @@ value(propId1:propValue1，propId2:propValue2)
 + 每个应用支持自定义更新脚本，执行路径为应用根目录custom-build/before-app-start.sh，在目标服务器应用启动前执行
 + 环境变量说明
 
-| 变量名称 | 是否必填 | 含义 | 解析类型 | 示例 |
+| <div style="width:80px">变量名称</div> | <div style="width:20px">是否必填</div> | 含义 | 解析类型 | 示例 |
 | --- | --- | --- | --- | --- |
 | CD_REPO | 是 | 仓库地址<br>git仓库末尾需要包含.git | string | http://git.avalongames.com/website/gm_website_server.git |
 | CD_APPS | 是 | 应用列表<br>根目录为仓库| 数组，元素格式=自定义格式<br>value=应用的相对目录<br>部署名称=可选,交付时应用的名字，默认使用相对目录的最后一段<br>jar包路径=可选,jar包路径：参数，mvn生成的jar包路径，仅java应用时生效，并且必须)  | (部署名称:gameWebsiteServer，jar包路径:cat-global/target/catWebsite.jar) |
