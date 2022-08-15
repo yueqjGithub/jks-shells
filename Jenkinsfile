@@ -161,15 +161,17 @@ pipeline {
                                     )
                                 )
                             } else if (cType == 'multiple-select') {
-                                extendedChoice(
-                                    description: cDesc,
-                                    multiSelectDelimiter: ',',
-                                    name: cName,
-                                    quoteValue: false,
-                                    saveJSONParameterToFile: false,
-                                    type: 'PT_CHECKBOX',
-                                    value: cOption,
-                                    visibleItemCount: 20
+                                buildParams.add(
+                                    extendedChoice(
+                                        description: cDesc,
+                                        multiSelectDelimiter: ',',
+                                        name: cName,
+                                        quoteValue: false,
+                                        saveJSONParameterToFile: false,
+                                        type: 'PT_CHECKBOX',
+                                        value: cOption,
+                                        visibleItemCount: 20
+                                    )
                                 )
                             } else if (cType == 'checkbox'){
                                 buildParams.add(
