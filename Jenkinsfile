@@ -135,7 +135,7 @@ pipeline {
                     if (env.CD_CUSTOM_PARAM == null | env.CD_CUSTOM_PARAM == ''){
                         echo "未配置自定义参数，跳过"
                     }else{
-                        def arr = env.CD_CUSTOM_PARAM.tokenize(",")
+                        def arr = env.CD_CUSTOM_PARAM
                         for (cRow in arr) {
                             def cName = sh("bash ./custom_string_parse.sh ${cRow} 字段名")
                             def cDesc = sh("bash ./custom_string_parse.sh ${cRow} 描述")                            
