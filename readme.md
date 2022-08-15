@@ -35,7 +35,7 @@ value(propId1:propValue1，propId2:propValue2)
 | CD_SERVERS | 是 | 服务器列表 | 数组，元素格式=自定义格式<br>value=显示名称<br>ip=ssh的ip<br>端口=ssh的端口<br>user=可选,运行应用的linux用户,默认为webuser<br>是否sudo=操作应用时是否sudo,true或false<br>部署目录=应用部署目录) | 内网开发(ip:192.168.200.157，端口:22，是否sudo:false，部署目录:/home/webuser/project/website) |
 | CD_FTP_PATH | 是 | ftp上传地址 | string | corp/SDK/global/server |
 | CD_VERSION_W_DATA | 否 | 版本号W位<br>影响包名，默认包名不追加该段格式 | 数组，元素格式=string | release,cn,global,dev |
-| CD_CUSTOM_PARAM | 否 | 自定义参数<br>配合自定义构建脚本、自定义更新脚本使用 | 数组，元素格式=自定义格式<br>字段名=表单id<br>描述=表单描述<br>表单类型=表单组件类型,支持input/single-select/multiple-select/checkbox，默认值:表单默认值,仅input、checkbox时生效，选项:以英文竖线隔开,仅single-select/multiple-select时生效 | (字段名:aaaa，描述:啊啊啊，表单类型:input，默认值:aaa),(字段名:bbbb，描述:不不不，表单类型:single-select，选项:dddd|cccc),(字段名:cccc，描述:不不不，表单类型:multiple-select，选项:dddd|cccc),(字段名:dddd，描述:啊啊啊，表单类型:checkbox，默认值:true) |
+| CD_CUSTOM_PARAM | 否 | 自定义参数<br>配合自定义构建脚本、自定义更新脚本使用 | 数组，元素格式=自定义格式<br>字段名=表单id<br>描述=表单描述<br>表单类型=表单组件类型,支持input/single-select/multiple-select/checkbox，默认值:表单默认值,仅input、checkbox时生效，选项:以英文竖线隔开,仅single-select/multiple-select时生效 | (字段名:aaaa，描述:啊啊啊，表单类型:input，默认值:aaa),(字段名:bbbb，描述:不不不，表单类型:single-select，选项:dddd\|cccc),(字段名:cccc，描述:不不不，表单类型:multiple-select，选项:dddd\|cccc),(字段名:dddd，描述:啊啊啊，表单类型:checkbox，默认值:true) |
 
 + 示例：以下为OA工具的环境变量配置示例
 
