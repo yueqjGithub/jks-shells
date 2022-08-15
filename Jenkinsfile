@@ -142,10 +142,8 @@ pipeline {
                             def cType = sh(script:"bash ./custom_string_parse.sh '${cRow}' 表单类型",returnStdout:false)
                             def cDefaultValue = sh(script:"bash ./custom_string_parse.sh '${cRow}' 默认值",returnStdout:false) 
                             def cOption = sh(script:"bash ./custom_string_parse.sh '${cRow}' 选项",returnStdout:false)
-                            if (cOption != null){
-                                cOption = cOption.tokenize("|")
-                            }
 
+                            echo "自定义参数解析成功,字段名=${cName},描述=${cDesc},类型=${cType}，默认值=${cDefaultValue},选项=${cOption}"
 
                             if (cType == 'input') {                               
                                 buildParams.add(
@@ -157,6 +155,7 @@ pipeline {
                                     )
                                 )
                             } else if (cType == 'single-select'){
+                                cOption = cOption.tokenize("|")
                                 buildParams.add(
                                     choice(
                                         choices: cOption, 
@@ -165,6 +164,7 @@ pipeline {
                                     )
                                 )
                             } else if (cType == 'multiple-select') {
+                                cOption = cOption.tokenize("|")
                                 buildParams.add(
                                     extendedChoice(
                                         description: cDesc,
@@ -188,7 +188,7 @@ pipeline {
                             } else {
                                 error "不支持的自定义参数类型,${cName}的类型=${cType}"
                             }
-                            echo "自定义参数${cName}类型=${cType}，表单已设置"
+                            
                         }
                     }
                     
