@@ -141,7 +141,10 @@ pipeline {
                             def cDesc = sh(script:"bash ./custom_string_parse.sh '${cRow}' 描述",returnStdout:false)                            
                             def cType = sh(script:"bash ./custom_string_parse.sh '${cRow}' 表单类型",returnStdout:false)
                             def cDefaultValue = sh(script:"bash ./custom_string_parse.sh '${cRow}' 默认值",returnStdout:false) 
-                            def cOption = sh(script:"bash ./custom_string_parse.sh '${cRow}' 选项",returnStdout:false).tokenize("|")
+                            def cOption = sh(script:"bash ./custom_string_parse.sh '${cRow}' 选项",returnStdout:false)
+                            if (cOption != null){
+                                cOption = cOption.tokenize("|")
+                            }
 
 
                             if (cType == 'input') {                               
