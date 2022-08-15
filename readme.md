@@ -23,15 +23,19 @@ value(propId1:propValue1，propId2:propValue2)
 ### 使用教程
 + 每个应用支持自定义构建脚本，执行路径为应用根目录/custom-build/build.sh，在压缩成zip前执行
 + 每个应用支持自定义更新脚本，执行路径为应用根目录custom-build/before-app-start.sh，在目标服务器应用启动前执行
-+ 环境变量说明，*表示必填参数，否则为可选参数:
++ 环境变量说明
+
+| 变量名称 | 是否必填 | 说明 |
+| -- | -- | -- |
+| CD_REPO | 是 | 仓库地址，git仓库末尾需要包含.git |
+| CD_APPS | 是 | 应用列表，根目录为仓库，自定义格式:<br>&emsp;应用的相对目录(部署名称:xx,jar包路径:xx)，参数说明如下：<br>&emsp;&emsp;1.部署名称:可选参数，交付时应用的名字，默认使用相对目录的最后一段<br>&emsp;&emsp;2.jar包路径:可选参数，mvn生成的jar包路径，仅java应用时生效，并且必须 |
+
+
+
++ demo：
 
 ```
-# * 仓库地址，git仓库末尾需要包含.git
-CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git
-# * 应用列表，根目录为仓库，自定义格式说明
-#       * 应用的相对目录
-#               部署名称:可选参数，交付时应用的名字，默认使用相对目录的最后一段
-#               jar包路径:可选参数，mvn生成的jar包路径，仅java应用时生效，并且必须
+CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git           
 CD_APPS=FrontEnd,OaToolsManage
 # zip包的根目录，默认空字符串
 CD_ZIP_ROOT=web
