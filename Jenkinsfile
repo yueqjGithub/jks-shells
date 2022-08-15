@@ -135,13 +135,13 @@ pipeline {
                     if (env.CD_CUSTOM_PARAM == null | env.CD_CUSTOM_PARAM == ''){
                         echo "未配置自定义参数，跳过"
                     }else{
-                        def arr = env.CD_CUSTOM_PARAM
+                        def arr = env.CD_CUSTOM_PARAM.tokenize(",")
                         for (cRow in arr) {
                             def cName = sh("bash -x ./custom_string_parse.sh ${cRow} 字段名")
                             def cDesc = sh("bash -x ./custom_string_parse.sh ${cRow} 描述")                            
                             def cType = sh("bash -x ./custom_string_parse.sh ${cRow} 表单类型")
                             def cDefaultValue = sh("bash -x ./custom_string_parse.sh ${cRow} 默认值") 
-                            def cOption = sh("bash -x ./custom_string_parse.sh ${cRow} 选项")          
+                            def cOption = sh("bash -x ./custom_string_parse.sh ${cRow} 选项").tokenize("|")
                                                   
                             if (ctype == 'input') {
                                 buildParams.add(
