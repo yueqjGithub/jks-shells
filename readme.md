@@ -41,6 +41,9 @@ value(propId1:propValue1，propId2:propValue2)
 
 </div>
 
+<svg fill="none" viewBox="0 0 400 400" width="400" height="400" xmlns="http://www.w3.org/2000/svg">
+    <foreignObject width="100%" height="100%">
+        <div xmlns="http://www.w3.org/1999/xhtml">
 <style>
     .how-to-use {
         table th:first-of-type {
@@ -57,6 +60,12 @@ value(propId1:propValue1，propId2:propValue2)
         }        
     }
 </style>
+            <h1>HELLO WORLD!</h1>
+        </div>
+    </foreignObject>
+</svg>
+
+
 
 + 示例：以下为OA工具的环境变量配置示例
 
