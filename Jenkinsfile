@@ -143,7 +143,7 @@ pipeline {
                             def cDefaultValue = sh(script:"bash -x ./custom_string_parse.sh '${cRow}' 默认值",returnStdout:true) 
                             def cOption = sh(script:"bash -x ./custom_string_parse.sh '${cRow}' 选项",returnStdout:true).tokenize("|")
                                                   
-                            if (ctype == 'input') {
+                            if (cType == 'input') {
                                 buildParams.add(
                                     string(
                                         defaultValue: cDefaultValue, 
@@ -152,7 +152,7 @@ pipeline {
                                         trim: true
                                     )
                                 )
-                            } else if (ctype == 'single-select'){
+                            } else if (cType == 'single-select'){
                                 buildParams.add(
                                     choice(
                                         choices: cOption, 
@@ -160,7 +160,7 @@ pipeline {
                                         name: cName
                                     )
                                 )
-                            } else if (ctype == 'multiple-select') {
+                            } else if (cType == 'multiple-select') {
                                 extendedChoice(
                                     description: cDesc,
                                     multiSelectDelimiter: ',',
@@ -171,7 +171,7 @@ pipeline {
                                     value: cOption,
                                     visibleItemCount: 20
                                 )
-                            } else if (ctype == 'checkbox'){
+                            } else if (cType == 'checkbox'){
                                 buildParams.add(
                                     booleanParam(
                                         defaultValue: cDefaultValue == 'true', 
