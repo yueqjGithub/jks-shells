@@ -22,7 +22,7 @@ value(propId1:propValue1，propId2:propValue2)
 
 ### 使用教程
 + 每个应用支持自定义构建脚本，执行路径为应用根目录/custom-build/build.sh，在压缩成zip前执行
-+ 每个应用支持自定义更新脚本，执行路径为应用根目录custom-build/before-app-start.sh，在目标服务器应用启动前执行
++ 每个应用支持自定义更新脚本，执行路径为应用根目录/custom-build/before-app-start.sh，在目标服务器应用启动前执行
 
 #### 环境变量说明
 
