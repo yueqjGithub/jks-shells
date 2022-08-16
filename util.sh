@@ -80,15 +80,12 @@ function avalon_web_cd_build_app() {
             appRepoUrl=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${CD_REPO})
         fi
 
-        echo "appRepoUrl=${appRepoUrl}"
         local appSubPath=$(bash md5.sh "${appRepoUrl}")
         local appAbsolutePath="${WORKSPACE}/build/${appSubPath}/${appPath}"
 
         local appName=$(echo "${appPath}" | sed -r 's/.+\///g')
         # 是否压缩应用，运维标准不统一，遗留问题
         local willZipApp=true
-
-        echo "开始构建应用${appName}"
 
         cd "${appAbsolutePath}" || exit 1
 
