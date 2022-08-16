@@ -68,7 +68,7 @@ function avalon_web_cd_build_app() {
         local appPath=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr})
         # 根据应用配置的对应仓库，获取最终的build路径
         local appRepoId=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} 仓库id)
-        local matchResult=$(echo "${CD_REPO}" | sed -rn "s/^([^()]+)\([^()]*仓库id:${appRepoId}[,)].*)$/\1/p")
+        local matchResult=$(echo "${CD_REPO}" | sed -rn "s/^([^()]+)\([^()]*仓库id:${appRepoId}[,)].*\)$/\1/p")
         local appRepoUrl=""
         if [[ ${#matchResult[*]} == 1 ]]; then
             appRepoUrl="${matchResult[0]}"
