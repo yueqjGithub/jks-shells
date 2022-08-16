@@ -268,6 +268,7 @@ rm -rf ${deployDir}/update_tmp
 mkdir ${deployDir}/update_tmp
 mv -f /tmp/${zipname} ${deployDir}/update_tmp/ || exit 1
 if [[ -f ${deployDir}/update_tmp/${zipname} ]]; then
+
 else
     exit 1
 fi
