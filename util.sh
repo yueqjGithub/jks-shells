@@ -71,7 +71,7 @@ function avalon_web_cd_build_app() {
         local matchResult=$(echo "${CD_REPO}" | sed -rn "s/^([^()]+)\([^()]*仓库id:${appRepoId}[,)].*)$/\1/p")
         local appRepoUrl=""
         if [[ ${#matchResult[*]} == 1 ]]; then
-            appRepoUrl=matchResult[0]
+            appRepoUrl="${matchResult[0]}"
         else
             #未匹配表示仓库只有一个，使用默认值
             appRepoUrl=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${CD_REPO})
