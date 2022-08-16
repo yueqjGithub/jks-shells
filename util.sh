@@ -275,7 +275,7 @@ else
 fi
 cd ${deployDir}/update_tmp || exit 1
 # 查看目录结构，获取要更新的应用列表
-zipStruct=$(unzip -l ${zipname} | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/p" || exit 1)
+zipStruct=$(unzip -l "${zipname}" | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/p" || exit 1)
 updateApps=$(echo \${zipStruct} | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p" || exit 1)
 echo "更新的应用列表:${updateApps}"
 
