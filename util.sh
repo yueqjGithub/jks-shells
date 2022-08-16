@@ -271,83 +271,83 @@ cd ${deployDir}/update_tmp || exit 1
 # 查看目录结构，获取要更新的应用列表
 zipStruct=\$(unzip -l "${zipname}" | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/p")
 updateApps=\$(echo "\${zipStruct}" | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p")
-echo "更新的应用列表:${updateApps}"
+echo "更新的应用列表:\${updateApps}"
 
-# appZips=$(ls *.zip 2> /dev/null | wc -l)
-# if [[ "\${appZips}" != "0" ]]; then
-#     unzip -o ${zipname} || exit 1
-# fi
+appZips=$(ls *.zip 2> /dev/null | wc -l)
+if [[ "\${appZips}" != "0" ]]; then
+    unzip -o ${zipname} || exit 1
+fi
 
-# if [[ "${CD_ZIP_ROOT}" != "" ]]; then
-#     mv -f ${deployDir}/update_tmp/${CD_ZIP_ROOT}/*.zip ${deployDir}/update_tmp/update_tmp || exit 1
-#     rm -rf ${deployDir}/update_tmp/${CD_ZIP_ROOT}/ || exit 1
-# fi
+if [[ "${CD_ZIP_ROOT}" != "" ]]; then
+    mv -f ${deployDir}/update_tmp/${CD_ZIP_ROOT}/*.zip ${deployDir}/update_tmp/update_tmp || exit 1
+    rm -rf ${deployDir}/update_tmp/${CD_ZIP_ROOT}/ || exit 1
+fi
 
-# rm -f ${zipname} || exit 1
-# cd ${deployDir}/update_tmp
-# # 尝试解压所有应用的zip
-# unzip -o *.zip
-# cd ${deployDir}
+rm -f ${zipname} || exit 1
+cd ${deployDir}/update_tmp
+# 尝试解压所有应用的zip
+unzip -o *.zip
+cd ${deployDir}
 
-# for i in \${updateApps}
-#   do
-#     appName=\`echo \${i} | cut -f 1 -d .\`
+for i in \${updateApps}
+  do
+    appName=\`echo \${i} | cut -f 1 -d .\`
 
-#     echo "#开始更新\${appName}应用"
-#     appType=
-#     if [[ -f \${appName}.json ]] || [[ -f \${appName}.yaml ]]; then
-#       configFileType="json"
-#       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
-#       appType=pm2
-#       echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
-#       pm2 delete \${appName}.\${configFileType}
-#       echo "删除原目录"
-#       rm -rf \${appName}
-#       mv update_tmp/\${appName} ./
-#     elif [[ -f \${appName}/.env ]]; then
-#       appType=php
-#       echo "laravel应用需要备份.env文件"
-#       mv \${appName}/.env \${appName}.env
-#       rm -rf \${appName}
-#       mv update_tmp/\${appName} ./
-#       mv \${appName}.env \${appName}/.env 
-#     elif [[ -f \${appName}/\${appName}.jar ]]; then
-#       appType=java
-#       echo "java应用需要备份.properties文件"
-#       pid=$(ps ax | grep -i \${appName}.jar |grep java | grep -v grep | awk '{print $1}') || exit 1
-#       if [ -z "\$pid" ] ; then
-#         echo "\${appName}.jar未运行,不做停服处理"
-#       else
-#         kill \${pid}
-#       fi
-#       mv \${appName}/\${appName}.properties \${appName}.properties
-#       rm -rf \${appName}
-#       mv update_tmp/\${appName} ./
-#       mv \${appName}.properties \${appName}/\${appName}.properties    
-#     else
-#       rm -rf \${appName}
-#       mv update_tmp/\${appName} ./
-#     fi
+    echo "#开始更新\${appName}应用"
+    appType=
+    if [[ -f \${appName}.json ]] || [[ -f \${appName}.yaml ]]; then
+      configFileType="json"
+      configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
+      appType=pm2
+      echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
+      pm2 delete \${appName}.\${configFileType}
+      echo "删除原目录"
+      rm -rf \${appName}
+      mv update_tmp/\${appName} ./
+    elif [[ -f \${appName}/.env ]]; then
+      appType=php
+      echo "laravel应用需要备份.env文件"
+      mv \${appName}/.env \${appName}.env
+      rm -rf \${appName}
+      mv update_tmp/\${appName} ./
+      mv \${appName}.env \${appName}/.env 
+    elif [[ -f \${appName}/\${appName}.jar ]]; then
+      appType=java
+      echo "java应用需要备份.properties文件"
+      pid=$(ps ax | grep -i \${appName}.jar |grep java | grep -v grep | awk '{print $1}') || exit 1
+      if [ -z "\$pid" ] ; then
+        echo "\${appName}.jar未运行,不做停服处理"
+      else
+        kill \${pid}
+      fi
+      mv \${appName}/\${appName}.properties \${appName}.properties
+      rm -rf \${appName}
+      mv update_tmp/\${appName} ./
+      mv \${appName}.properties \${appName}/\${appName}.properties    
+    else
+      rm -rf \${appName}
+      mv update_tmp/\${appName} ./
+    fi
 
-#     if [[ -f \${appName}/custom-build/before-app-start.sh ]]
-#     then    
-#       echo "开始执行应用启动前的自定义脚本"
-#       cd \${appName}
-#       bash custom-build/before-app-start.sh
-#       cd ../
-#     else
-#       echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
-#     fi
+    if [[ -f \${appName}/custom-build/before-app-start.sh ]]
+    then    
+      echo "开始执行应用启动前的自定义脚本"
+      cd \${appName}
+      bash custom-build/before-app-start.sh
+      cd ../
+    else
+      echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
+    fi
 
-#     # 启动服务器，仅pm2和java需要执行启动
-#     if [[ \${appType} == 'pm2' ]]; then
-#       pm2 start \${appName}.\${configFileType}
-#     elif [[ \${appType} == 'java' ]]; then
-#       nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${appName}.jar --config-path=\${appName}/\${appName}.properties &
-#     fi
+    # 启动服务器，仅pm2和java需要执行启动
+    if [[ \${appType} == 'pm2' ]]; then
+      pm2 start \${appName}.\${configFileType}
+    elif [[ \${appType} == 'java' ]]; then
+      nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${appName}.jar --config-path=\${appName}/\${appName}.properties &
+    fi
   
-#     rm -f \${appName}.zip
-#   done
+    rm -f \${appName}.zip
+  done
 
 
 
