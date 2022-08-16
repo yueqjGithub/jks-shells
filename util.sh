@@ -15,7 +15,6 @@ function avalon_web_cd_clear_build() {
 # 第三个参数 仓库地址
 # 第四个参数 svn版本号
 function avalon_web_cd_pull_repo() {
-    echo "avalon_web_cd_pull_repo"
     local repoType=$1
     local branch=$2
     local repoUrl=$3
@@ -30,6 +29,7 @@ function avalon_web_cd_pull_repo() {
         local branhName=$(echo "${branch}" | sed "s/.*\///g")
         git clone -b"${branhName}" --depth=1 "${gitProtocolUrl}"
         local projectName=$(echo "${gitProtocolUrl}" | sed "s/.*\///g" | sed "s/\.git//g")
+        mkdir -p ${WORKSPACE}/build/${buildSubPath}
         mv ${WORKSPACE}/${projectName} ${WORKSPACE}/build/${buildSubPath}
         cd ${WORKSPACE}/build || exit 1
         return 0
