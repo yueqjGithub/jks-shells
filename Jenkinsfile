@@ -16,6 +16,7 @@ def parseRepo(repoStr){
         echo "${map}"
         data.add(map)   
     }
+    echo data
     return data
 }
 
