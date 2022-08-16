@@ -323,16 +323,18 @@ for i in \${updateApps}
     elif [[ \${appType} == "java" ]]; then
       appType=java
       echo "java应用需要备份.properties文件"
-      pid=\$(ps ax | grep -i \${appName}.jar |grep java | grep -v grep | awk '{print \$1}') || exit 1
+      jarFileName=\$(ls *.jar)
+      pid=\$(ps ax | grep -i \${jarFileName}.jar |grep java | grep -v grep | awk '{print \$1}') || exit 1
       if [ -z "\$pid" ] ; then
-        echo "\${appName}.jar未运行,不做停服处理"
+        echo "\${jarFileName}.jar未运行,不做停服处理"
       else
         kill \${pid}
       fi
-      mv \${appName}/\${appName}.properties \${appName}.properties
+      mkdir \${appName}/tmp
+      mv \${appName}/*.properties \${appName}/tmp
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
-      mv \${appName}.properties \${appName}/\${appName}.properties    
+      mv \${appName}/tmp/*.properties \${appName}/
     else
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
@@ -352,7 +354,7 @@ for i in \${updateApps}
     if [[ \${appType} == 'pm2' ]]; then
       pm2 start \${appName}.\${configFileType}
     elif [[ \${appType} == 'java' ]]; then
-      nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${appName}.jar --config-path=\${appName}/\${appName}.properties &
+      nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${jarFileName} --config-path=\${appName}/application.properties &
     fi
   
     rm -f \${appName}.zip
