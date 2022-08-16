@@ -270,7 +270,7 @@ pipeline {
                         echo row.url
                         echo svnVersion
                         echo "${row.type} ${env[branchKey]} \"${row.url}\" \"${svnVersion}\""
-                        sh "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} \"${row.url}\" \"${svnVersion}\""
+                        // sh "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} \"${row.url}\" \"${svnVersion}\""
                     }
                 }         
             }
