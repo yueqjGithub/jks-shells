@@ -255,13 +255,14 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                def repoData = parseRepo(env.CD_REPO)
-                for(row in repoData){
-                    def branchKey = getRepoBranchKey(row.id)
-                    def svnVersionKey = getRepoSvnVersionKey(row.id)
-                    sh "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} ${svnVersionKey}"
-                } 
-                
+                script{
+                    def repoData = parseRepo(env.CD_REPO)
+                    for(row in repoData){
+                        def branchKey = getRepoBranchKey(row.id)
+                        def svnVersionKey = getRepoSvnVersionKey(row.id)
+                        sh "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} ${svnVersionKey}"
+                    }
+                }         
             }
         }
 
