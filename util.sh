@@ -270,6 +270,7 @@ mv -f /tmp/${zipname} ${deployDir}/update_tmp/ || exit 1
 if [[ -f ${deployDir}/update_tmp/${zipname} ]]; then
 
 else
+    echo "zip更新包不存在:${deployDir}/update_tmp/${zipname}"
     exit 1
 fi
 cd ${deployDir}/update_tmp || exit 1
