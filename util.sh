@@ -330,11 +330,17 @@ for i in \${updateApps}
       else
         kill \${pid}
       fi
-      mkdir \${appName}/tmp
-      mv \${appName}/*.properties \${appName}/tmp
+      mkdir "\${appName}_tmp"
+      if [[ -f \${appName}/application.properties ]]; then
+        mv \${appName}/application.properties \${appName}_tmp
+      fi
+      
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
-      mv \${appName}/tmp/*.properties \${appName}/
+      
+      if [[ -f \${appName}/application.properties ]]; then
+        mv \${appName}_tmp/application.properties \${appName}/
+      fi
     else
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
