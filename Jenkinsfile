@@ -261,16 +261,12 @@ pipeline {
                     for(row in repoData){
                         def branchKey = getRepoBranchKey(row.id)
                         def svnVersionKey = getRepoSvnVersionKey(row.id)
-                        echo row.type
-                        echo row.url
-                        def svnVersion = env.${svnVersionKey}
+                        def svnVersion = env."${svnVersionKey}"
                         if( svnVersion == null ){
                             svnVersion = ""
                         }
 
-                        // echo svnVersion
-                        echo "${row.type}  \"${row.url}\" "
-                        // sh "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} \"${row.url}\" \"${svnVersion}\""
+                        sh "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} \"${svnVersion}\""
                     }
                 }         
             }
