@@ -323,7 +323,7 @@ for i in \${updateApps}
     elif [[ \${appType} == "java" ]]; then
       appType=java
       echo "java应用需要备份.properties文件"
-      jarFileName=\$(ls *.jar)
+      jarFileName=\$(ls "\${appName}/*.jar" | "sed -rn s/^.+\/(.+)$/\1/p" )
       pid=\$(ps ax | grep -i \${jarFileName}.jar |grep java | grep -v grep | awk '{print \$1}') || exit 1
       if [ -z "\$pid" ] ; then
         echo "\${jarFileName}.jar未运行,不做停服处理"
@@ -337,7 +337,7 @@ for i in \${updateApps}
       
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
-      
+
       if [[ -f \${appName}/application.properties ]]; then
         mv \${appName}_tmp/application.properties \${appName}/
       fi
