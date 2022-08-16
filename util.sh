@@ -267,7 +267,10 @@ echo "#解压并移动到指定目录"
 rm -rf ${deployDir}/update_tmp
 mkdir ${deployDir}/update_tmp
 mv -f /tmp/${zipname} ${deployDir}/update_tmp/ || exit 1
-ls ${deployDir}/update_tmp/
+if [[ -f ${deployDir}/update_tmp/${zipname} ]]; then
+else
+    exit 1
+fi
 cd ${deployDir}/update_tmp || exit 1
 # 查看目录结构，获取要更新的应用列表
 zipStruct=$(unzip -l ${zipname} | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/p" || exit 1)
