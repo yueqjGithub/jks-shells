@@ -58,6 +58,8 @@ function avalon_web_cd_build_app() {
     destDir=${WORKSPACE}/dist/${CD_ZIP_ROOT}
     mkdir -p ${destDir}
 
+    local appNameAndType=""
+
     OLD_IFS="$IFS"
     IFS=","
     apps=(${CD_SELECTED_APPS})
@@ -136,7 +138,7 @@ function avalon_web_cd_build_app() {
         local destAppDir=${destDir}/${appName}
         [[ -d "${destAppDir}" ]] || mkdir "${destAppDir}" || exit 1
 
-
+        appNameAndType="${appNameAndType};${appName}=${appType}"
         echo "${appName}应用类型=${appType}"
 
         if [ ${appType} == 'front' ]; then
@@ -207,6 +209,8 @@ function avalon_web_cd_build_app() {
             rm -rf "${destAppDir}"
         fi
     done
+
+    CD_APP_NAME_AND_TYPE="${appNameAndType}"
 
     #生成readme和Version.txt
     cd "${WORKSPACE}/build" || exit 1
@@ -295,10 +299,10 @@ cd ${deployDir}
 for i in \${updateApps}
   do
     appName=\`echo \${i} | cut -f 1 -d .\`
+    appType=\$(echo ${CD_APP_NAME_AND_TYPE} | sed -rn "s/^.*\${appName}=([^=;]+).*$/\1/p" )
 
     echo "#开始更新\${appName}应用"
-    appType=
-    if [[ -f \${appName}.json ]] || [[ -f \${appName}.yaml ]]; then
+    if [[ \${appType} == "node" ]] ; then
       configFileType="json"
       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
       appType=pm2
@@ -307,14 +311,14 @@ for i in \${updateApps}
       echo "删除原目录"
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
-    elif [[ -f \${appName}/.env ]]; then
+    elif [[ \${appType} == "laravel" ]]; then
       appType=php
       echo "laravel应用需要备份.env文件"
       mv \${appName}/.env \${appName}.env
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
       mv \${appName}.env \${appName}/.env 
-    elif [[ -f \${appName}/\${appName}.jar ]]; then
+    elif [[ \${appType} == "java" ]]; then
       appType=java
       echo "java应用需要备份.properties文件"
       pid=\$(ps ax | grep -i \${appName}.jar |grep java | grep -v grep | awk '{print \$1}') || exit 1
