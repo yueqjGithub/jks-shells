@@ -10,32 +10,41 @@ function avalon_web_cd_clear_build() {
 }
 
 # 拉取仓库代码,应用列表位于 ${WORKSPACE}/build/ 目录下
+# 第一个参数 仓库类型,git或svn
+# 第二个参数 仓库分支
+# 第三个参数 仓库地址
+# 第四个参数 svn版本号
 function avalon_web_cd_pull_repo() {
-    if [[ ${CD_REPO_TYPE} == "git" ]]; then
+    local repoType=$1
+    local branch=$2
+    local repoUrl=$3
+    local svnVersion=$4
+
+    if [[ ${repoType} == "git" ]]; then
         echo '从公司内网git拉取代码'
         #http协议转为git协议
-        local gitProtocolUrl=$(echo "${CD_REPO}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g")
-        local branhName=$(echo "${CD_BRANCH}" | sed "s/.*\///g")
+        local gitProtocolUrl=$(echo "${repoUrl}" | sed "s/http\:\/\//git@/g" | sed "s/https\:\/\//git@/g" | sed "s/avalongames.com\//avalongames.com:/g")
+        local branhName=$(echo "${branch}" | sed "s/.*\///g")
         git clone -b"${branhName}" --depth=1 "${gitProtocolUrl}"
         local projectName=$(echo "${gitProtocolUrl}" | sed "s/.*\///g" | sed "s/\.git//g")
         mv ${WORKSPACE}/${projectName} ${WORKSPACE}/build
         cd ${WORKSPACE}/build || exit 1
         return 0
-    elif [[ ${CD_REPO_TYPE} == "svn" ]]; then
+    elif [[ ${repoType} == "svn" ]]; then
         echo '从公司内网svn拉取代码'
         mkdir ${WORKSPACE}/build
         cd ${WORKSPACE}/build || exit 1
         #获取svn最新版本号
-        if [[ ${CD_SVNVERSION} == 'latest' ]]; then
-            for i in $(svn info "${CD_REPO}/${CD_BRANCH}" --trust-server-cert --non-interactive | grep Revision); do
+        if [[ ${svnVersion} == 'latest' ]]; then
+            for i in $(svn info "${repoUrl}/${branch}" --trust-server-cert --non-interactive | grep Revision); do
                 svnVersion=$(echo "${i}" | sed 's:Revision\: ::g')
             done
         fi
 
-        svn co "${CD_REPO}/${CD_BRANCH}" -r "${svnVersion}" --trust-server-cert --non-interactive
+        svn co "${repoUrl}/${branch}" -r "${svnVersion}" --trust-server-cert --non-interactive
         return 0
     else
-        echo "无法识别的从仓库地址:${CD_REPO}"
+        echo "无法识别的从仓库地址:${repoUrl}"
         return 1
     fi
 }

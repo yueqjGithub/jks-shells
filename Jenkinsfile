@@ -1,3 +1,30 @@
+// 解析仓库配置，参数为仓库环境变量，返回map类型的list，map格式为[id:xx,url:xx,type:xx]
+def parseRepo(repoStr){
+    // 遍历仓库
+    def repoArr = env.CD_REPO.tokenize(",")
+    def data = []
+    for(row in repoArr){
+        def rValue = sh(script:"bash ./custom_string_parse.sh '${row}' ",returnStdout:true).trim()
+        def rId = sh(script:"bash ./custom_string_parse.sh '${row}' 仓库id",returnStdout:true).trim()
+        def rType=""          
+        if(rValue ==~ '.*svn.avalongames.com.*') {
+            rType = "svn"
+        }else if(env.CD_REPO ==~ '.*git.avalongames.com.*') {
+            rType = "git"
+        }
+        data.add([id:rId,url:rValue,type:rType])   
+    }
+    return data
+}
+
+// 获取仓库相关的环境变量名称，参数依次为字段名/仓库id
+def getRepoFieldEnvName(field,repoId){
+    if(repoId != ''){
+        field += "_${repoId}"
+    }    
+    return field
+}
+
 pipeline {
     agent {
         node {
@@ -30,54 +57,47 @@ pipeline {
                         error '未设置jira项目key'
                     }
 
-                    if(env.CD_REPO ==~ '.*svn.avalongames.com.*') {
-                        echo "仓库类型=svn"
-                        env.CD_REPO_TYPE = "svn"
-                        if (env.CD_SVN_VERSION == null || env.CD_SVN_VERSION == '') {
-                            error '未设置svn版本号'
-                        }
-                    }
-                    if(env.CD_REPO ==~ '.*git.avalongames.com.*') {
-                        echo "仓库类型=git"
-                        env.CD_REPO_TYPE = "git"
+                    def buildParams = []
+
+                    // 遍历仓库
+                    def repoData = parseRepo(env.CD_REPO)
+                    for(row in repoData){   
+                        if (row.type == 'git'){
+                            buildParams.add(
+                                listGitBranches(
+                                    name: 'CD_BRANCH',
+                                    description: 'git的tag/branch列表',
+                                    remoteURL: row.url,
+                                    credentialsId: env.CD_RELEASE_CRED,
+                                    defaultValue: 'main',
+                                    type: 'PT_BRANCH_TAG',
+                                    listSize: '1'
+                                )
+                            )
+                        } else if (row.type == 'svn'){
+                            buildParams.addAll(
+                                [
+                                    $class: 'ListSubversionTagsParameterDefinition', 
+                                    credentialsId: env.CD_RELEASE_CRED, 
+                                    defaultValue: '', 
+                                    maxTags: '', 
+                                    name: 'CD_BRANCH', 
+                                    reverseByDate: false, 
+                                    reverseByName: false, 
+                                    tagsDir: row.url, 
+                                    tagsFilter: ''
+                                ],
+                                string(defaultValue: 'latest', description: 'svn版本号,latest=最新', name: 'CD_SVN_VERSION')
+                            )                        
+                        }else {
+                            error "未识别的仓库类型,地址=${row.url}"
+                        }                        
                     }
 
                     if(env.CD_ZIP_PREFIX == null || env.CD_ZIP_PREFIX == ''){
                         echo "未配置包名前缀，默认使用jenkins工程名称${env.JOB_BASE_NAME}"
                         env.CD_ZIP_PREFIX=env.JOB_BASE_NAME
                     }
-
-                    def buildParams = []
-
-                    if (env.CD_REPO_TYPE == 'git'){
-                        buildParams.add(
-                            listGitBranches(
-                                name: 'CD_BRANCH',
-                                description: 'git的tag/branch列表',
-                                remoteURL: env.CD_REPO,
-                                credentialsId: env.CD_RELEASE_CRED,
-                                defaultValue: 'main',
-                                type: 'PT_BRANCH_TAG',
-                                listSize: '1'
-                            )
-                        )
-                    }
-                    if (env.CD_REPO_TYPE == 'svn'){
-                        buildParams.addAll(
-                            [
-                                $class: 'ListSubversionTagsParameterDefinition', 
-                                credentialsId: env.CD_RELEASE_CRED, 
-                                defaultValue: '', 
-                                maxTags: '', 
-                                name: 'CD_BRANCH', 
-                                reverseByDate: false, 
-                                reverseByName: false, 
-                                tagsDir: env.CD_REPO, 
-                                tagsFilter: ''
-                            ],
-                            string(defaultValue: 'latest', description: 'svn版本号,latest=最新', name: 'CD_SVN_VERSION')
-                        )                        
-                    }                    
 
                     buildParams.add(
                         [
@@ -200,10 +220,18 @@ pipeline {
                         disableConcurrentBuilds(),
                     ])
                
-                    // 分支是参数化构建传递的
+                    // 分支是参数化构建传递的，参数化构建的值最后进行检测
                     if (env.CD_BRANCH == null || env.CD_BRANCH == '') {
                         error '未设置仓库分支'
                     }            
+                    for(row in repoData){   
+                        if(row.type == 'svn') {
+                            def vKey = getRepoFieldEnvName("CD_SVN_VERSION",row.id)
+                            if (env[vKey] == null || env[vKey] == '') {
+                                error '未设置svn版本号'
+                            }
+                        }
+                    }
 
                 }
             }
