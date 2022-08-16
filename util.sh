@@ -15,6 +15,7 @@ function avalon_web_cd_clear_build() {
 # 第三个参数 仓库地址
 # 第四个参数 svn版本号
 function avalon_web_cd_pull_repo() {
+    echo "avalon_web_cd_pull_repo"
     local repoType=$1
     local branch=$2
     local repoUrl=$3
