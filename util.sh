@@ -210,8 +210,8 @@ function avalon_web_cd_build_app() {
         fi
     done
 
-    CD_APP_NAME_AND_TYPE="${appNameAndType}"
-    export CD_APP_NAME_AND_TYPE
+    export CD_APP_NAME_AND_TYPE="${appNameAndType}"
+
 
     #生成readme和Version.txt
     cd "${WORKSPACE}/build" || exit 1
