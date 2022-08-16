@@ -128,6 +128,11 @@ function avalon_web_cd_build_app() {
             fi
         fi
 
+        if [[ appName == "" ]]; then
+            echo "非java单应用仓库的应用名称不能为空:${appRepoUrl}"
+            exit 1
+        fi
+
         local destAppDir=${destDir}/${appName}
         [[ -d "${destAppDir}" ]] || mkdir "${destAppDir}" || exit 1
 
