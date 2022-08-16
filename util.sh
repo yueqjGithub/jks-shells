@@ -30,7 +30,7 @@ function avalon_web_cd_pull_repo() {
         git clone -b"${branhName}" --depth=1 "${gitProtocolUrl}"
         local projectName=$(echo "${gitProtocolUrl}" | sed "s/.*\///g" | sed "s/\.git//g")
         mkdir -p ${WORKSPACE}/build/${buildSubPath}
-        mv ${WORKSPACE}/${projectName} ${WORKSPACE}/build/${buildSubPath}
+        mv ${WORKSPACE}/${projectName}/* ${WORKSPACE}/build/${buildSubPath}/
         cd ${WORKSPACE}/build || exit 1
         return 0
     elif [[ ${repoType} == "svn" ]]; then
