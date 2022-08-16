@@ -19,6 +19,8 @@ function avalon_web_cd_pull_repo() {
     local branch=$2
     local repoUrl=$3
     local svnVersion=$4
+    # 仓库代码在build中的子路径
+    local buildSubPath=$(bash md5.sh "${repoUrl}")
 
     if [[ ${repoType} == "git" ]]; then
         echo '从公司内网git拉取代码'
@@ -27,13 +29,13 @@ function avalon_web_cd_pull_repo() {
         local branhName=$(echo "${branch}" | sed "s/.*\///g")
         git clone -b"${branhName}" --depth=1 "${gitProtocolUrl}"
         local projectName=$(echo "${gitProtocolUrl}" | sed "s/.*\///g" | sed "s/\.git//g")
-        mv ${WORKSPACE}/${projectName} ${WORKSPACE}/build
+        mv ${WORKSPACE}/${projectName} ${WORKSPACE}/build/${buildSubPath}
         cd ${WORKSPACE}/build || exit 1
         return 0
     elif [[ ${repoType} == "svn" ]]; then
         echo '从公司内网svn拉取代码'
-        mkdir ${WORKSPACE}/build
-        cd ${WORKSPACE}/build || exit 1
+        mkdir -p ${WORKSPACE}/build/${buildSubPath}
+        cd ${WORKSPACE}/build/${buildSubPath} || exit 1
         #获取svn最新版本号
         if [[ ${svnVersion} == 'latest' ]]; then
             for i in $(svn info "${repoUrl}/${branch}" --trust-server-cert --non-interactive | grep Revision); do
@@ -61,31 +63,45 @@ function avalon_web_cd_build_app() {
     IFS="$OLD_IFS"
     for app in ${apps[@]}; do
 
-        appConfigStr=${app}
-        appPath=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr})
-        appName=$(echo "${appPath}" | sed -r 's/.+\///g')
+        local appConfigStr=${app}
+        local appPath=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr})
+        # 根据应用配置的对应仓库，获取最终的build路径
+        local appRepoId=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} 仓库id)
+        local matchResult=$(echo "${CD_REPO}" | sed -rn "s/^([^()]+)\([^()]*仓库id:${appRepoId}[,)].*)$/\1/p")
+        local appRepoUrl=""
+        if [[ ${#matchResult[*]} == 1 ]]; then
+            appRepoUrl=matchResult[0]
+        else
+            #未匹配表示仓库只有一个，使用默认值
+            appRepoUrl=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${CD_REPO})
+        fi
+        echo "appRepoUrl=${appRepoUrl}"
+        local appSubPath=$(bash md5.sh "${appRepoUrl}")
+        local appAbsolutePath="${WORKSPACE}/build/${appSubPath}/${appPath}"
+
+        local appName=$(echo "${appPath}" | sed -r 's/.+\///g')
         # 是否压缩应用，运维标准不统一，遗留问题
-        willZipApp=true
+        local willZipApp=true
 
         echo "开始构建应用${appName}"
 
-        cd "${WORKSPACE}/build/${appPath}" || exit 1
+        cd "${appAbsolutePath}" || exit 1
 
-        [[ -d "${WORKSPACE}/build/${appPath}" ]] || mkdir "${WORKSPACE}/build/${appPath}"
+        [[ -d "${appAbsolutePath}" ]] || mkdir "${appAbsolutePath}"
 
-        appType='未知'
-        buildFile="${WORKSPACE}/build/${appPath}/*"
+        local appType='未知'
+        local buildFile="${appAbsolutePath}/*"
         if [[ -f 'composer.json' ]] && [[ $(cat composer.json | grep "laravel/framework") ]]; then
             appType='laravel'
         elif [[ -f 'webpack.config.custom.js' ]]; then
             appType='front'
-            buildFile="${WORKSPACE}/build/${appPath}/dist/*"
-            if [[ -f "${WORKSPACE}/build/${appPath}/next.config.js" ]] || [[ -f "${WORKSPACE}/build/${appPath}/vite.confit.ts" ]]; then
+            buildFile="${appAbsolutePath}/dist/*"
+            if [[ -f "${appAbsolutePath}/next.config.js" ]] || [[ -f "${appAbsolutePath}/vite.confit.ts" ]]; then
                 willZipApp=false
             fi
         elif [[ -f 'package.json' ]]; then
             appType='node'
-            if [[ -f "${WORKSPACE}/build/${appPath}/next.config.js" ]] || [[ -f "${WORKSPACE}/build/${appPath}/vite.confit.ts" ]]; then
+            if [[ -f "${appAbsolutePath}/next.config.js" ]] || [[ -f "${appAbsolutePath}/vite.confit.ts" ]]; then
                 willZipApp=false
             fi
         elif [[ -f 'pom.xml' ]]; then
@@ -98,10 +114,10 @@ function avalon_web_cd_build_app() {
                 exit 1
             fi
 
-            buildFile="${WORKSPACE}/build/${jarPath}"
+            buildFile="${WORKSPACE}/build/${appSubPath}/${jarPath}"
             # 如果java应用的仓库根目录就是应用，则使用jar名称作为应用名
             if [[ ${appName} == "" ]]; then
-                deployAppName=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} 部署名称)
+                local deployAppName=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} 部署名称)
                 if [[ ${deployAppName} == "" ]]; then
                     echo "未配置部署名称"
                     exit 1
@@ -110,7 +126,7 @@ function avalon_web_cd_build_app() {
             fi
         fi
 
-        destAppDir=${destDir}/${appName}
+        local destAppDir=${destDir}/${appName}
         [[ -d "${destAppDir}" ]] || mkdir "${destAppDir}" || exit 1
 
 
@@ -163,14 +179,14 @@ function avalon_web_cd_build_app() {
             mvn clean install -DskipTests || exit 1
             # 复制sql与properties文件
             mkdir ${destAppDir}/sql
-            mv ${WORKSPACE}/build/${appPath}/config/* ${destAppDir}/sql
+            mv ${appAbsolutePath}/config/* ${destAppDir}/sql
             mv ${destAppDir}/sql/application.* ${destAppDir}
         fi
 
-        if [[ -f "${WORKSPACE}/build/${appPath}/custom-build/build.sh" ]]; then
+        if [[ -f "${appAbsolutePath}/custom-build/build.sh" ]]; then
             echo "${appName}检测到自定义脚本custom-build/build.sh，开始执行"
-            bash "${WORKSPACE}/build/${appPath}/custom-build/build.sh" || exit 1
-            cd "${WORKSPACE}/build/${appPath}" || exit 1
+            bash "${appAbsolutePath}/custom-build/build.sh" || exit 1
+            cd "${appAbsolutePath}" || exit 1
         else
             echo "${appName}未检测到自定义脚本custom-build/build.sh，无需执行"
         fi

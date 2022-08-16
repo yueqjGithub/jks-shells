@@ -1,7 +1,7 @@
 // 解析仓库配置，参数为仓库环境变量，返回map类型的list，map格式为[id:xx,url:xx,type:xx]
 def parseRepo(repoStr){
     // 遍历仓库
-    def repoArr = env.CD_REPO.tokenize(",")
+    def repoArr = repoStr.tokenize(",")
     def data = []
     for(row in repoArr){
         def rValue = sh(script:"bash ./custom_string_parse.sh '${row}' ",returnStdout:true).trim()
@@ -9,7 +9,7 @@ def parseRepo(repoStr){
         def rType=""          
         if(rValue ==~ '.*svn.avalongames.com.*') {
             rType = "svn"
-        }else if(env.CD_REPO ==~ '.*git.avalongames.com.*') {
+        }else if(rValue ==~ '.*git.avalongames.com.*') {
             rType = "git"
         }
         data.add([id:rId,url:rValue,type:rType])   
@@ -23,6 +23,14 @@ def getRepoFieldEnvName(field,repoId){
         field += "_${repoId}"
     }    
     return field
+}
+
+def getRepoBranchKey(repoId){
+    return getRepoFieldEnvName("CD_BRANCH",repoId)
+}
+
+def getRepoSvnVersionKey(repoId){
+    return getRepoFieldEnvName("CD_SVN_VERSION",repoId)
 }
 
 pipeline {
@@ -62,10 +70,11 @@ pipeline {
                     // 遍历仓库
                     def repoData = parseRepo(env.CD_REPO)
                     for(row in repoData){   
+                        def branchKey = getRepoBranchKey(row.id)
                         if (row.type == 'git'){
                             buildParams.add(
                                 listGitBranches(
-                                    name: 'CD_BRANCH',
+                                    name: branchKey,
                                     description: 'git的tag/branch列表',
                                     remoteURL: row.url,
                                     credentialsId: env.CD_RELEASE_CRED,
@@ -75,19 +84,20 @@ pipeline {
                                 )
                             )
                         } else if (row.type == 'svn'){
+                            def svnVersionKey = getRepoSvnVersionKey(row.id)
                             buildParams.addAll(
                                 [
                                     $class: 'ListSubversionTagsParameterDefinition', 
                                     credentialsId: env.CD_RELEASE_CRED, 
                                     defaultValue: '', 
                                     maxTags: '', 
-                                    name: 'CD_BRANCH', 
+                                    name: branchKey, 
                                     reverseByDate: false, 
                                     reverseByName: false, 
                                     tagsDir: row.url, 
                                     tagsFilter: ''
                                 ],
-                                string(defaultValue: 'latest', description: 'svn版本号,latest=最新', name: 'CD_SVN_VERSION')
+                                string(defaultValue: 'latest', description: 'svn版本号,latest=最新', name: svnVersionKey)
                             )                        
                         }else {
                             error "未识别的仓库类型,地址=${row.url}"
@@ -226,8 +236,8 @@ pipeline {
                     }            
                     for(row in repoData){   
                         if(row.type == 'svn') {
-                            def vKey = getRepoFieldEnvName("CD_SVN_VERSION",row.id)
-                            if (env[vKey] == null || env[vKey] == '') {
+                            def svnVersionKey = getRepoSvnVersionKey(row.id)
+                            if (env[svnVersionKey] == null || env[svnVersionKey] == '') {
                                 error '未设置svn版本号'
                             }
                         }
@@ -245,7 +255,13 @@ pipeline {
 
         stage('拉取项目仓库') {
             steps {
-                sh 'source ./util.sh && avalon_web_cd_pull_repo'
+                def repoData = parseRepo(env.CD_REPO)
+                for(row in repoData){
+                    def branchKey = getRepoBranchKey(row.id)
+                    def svnVersionKey = getRepoSvnVersionKey(row.id)
+                    sh "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} ${svnVersionKey}"
+                } 
+                
             }
         }
 
