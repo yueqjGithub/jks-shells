@@ -266,7 +266,7 @@ echo "#解压并移动到指定目录"
 # 创建用于更新的临时目录
 rm -rf ${deployDir}/update_tmp
 mkdir ${deployDir}/update_tmp
-mv -f /tmp/${zipname} ${deployDir}/update_tmp/ || exit 1
+cp /tmp/${zipname} ${deployDir}/update_tmp/ || exit 1
 if [[ -f ${deployDir}/update_tmp/${zipname} ]]; then
     echo "zip更新包:${deployDir}/update_tmp/${zipname}"
 else
