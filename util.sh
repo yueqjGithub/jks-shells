@@ -211,6 +211,7 @@ function avalon_web_cd_build_app() {
     done
 
     CD_APP_NAME_AND_TYPE="${appNameAndType}"
+    export CD_APP_NAME_AND_TYPE
 
     #生成readme和Version.txt
     cd "${WORKSPACE}/build" || exit 1
@@ -299,9 +300,10 @@ cd ${deployDir}
 for i in \${updateApps}
   do
     appName=\`echo \${i} | cut -f 1 -d .\`
+    echo ""
     appType=\$(echo ${CD_APP_NAME_AND_TYPE} | sed -rn "s/^.*\${appName}=([^=;]+).*$/\1/p" )
 
-    echo "#开始更新\${appName}应用,type=\${appType}"
+    echo "开始更新\${appName}应用,type=\${appType}"
     if [[ \${appType} == "node" ]] ; then
       configFileType="json"
       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
