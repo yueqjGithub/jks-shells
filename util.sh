@@ -210,7 +210,8 @@ function avalon_web_cd_build_app() {
         fi
     done
 
-    export CD_APP_NAME_AND_TYPE="${appNameAndType}"
+    # 将应用类型信息写入文件
+    echo "${appNameAndType}" >appNameAndType.txt
 
 
     #生成readme和Version.txt
@@ -301,7 +302,7 @@ for i in \${updateApps}
   do
     appName=\`echo \${i} | cut -f 1 -d .\`
     echo ""
-    appType=\$(echo ${CD_APP_NAME_AND_TYPE} | sed -rn "s/^.*\${appName}=([^=;]+).*$/\1/p" )
+    appType=\$(cat ${deployDir}/update_tmp/appNameAndType.txt | sed -rn "s/^.*\${appName}=([^=;]+).*$/\1/p" )
 
     echo "开始更新\${appName}应用,type=\${appType}"
     if [[ \${appType} == "node" ]] ; then
@@ -357,8 +358,6 @@ for i in \${updateApps}
   
     rm -f \${appName}.zip
   done
-
-
 
 exit 0
 EOF
