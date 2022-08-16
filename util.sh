@@ -210,16 +210,15 @@ function avalon_web_cd_build_app() {
         fi
     done
 
-    # 将应用类型信息写入文件
-    echo "${appNameAndType}" >appNameAndType.txt
-
-
     #生成readme和Version.txt
     cd "${WORKSPACE}/build" || exit 1
     local version=$(git rev-list --all | wc -l)
     cd "${WORKSPACE}/dist/${CD_ZIP_ROOT}" || exit 1
     echo "${CD_README}" | sed 's: :\n:g' >readme.txt
     echo "${version}" >Version.txt
+
+    # 将应用类型信息写入文件
+    echo "${appNameAndType}" >appNameAndType.txt
 
     #压缩并生成md5
     zipname=${CD_ZIP_PREFIX}_${CD_APP_VERSION}_${version}_${BUILD_NUMBER}
