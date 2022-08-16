@@ -6,13 +6,15 @@ def parseRepo(repoStr){
     for(row in repoArr){
         def rValue = sh(script:"bash ./custom_string_parse.sh '${row}' ",returnStdout:true).trim()
         def rId = sh(script:"bash ./custom_string_parse.sh '${row}' 仓库id",returnStdout:true).trim()
-        def rType=""          
+        def rType = ""          
         if(rValue ==~ '.*svn.avalongames.com.*') {
             rType = "svn"
         }else if(rValue ==~ '.*git.avalongames.com.*') {
             rType = "git"
         }
-        data.add([id:rId,url:rValue,type:rType])   
+        def map = [id:rId,url:rValue,type:rType]
+        echo "${map}"
+        data.add(map)   
     }
     return data
 }
@@ -260,7 +262,6 @@ pipeline {
                     for(row in repoData){
                         def branchKey = getRepoBranchKey(row.id)
                         def svnVersionKey = getRepoSvnVersionKey(row.id)
-                        echo "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} ${svnVersionKey}"
                         sh "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} ${svnVersionKey}"
                     }
                 }         
