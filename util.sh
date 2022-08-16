@@ -273,20 +273,23 @@ zipStruct=\$(unzip -l "${zipname}" | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/
 updateApps=\$(echo "\${zipStruct}" | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p")
 echo "更新的应用列表:\${updateApps}"
 
-appZips=\$(ls *.zip 2> /dev/null | wc -l)
-if [[ "\${appZips}" != "0" ]]; then
-    unzip -o ${zipname} || exit 1
-fi
+# 解压更新包
+cd ${deployDir}/update_tmp
+unzip -o *.zip
 
+# 消除压缩包的根目录
 if [[ "${CD_ZIP_ROOT}" != "" ]]; then
     mv -f ${deployDir}/update_tmp/${CD_ZIP_ROOT}/*.zip ${deployDir}/update_tmp/update_tmp || exit 1
     rm -rf ${deployDir}/update_tmp/${CD_ZIP_ROOT}/ || exit 1
 fi
 
-rm -f ${zipname} || exit 1
-cd ${deployDir}/update_tmp
 # 尝试解压所有应用的zip
-unzip -o *.zip
+appZips=\$(ls *.zip 2> /dev/null | wc -l)
+if [[ "\${appZips}" != "0" ]]; then
+    unzip -o *.zip || exit 1
+fi
+
+rm -f ${zipname} || exit 1
 cd ${deployDir}
 
 for i in \${updateApps}
@@ -314,7 +317,7 @@ for i in \${updateApps}
     elif [[ -f \${appName}/\${appName}.jar ]]; then
       appType=java
       echo "java应用需要备份.properties文件"
-      pid=$(ps ax | grep -i \${appName}.jar |grep java | grep -v grep | awk '{print $1}') || exit 1
+      pid=\$(ps ax | grep -i \${appName}.jar |grep java | grep -v grep | awk '{print \$1}') || exit 1
       if [ -z "\$pid" ] ; then
         echo "\${appName}.jar未运行,不做停服处理"
       else
