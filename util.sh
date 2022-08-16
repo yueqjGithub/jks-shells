@@ -301,7 +301,7 @@ for i in \${updateApps}
     appName=\`echo \${i} | cut -f 1 -d .\`
     appType=\$(echo ${CD_APP_NAME_AND_TYPE} | sed -rn "s/^.*\${appName}=([^=;]+).*$/\1/p" )
 
-    echo "#开始更新\${appName}应用"
+    echo "#开始更新\${appName}应用,type=\${appType}"
     if [[ \${appType} == "node" ]] ; then
       configFileType="json"
       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
