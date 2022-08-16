@@ -13,10 +13,8 @@ def parseRepo(repoStr){
             rType = "git"
         }
         def map = [id:rId,url:rValue,type:rType]
-        echo "${map}"
         data.add(map)   
     }
-    echo data
     return data
 }
 
@@ -263,7 +261,8 @@ pipeline {
                     for(row in repoData){
                         def branchKey = getRepoBranchKey(row.id)
                         def svnVersionKey = getRepoSvnVersionKey(row.id)
-                        sh "source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} ${svnVersionKey}"
+                        echo "branchKey=${branchKey}"
+                        sh("source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} ${svnVersionKey}")
                     }
                 }         
             }
