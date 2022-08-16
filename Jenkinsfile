@@ -261,7 +261,7 @@ pipeline {
                     for(row in repoData){
                         def branchKey = getRepoBranchKey(row.id)
                         def svnVersionKey = getRepoSvnVersionKey(row.id)
-                        sh(script:"source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} ${svnVersionKey}",returnStdout:true)
+                        sh(script:"source ./util.sh && avalon_web_cd_pull_repo ${row.type} ${env[branchKey]} ${row.url} ${env[svnVersionKey]}",returnStdout:true)
                     }
                 }         
             }
