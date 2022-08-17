@@ -362,7 +362,7 @@ for i in \${updateApps}
     if [[ \${appType} == 'pm2' ]]; then
       pm2 start \${appName}.\${configFileType}
     elif [[ \${appType} == 'java' ]]; then
-      nohup java -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8  -jar  \${appName}/\${jarFileName} --config-path=\${appName}/application.properties &
+      nohup java -jar \${appName}/\${jarFileName} >/dev/null 2>&1 & echo "启动脚本已执行"
     fi
   
     rm -f \${appName}.zip
