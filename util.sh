@@ -20,6 +20,7 @@ function avalon_web_cd_pull_repo() {
     local repoUrl=$3
     local svnVersion=$4
     # 仓库代码在build中的子路径
+    cd ${WORKSPACE}
     local buildSubPath=$(bash md5.sh "${repoUrl}")
 
     if [[ ${repoType} == "git" ]]; then
