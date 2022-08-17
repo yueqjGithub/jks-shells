@@ -429,10 +429,10 @@ for i in \${updateApps}
       pm2 start \${appName}.\${configFileType}
     elif [[ \${appType} == 'next' ]]; then
       cd ${deployDir}/\${appName}
-      nohup npm run start >/dev/null 2>&1 & echo "启动脚本已执行"
+      nohup npm run start & echo "启动脚本已执行"
       cd ${deployDir}
     elif [[ \${appType} == 'java' ]]; then
-      nohup java -jar \${appName}/\${jarFileName} >/dev/null 2>&1 & echo "启动脚本已执行"
+      nohup java -jar \${appName}/\${jarFileName} & echo "启动脚本已执行"
     fi
   
     rm -f \${appName}.zip
