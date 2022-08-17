@@ -186,11 +186,11 @@ function avalon_web_cd_build_app() {
             fi
         fi
 
-        if [[ ${appType} == 'next' ]]; then
-            #node应用
-            # echo "安装依赖库"
-            # npm install --unsafe-perm || exit 1
-        fi
+        # if [[ ${appType} == 'next' ]]; then
+        #     #node应用
+        #     # echo "安装依赖库"
+        #     # npm install --unsafe-perm || exit 1
+        # fi
 
         if [[ ${appType} == 'java' ]]; then
             #java应用
