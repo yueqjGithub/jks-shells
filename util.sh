@@ -73,10 +73,14 @@ function avalon_web_cd_build_app() {
         local appRepoId=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} 仓库id)
         local appRepoUrl=""
         if [[ "${appRepoId}" != "" ]]; then
-            local matchResult=$(echo "${CD_REPO}" | sed -rn "s/^([^()]+)\([^()]*仓库id:${appRepoId}[,)].*$/\1/p")
-            if [[ ${#matchResult[*]} == 1 ]]; then
-                appRepoUrl="${matchResult[0]}"
-            fi
+            local repoArr=(${CD_REPO//,/ })
+            for row in ${repoArr[@]}
+            do
+                local rowRepoId=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${row} 仓库id)
+                if [[ "${rowRepoId}" == "${appRepoId}" ]]; then
+                    appRepoUrl=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${row})
+                fi
+            done 
         fi
         if [[ "${appRepoUrl}" == "" ]]; then
             #仓库只有一个时，使用默认值
