@@ -338,15 +338,19 @@ for i in \${updateApps}
       # 备份配置文件到临时目录
       if [[ -f \${appName}/application.properties ]]; then
         mv \${appName}/application.properties \${appName}_tmp
+        echo "已备份\${appName}/application.properties"
       fi
       if [[ -f \${appName}/application.yml ]]; then
         mv \${appName}/application.yml \${appName}_tmp
+        echo "已备份\${appName}/application.yml"
       fi
       if [[ -d \${appName}/config ]]; then
         mv \${appName}/config \${appName}_tmp
+        echo "已备份\${appName}/config"
       fi      
       if [[ -d \${appName}/resources ]]; then
         mv \${appName}/resources \${appName}_tmp
+        echo "已备份\${appName}/resources"
       fi   
 
       # 删除整个应用目录，从更新包解压
