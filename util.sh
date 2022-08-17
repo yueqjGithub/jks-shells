@@ -109,6 +109,7 @@ function avalon_web_cd_build_app() {
                 willZipApp=false
             fi
         elif [[ -f 'next.config.js' ]]; then
+            # next应用安装依赖库必须在服务器上
             appType='next'
             buildFile="${appAbsolutePath}/*"
             willZipApp=false
@@ -185,12 +186,6 @@ function avalon_web_cd_build_app() {
                 echo 'package.json中不存在release命令，无需执行'
             fi
         fi
-
-        # if [[ ${appType} == 'next' ]]; then
-        #     #node应用
-        #     # echo "安装依赖库"
-        #     # npm install --unsafe-perm || exit 1
-        # fi
 
         if [[ ${appType} == 'java' ]]; then
             #java应用
@@ -418,7 +413,7 @@ for i in \${updateApps}
     then    
       echo "开始执行应用启动前的自定义脚本"
       cd \${appName}
-      bash custom-build/before-app-start.sh || exit 1
+      bash custom-build/before-app-start.sh
       cd ../
     else
       echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
