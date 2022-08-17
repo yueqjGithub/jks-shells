@@ -210,7 +210,7 @@ function avalon_web_cd_build_app() {
             echo "${appName}未检测到自定义脚本custom-build/build.sh，无需执行"
         fi
 
-        mv ${buildFile} "${destAppDir}" || exit 1
+        cp -a ${buildFile} "${destAppDir}" || exit 1
 
         if [[ ${willZipApp} == "true" ]]; then
             #压缩
