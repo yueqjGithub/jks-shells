@@ -325,9 +325,9 @@ for i in \${updateApps}
       echo "java应用需要备份.properties文件"
       jarFileName=\$(ls \${appName}/*.jar | head -1 | sed -rn "s/^.+\/(.+)$/\1/p") || exit 1
       echo "jarFileName=\${jarFileName}"
-      pid=\$(ps ax | grep -i \${jarFileName}.jar |grep java | grep -v grep | awk '{print \$1}') || exit 1
+      pid=\$(ps ax | grep -i \${jarFileName} |grep java | grep -v grep | awk '{print \$1}') || exit 1
       if [ -z "\$pid" ] ; then
-        echo "\${jarFileName}.jar未运行,不做停服处理"
+        echo "\${jarFileName}未运行,不做停服处理"
       else
         kill \${pid}
       fi
