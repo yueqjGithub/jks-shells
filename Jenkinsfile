@@ -73,10 +73,15 @@ pipeline {
                     for(row in repoData){   
                         def branchKey = getRepoBranchKey(row.id)
                         if (row.type == 'git'){
+                            def description = 'git的tag/branch列表'
+                            if(row.id != ''){
+                                description += "仓库id=${row.id}"
+                            }
+
                             buildParams.add(
                                 listGitBranches(
                                     name: branchKey,
-                                    description: 'git的tag/branch列表',
+                                    description: description,
                                     remoteURL: row.url,
                                     credentialsId: env.CD_RELEASE_CRED,
                                     defaultValue: 'main',
