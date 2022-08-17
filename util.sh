@@ -83,7 +83,7 @@ function avalon_web_cd_build_app() {
             appRepoUrl=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${CD_REPO})
         fi
 
-        local appSubPath=$(bash md5.sh "${appRepoUrl}")
+        local appSubPath=$(bash ${WORKSPACE}/md5.sh "${appRepoUrl}")
         local appAbsolutePath="${WORKSPACE}/build/${appSubPath}/${appPath}"
 
         local appName=$(echo "${appPath}" | sed -r 's/.+\///g')
