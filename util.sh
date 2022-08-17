@@ -343,6 +343,8 @@ for i in \${updateApps}
       if [[ -f \${appName}/application.properties ]]; then
         mv \${appName}_tmp/application.properties \${appName}/
       fi
+
+      rm -rf "\${appName}_tmp"      
     else
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
