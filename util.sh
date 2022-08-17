@@ -106,6 +106,7 @@ function avalon_web_cd_build_app() {
         elif [[ -f 'next.config.js' ]]; then
             appType='next'
             buildFile="${appAbsolutePath}/*"
+            willZipApp=false
         elif [[ -f 'package.json' ]]; then
             appType='node'
             if [[ -f "${appAbsolutePath}/next.config.js" ]] || [[ -f "${appAbsolutePath}/vite.confit.ts" ]]; then
