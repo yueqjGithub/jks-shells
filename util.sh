@@ -324,7 +324,7 @@ for i in \${updateApps}
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
     elif [[ \${appType} == "next" ]]; then
-      pid=\$(ps ax | grep -v grep | grep "${deployDir}/\${appName}/node_modules/.bin/next" | sed -rn "s/^.+-p ([0-9]+)/\1/p") || exit 1
+      pid=\$(ps ax | grep -v grep | grep "${deployDir}/\${appName}/node_modules/.bin/next" | awk '{print \$1}') || exit 1
       if [ -z "\$pid" ] ; then
         echo "\${appName}未运行,不做停服处理"
       else
