@@ -75,7 +75,7 @@ pipeline {
                         if (row.type == 'git'){
                             def description = 'git的tag/branch列表'
                             if(row.id != ''){
-                                description += "仓库id=${row.id}"
+                                description += "(仓库id:${row.id})"
                             }
 
                             buildParams.add(
