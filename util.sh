@@ -97,12 +97,15 @@ function avalon_web_cd_build_app() {
         local buildFile="${appAbsolutePath}/*"
         if [[ -f 'composer.json' ]] && [[ $(cat composer.json | grep "laravel/framework") ]]; then
             appType='laravel'
-        elif [[ -f 'webpack.config.custom.js' ]]; then
+        elif [[ -f 'webpack.config.custom.js' ]] || [[ -f 'vite.config.ts' ]]; then
             appType='front'
             buildFile="${appAbsolutePath}/dist/*"
-            if [[ -f "${appAbsolutePath}/next.config.js" ]] || [[ -f "${appAbsolutePath}/vite.confit.ts" ]]; then
+            if [[ -f "${appAbsolutePath}/vite.confit.ts" ]]; then
                 willZipApp=false
             fi
+        elif [[ -f 'next.config.js' ]]; then
+            appType='next'
+            buildFile="${appAbsolutePath}/*"
         elif [[ -f 'package.json' ]]; then
             appType='node'
             if [[ -f "${appAbsolutePath}/next.config.js" ]] || [[ -f "${appAbsolutePath}/vite.confit.ts" ]]; then
@@ -119,20 +122,15 @@ function avalon_web_cd_build_app() {
             fi
 
             buildFile="${WORKSPACE}/build/${appSubPath}/${jarPath}"
-            # 如果java应用的仓库根目录就是应用，则使用jar名称作为应用名
-            if [[ ${appName} == "" ]]; then
-                local deployAppName=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} 部署名称)
-                if [[ ${deployAppName} == "" ]]; then
-                    echo "未配置部署名称"
-                    exit 1
-                fi
-                appName="${deployAppName}"
-            fi
         fi
 
-        if [[ appName == "" ]]; then
-            echo "非java单应用仓库的应用名称不能为空:${appRepoUrl}"
-            exit 1
+        if [[ ${appName} == "" ]]; then
+            local deployAppName=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} 部署名称)
+            if [[ ${deployAppName} == "" ]]; then
+                echo "未配置部署名称"
+                exit 1
+            fi
+            appName="${deployAppName}"
         fi
 
         local destAppDir=${destDir}/${appName}
@@ -169,6 +167,20 @@ function avalon_web_cd_build_app() {
         fi
 
         if [[ ${appType} == 'node' ]]; then
+            #node应用
+            echo "安装依赖库"
+            npm install --unsafe-perm || exit 1
+            #判断是否需要执行命令
+            echo "执行构建"
+            if [[ $(cat package.json | grep "\"release\"") ]]; then
+                echo 'package.json中存在release命令，开始执行'
+                npm run release || exit 1
+            else
+                echo 'package.json中不存在release命令，无需执行'
+            fi
+        fi
+
+        if [[ ${appType} == 'next' ]]; then
             #node应用
             echo "安装依赖库"
             npm install --unsafe-perm || exit 1
