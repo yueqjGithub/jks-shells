@@ -322,7 +322,7 @@ for i in \${updateApps}
       mv \${appName}.env \${appName}/.env 
     elif [[ \${appType} == "java" ]]; then
       appType=java
-      echo "java应用需要备份.properties文件"
+      echo "java应用需要备份配置文件application.properties/application.yml/config目录/resources目录"
       jarFileName=\$(ls \${appName}/*.jar | head -1 | sed -rn "s/^.+\/(.+)$/\1/p") || exit 1
       echo "jarFileName=\${jarFileName}"
       pid=\$(ps ax | grep -i \${jarFileName} |grep java | grep -v grep | awk '{print \$1}') || exit 1
@@ -334,15 +334,37 @@ for i in \${updateApps}
       fi
       rm -rf "\${appName}_tmp"
       mkdir "\${appName}_tmp"
+
+      # 备份配置文件到临时目录
       if [[ -f \${appName}/application.properties ]]; then
         mv \${appName}/application.properties \${appName}_tmp
       fi
-      
+      if [[ -f \${appName}/application.yml ]]; then
+        mv \${appName}/application.yml \${appName}_tmp
+      fi
+      if [[ -d \${appName}/config ]]; then
+        mv \${appName}/config \${appName}_tmp
+      fi      
+      if [[ -d \${appName}/resources ]]; then
+        mv \${appName}/resources \${appName}_tmp
+      fi   
+
+      # 删除整个应用目录，从更新包解压
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
 
-      if [[ -f \${appName}/application.properties ]]; then
+      # 从临时目录恢复配置文件
+      if [[ -f \${appName}_tmp/application.properties ]]; then
         mv \${appName}_tmp/application.properties \${appName}/
+      fi
+      if [[ -f \${appName}_tmp/application.yml ]]; then
+        mv \${appName}_tmp/application.yml \${appName}/
+      fi
+      if [[ -d \${appName}_tmp/config ]]; then
+        mv \${appName}_tmp/config \${appName}/
+      fi
+      if [[ -d \${appName}_tmp/resources ]]; then
+        mv \${appName}_tmp/resources \${appName}/
       fi
 
       rm -rf "\${appName}_tmp"      

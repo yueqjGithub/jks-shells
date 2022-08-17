@@ -29,8 +29,14 @@ value(propId1:propValue1，propId2:propValue2)
 + CD_REPO
 > 是否必填：是
 > 含义：仓库地址，git仓库末尾需要包含.git
-> 解析类型：string
-> 示例：http://git.avalongames.com/website/gm_website_server.git
+> 解析类型：数组，元素格式=自定义格式，说明如下
+> 示例1：http://git.avalongames.com/website/gm_website_server.git
+> 示例2：http://git.avalongames.com/website/gm_website_server.git(仓库id:A),http://git.avalongames.com/website/gm_global_cat_frontend.git(仓库id:B)
+>
+> | id | 是否必填 | 值 |
+> | -- | -- | -- |
+> | value | 是 | 仓库地址 |
+> | 仓库id | 否 | 仓库id，配合应用列表使用，只有一个仓库时可以不标记，多个仓库必须标记 |
 
 + CD_APPS
 > 是否必填：是
@@ -43,7 +49,8 @@ value(propId1:propValue1，propId2:propValue2)
 > | 部署名称 | 否 | 交付时应用的名字，默认使用相对目录的最后一段 |
 > | jar包路径 | 否 | mvn生成的jar包路径，仅java应用时生效，并且必须 |
 >
-> 示例：(部署名称:gameWebsiteServer，jar包路径:cat-global/target/catWebsite.jar)
+> 示例1：(部署名称:gameWebsiteServer，jar包路径:cat-global/target/catWebsite.jar)
+> 示例2：FrontEnd,OaToolsManage
 
 + CD_ZIP_ROOT
 > 是否必填：否
@@ -106,7 +113,7 @@ value(propId1:propValue1，propId2:propValue2)
 >
 > 示例：(字段名:aaaa，描述:啊啊啊，表单类型:input，默认值:aaa),(字段名:bbbb，描述:不不不，表单类型:single-select，选项:dddd\|cccc),(字段名:cccc，描述:不不不，表单类型:multiple-select，选项:dddd\|cccc),(字段名:dddd，描述:啊啊啊，表单类型:checkbox，默认值:true)
 
-+ 示例：以下为OA工具的环境变量配置示例
++ 示例1：OA工具的环境变量配置示例
 
 ```
 CD_REPO=http://git.avalongames.com/oa_tools/oa_tools.git
@@ -115,5 +122,18 @@ CD_ZIP_ROOT=web
 CD_JIRA_KEY=OA
 CD_SERVERS=内网测试(user:webuser，ip:192.168.200.217，端口:22，是否sudo:false，部署目录:/online/web/oatools)
 CD_FTP_PATH=corp/OaTools
+
+```
+
++ 示例2：游戏官网后台管理服务器的环境变量配置示例
+
+```
+
+CD_REPO=http://git.avalongames.com/website/gm_website_server.git
+CD_APPS=(部署名称:gameWebsiteServer，jar包路径:cat-global/target/catWebsite.jar)
+CD_JIRA_KEY=GW
+CD_SERVERS=内网开发(ip:192.168.200.157，端口:22，是否sudo:false，部署目录:/home/webuser/project/website)
+CD_FTP_PATH=corp/SDK/global/server
+CD_VERSION_W_DATA=release,cn,global,dev
 
 ```
