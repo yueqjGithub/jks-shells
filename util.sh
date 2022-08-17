@@ -330,6 +330,7 @@ for i in \${updateApps}
         echo "\${jarFileName}未运行,不做停服处理"
       else
         kill \${pid}
+        echo "已杀掉进程pid=\${pid}"
       fi
       rm -rf "\${appName}_tmp"
       mkdir "\${appName}_tmp"
@@ -369,6 +370,8 @@ for i in \${updateApps}
   
     rm -f \${appName}.zip
   done
+
+rm -rf ${deployDir}/update_tmp
 
 exit 0
 EOF
