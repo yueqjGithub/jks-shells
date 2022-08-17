@@ -184,14 +184,6 @@ function avalon_web_cd_build_app() {
             #node应用
             echo "安装依赖库"
             npm install --unsafe-perm || exit 1
-            #判断是否需要执行命令
-            echo "执行构建"
-            if [[ $(cat package.json | grep "\"release\"") ]]; then
-                echo 'package.json中存在release命令，开始执行'
-                npm run release || exit 1
-            else
-                echo 'package.json中不存在release命令，无需执行'
-            fi
         fi
 
         if [[ ${appType} == 'java' ]]; then
