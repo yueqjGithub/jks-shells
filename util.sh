@@ -413,7 +413,7 @@ for i in \${updateApps}
     then    
       echo "开始执行应用启动前的自定义脚本"
       cd \${appName}
-      bash custom-build/before-app-start.sh
+      bash custom-build/before-app-start.sh || exit 1
       cd ../
     else
       echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
