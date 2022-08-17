@@ -331,6 +331,25 @@ for i in \${updateApps}
         kill \${pid}
         echo "已杀掉进程pid=\${pid}"
       fi
+      rm -rf "\${appName}_tmp"
+      mkdir "\${appName}_tmp"
+      # 备份配置文件到临时目录
+      if [[ -f \${appName}/.env ]]; then
+        mv \${appName}/.env \${appName}_tmp
+        echo "已备份\${appName}/.env"
+      fi
+
+      # 删除整个应用目录，从更新包解压
+      rm -rf \${appName}
+      mv update_tmp/\${appName} ./
+
+      # 从临时目录恢复配置文件
+      if [[ -f \${appName}_tmp/.env ]]; then
+        mv \${appName}_tmp/.env \${appName}/
+      fi
+
+      rm -rf "\${appName}_tmp"  
+
     elif [[ \${appType} == "laravel" ]]; then
       appType=php
       echo "laravel应用需要备份.env文件"
