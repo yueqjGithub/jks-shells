@@ -323,6 +323,14 @@ for i in \${updateApps}
       echo "删除原目录"
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
+    elif [[ \${appType} == "next" ]]; then
+      pid=\$(ps ax | grep -v grep | grep "${deployDir}/\${appName}/node_modules/.bin/next" | sed -rn "s/^.+-p ([0-9]+)/\1/p") || exit 1
+      if [ -z "\$pid" ] ; then
+        echo "\${appName}未运行,不做停服处理"
+      else
+        kill \${pid}
+        echo "已杀掉进程pid=\${pid}"
+      fi
     elif [[ \${appType} == "laravel" ]]; then
       appType=php
       echo "laravel应用需要备份.env文件"
@@ -397,9 +405,13 @@ for i in \${updateApps}
       echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
     fi
 
-    # 启动服务器，仅pm2和java需要执行启动
-    if [[ \${appType} == 'pm2' ]]; then
+    # 启动服务器
+    if [[ \${appType} == 'node' ]]; then
       pm2 start \${appName}.\${configFileType}
+    elif [[ \${appType} == 'next' ]]; then
+      cd ${deployDir}/\${appName}
+      nohup npm run start >/dev/null &
+      cd ${deployDir}
     elif [[ \${appType} == 'java' ]]; then
       nohup java -jar \${appName}/\${jarFileName} >/dev/null 2>&1 & echo "启动脚本已执行"
     fi
