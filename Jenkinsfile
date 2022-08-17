@@ -234,13 +234,15 @@ pipeline {
                     // 分支是参数化构建传递的，参数化构建的值最后进行检测      
                     for(row in repoData){   
                         def branchKey = getRepoBranchKey(row.id)
-                        if(env(branchKey) == null || env(branchKey) == ""){
+                        def branch = env."${branchKey}"
+                        if(branch== null || branch == ""){
                             error "未设置仓库(id=${row.id})的分支"
                         }
 
                         if(row.type == 'svn') {
                             def svnVersionKey = getRepoSvnVersionKey(row.id)
-                            if (env[svnVersionKey] == null || env[svnVersionKey] == '') {
+                            def svnVersion = env."${svnVersionKey}"
+                            if (svnVersion == null || svnVersion == '') {
                                 error '未设置svn版本号'
                             }
                         }
