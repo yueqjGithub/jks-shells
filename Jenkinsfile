@@ -140,6 +140,19 @@ pipeline {
                         )
                     }
 
+                    if (env.CD_WEB_MODE == null | env.CD_WEB_MODE == ''){
+                        echo '未设置web构建模式,默认构建命令npm run release'
+                    }else{
+                        buildParams.add(
+                            def arr = env.CD_WEB_MODE.tokenize(",")
+                            choice(
+                                choices: arr,
+                                description: 'web构建模式',
+                                name: 'CD_WEB_MODE'
+                            )
+                        )
+                    }
+
                     buildParams.addAll(
                         extendedChoice(
                             description: '应用列表',
