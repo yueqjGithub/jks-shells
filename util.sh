@@ -300,11 +300,7 @@ fi
 # updateApps=\$(echo "\${zipStruct}" | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p")
 # echo "更新的应用列表:\${updateApps}"
 
-# 尝试解压所有应用的zip
-appZips=\$(ls *.zip 2> /dev/null | wc -l)
-if [[ "\${appZips}" != "0" ]]; then
-    unzip -o *.zip || exit 1
-fi
+
 
 cd ${deployDir}
 
@@ -317,6 +313,12 @@ do
   fi
   echo "\${app}"
 done
+
+# 尝试解压所有应用的zip
+appZips=\$(ls *.zip 2> /dev/null | wc -l)
+if [[ "\${appZips}" != "0" ]]; then
+    unzip -o *.zip || exit 1
+fi
 
 # for i in \${updateApps}
 #   do
