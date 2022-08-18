@@ -434,7 +434,9 @@ do
       nohup npm run start >/dev/null 2>&1 & echo "启动脚本已执行"
       cd ${deployDir} || exit 1
     elif [[ \${appType} == 'java' ]]; then
+      cd ${deployDir}/\${appName} || exit 1
       nohup java -jar \${appName}/\${jarFileName} >/dev/null 2>&1 & echo "启动脚本已执行"
+      cd ${deployDir} || exit 1
     fi
   
     rm -f \${appName}.zip || exit 1
