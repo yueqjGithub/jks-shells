@@ -140,7 +140,7 @@ pipeline {
                         )
                     }
 
-                    if (env.CD_WEB_MODE == null | env.CD_WEB_MODE == ''){
+                    if (env.CD_WEB_MODE == null){
                         echo '未设置web构建模式,默认构建命令npm run release'
                     }else{
                         buildParams.add(
