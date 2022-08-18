@@ -287,11 +287,11 @@ cd ${deployDir}/update_tmp || exit 1
 
 # 解压更新包
 unzip -o ${zipname} || exit 1
-rm -f ${zipname} || exit 1
+# rm -f ${zipname} || exit 1
 
 # 消除压缩包的根目录
 if [[ "${CD_ZIP_ROOT}" != "" ]]; then
-    mv -f ${deployDir}/update_tmp/${CD_ZIP_ROOT}/*.zip ${deployDir}/update_tmp/update_tmp || exit 1
+    mv -f ${deployDir}/update_tmp/${CD_ZIP_ROOT}/*.zip ${deployDir}/update_tmp || exit 1
     rm -rf ${deployDir}/update_tmp/${CD_ZIP_ROOT}/ || exit 1
 fi
 
