@@ -146,9 +146,9 @@ pipeline {
                     }else{
                         echo '设置web构建模式'
                         buildParams.add(
-                            def arr = env.CD_WEB_MODE_DATA.tokenize(",")
+                            def arr1 = env.CD_WEB_MODE_DATA.tokenize(",")
                             choice(
-                                choices: arr,
+                                choices: arr1,
                                 description: 'web构建模式',
                                 name: 'CD_WEB_MODE'
                             )
