@@ -56,6 +56,7 @@ function avalon_web_cd_pull_repo() {
 # 构建应用,构建后的文件位于 ${WORKSPACE}/dist/${CD_ZIP_ROOT} 目录下
 function avalon_web_cd_build_app() {
 
+    exit 0
     destDir=${WORKSPACE}/dist/${CD_ZIP_ROOT}
     mkdir -p ${destDir}
 
