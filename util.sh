@@ -303,6 +303,7 @@ do
       continue
     fi
 
+    echo "应用配置信息:\${appStr}"
     appName=\$(echo "\${appStr}" | awk -F= '{print $1}')
     appType=\$(echo "\${appStr}" | awk -F= '{print $2}')
 
@@ -322,42 +323,42 @@ do
       echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
       pm2 delete \${appName}.\${configFileType}
       # 删除整个应用目录，从更新包解压
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
+      rm -rf \${appName} || exit 1
+      mv update_tmp/\${appName} ./ || exit 1
     elif [[ \${appType} == "next" ]]; then
       pid=\$(ps ax | grep -v grep | grep "${deployDir}/\${appName}/node_modules/.bin/next" | awk '{print \$1}') || exit 1
       if [ -z "\$pid" ] ; then
         echo "\${appName}未运行,不做停服处理"
       else
-        kill \${pid}
+        kill \${pid} || exit 1
         echo "已杀掉进程pid=\${pid}"
       fi
-      rm -rf "\${appName}_tmp"
-      mkdir "\${appName}_tmp"
+      rm -rf "\${appName}_tmp" || exit 1
+      mkdir "\${appName}_tmp" || exit 1
       # 备份配置文件到临时目录
       if [[ -f \${appName}/.env ]]; then
-        mv \${appName}/.env \${appName}_tmp
+        mv \${appName}/.env \${appName}_tmp || exit 1
         echo "已备份\${appName}/.env"
       fi
 
       # 删除整个应用目录，从更新包解压
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
+      rm -rf \${appName} || exit 1
+      mv update_tmp/\${appName} ./ || exit 1
 
       # 从临时目录恢复配置文件
       if [[ -f \${appName}_tmp/.env ]]; then
-        mv \${appName}_tmp/.env \${appName}/
+        mv \${appName}_tmp/.env \${appName}/ || exit 1
       fi
 
-      rm -rf "\${appName}_tmp"  
+      rm -rf "\${appName}_tmp" || exit 1
 
     elif [[ \${appType} == "laravel" ]]; then
       appType=php
       echo "laravel应用需要备份.env文件"
-      mv \${appName}/.env \${appName}.env
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
-      mv \${appName}.env \${appName}/.env 
+      mv \${appName}/.env \${appName}.env || exit 1
+      rm -rf \${appName} || exit 1
+      mv update_tmp/\${appName} ./ || exit 1
+      mv \${appName}.env \${appName}/.env  || exit 1
     elif [[ \${appType} == "java" ]]; then
       appType=java
       echo "java应用需要备份配置文件application.properties/application.yml/config目录/resources目录"
@@ -370,57 +371,57 @@ do
         kill \${pid}
         echo "已杀掉进程pid=\${pid}"
       fi
-      rm -rf "\${appName}_tmp"
-      mkdir "\${appName}_tmp"
+      rm -rf "\${appName}_tmp" || exit 1
+      mkdir "\${appName}_tmp" || exit 1
 
       # 备份配置文件到临时目录
       if [[ -f \${appName}/application.properties ]]; then
-        mv \${appName}/application.properties \${appName}_tmp
+        mv \${appName}/application.properties \${appName}_tmp || exit 1
         echo "已备份\${appName}/application.properties"
       fi
       if [[ -f \${appName}/application.yml ]]; then
-        mv \${appName}/application.yml \${appName}_tmp
+        mv \${appName}/application.yml \${appName}_tmp || exit 1
         echo "已备份\${appName}/application.yml"
       fi
       if [[ -d \${appName}/config ]]; then
-        mv \${appName}/config \${appName}_tmp
+        mv \${appName}/config \${appName}_tmp || exit 1
         echo "已备份\${appName}/config"
       fi      
       if [[ -d \${appName}/resources ]]; then
-        mv \${appName}/resources \${appName}_tmp
+        mv \${appName}/resources \${appName}_tmp || exit 1
         echo "已备份\${appName}/resources"
       fi   
 
       # 删除整个应用目录，从更新包解压
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
+      rm -rf \${appName} || exit 1
+      mv update_tmp/\${appName} ./ || exit 1
 
       # 从临时目录恢复配置文件
       if [[ -f \${appName}_tmp/application.properties ]]; then
-        mv \${appName}_tmp/application.properties \${appName}/
+        mv \${appName}_tmp/application.properties \${appName}/ || exit 1
       fi
       if [[ -f \${appName}_tmp/application.yml ]]; then
-        mv \${appName}_tmp/application.yml \${appName}/
+        mv \${appName}_tmp/application.yml \${appName}/ || exit 1
       fi
       if [[ -d \${appName}_tmp/config ]]; then
-        mv \${appName}_tmp/config \${appName}/
+        mv \${appName}_tmp/config \${appName}/ || exit 1
       fi
       if [[ -d \${appName}_tmp/resources ]]; then
-        mv \${appName}_tmp/resources \${appName}/
+        mv \${appName}_tmp/resources \${appName}/ || exit 1
       fi
 
-      rm -rf "\${appName}_tmp"      
+      rm -rf "\${appName}_tmp" || exit 1
     else
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
+      rm -rf \${appName} || exit 1
+      mv update_tmp/\${appName} ./ || exit 1
     fi
 
     if [[ -f \${appName}/custom-build/before-app-start.sh ]]
     then    
       echo "开始执行应用启动前的自定义脚本"
-      cd \${appName}
+      cd \${appName} || exit 1
       bash custom-build/before-app-start.sh || exit 1
-      cd ../
+      cd ../ || exit 1
     else
       echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
     fi
@@ -429,17 +430,17 @@ do
     if [[ \${appType} == 'node' ]]; then
       pm2 start \${appName}.\${configFileType}
     elif [[ \${appType} == 'next' ]]; then
-      cd ${deployDir}/\${appName}
+      cd ${deployDir}/\${appName} || exit 1
       nohup npm run start >/dev/null 2>&1 & echo "启动脚本已执行"
-      cd ${deployDir}
+      cd ${deployDir} || exit 1
     elif [[ \${appType} == 'java' ]]; then
       nohup java -jar \${appName}/\${jarFileName} >/dev/null 2>&1 & echo "启动脚本已执行"
     fi
   
-    rm -f \${appName}.zip
+    rm -f \${appName}.zip || exit 1
   done
 
-rm -rf ${deployDir}/update_tmp
+rm -rf ${deployDir}/update_tmp || exit 1
 
 exit 0
 EOF
