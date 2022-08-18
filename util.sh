@@ -319,7 +319,6 @@ do
     if [[ \${appType} == "node" ]] ; then
       configFileType="json"
       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
-      appType=pm2
       echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
       pm2 delete \${appName}.\${configFileType}
       # 删除整个应用目录，从更新包解压
@@ -353,14 +352,12 @@ do
       rm -rf "\${appName}_tmp" || exit 1
 
     elif [[ \${appType} == "laravel" ]]; then
-      appType=php
       echo "laravel应用需要备份.env文件"
       mv \${appName}/.env \${appName}.env || exit 1
       rm -rf \${appName} || exit 1
       mv update_tmp/\${appName} ./ || exit 1
       mv \${appName}.env \${appName}/.env  || exit 1
     elif [[ \${appType} == "java" ]]; then
-      appType=java
       echo "java应用需要备份配置文件application.properties/application.yml/config目录/resources目录"
       jarFileName=\$(ls \${appName}/*.jar | head -1 | sed -rn "s/^.+\/(.+)$/\1/p") || exit 1
       echo "jarFileName=\${jarFileName}"
