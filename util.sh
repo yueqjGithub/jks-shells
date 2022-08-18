@@ -56,7 +56,6 @@ function avalon_web_cd_pull_repo() {
 # 构建应用,构建后的文件位于 ${WORKSPACE}/dist/${CD_ZIP_ROOT} 目录下
 function avalon_web_cd_build_app() {
 
-    exit 0
     destDir=${WORKSPACE}/dist/${CD_ZIP_ROOT}
     mkdir -p ${destDir}
 
@@ -152,7 +151,7 @@ function avalon_web_cd_build_app() {
 
 
         echo "${appName}应用类型=${appType}"
-
+        pwd
         if [ ${appType} == 'front' ]; then
             #前端应用
             echo "安装依赖库"
@@ -165,6 +164,7 @@ function avalon_web_cd_build_app() {
             else
                 npm run release || exit 1
             fi
+            exit 0
         fi
 
         if [[ ${appType} == 'laravel' ]]; then
