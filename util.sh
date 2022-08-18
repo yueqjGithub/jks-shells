@@ -427,7 +427,9 @@ for i in \${updateApps}
       nohup npm run start >/dev/null 2>&1 & echo "启动脚本已执行"
       cd ${deployDir}
     elif [[ \${appType} == 'java' ]]; then
-      nohup java -jar \${appName}/\${jarFileName} >/dev/nohup.log 2>&1 & echo "启动脚本已执行"
+      cd ${deployDir}/\${appName}
+      nohup java -jar ${jarFileName} >/dev/nohup.log 2>&1 & echo "启动脚本已执行"
+      cd ${deployDir}
     fi
   
     rm -f \${appName}.zip
