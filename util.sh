@@ -143,7 +143,12 @@ function avalon_web_cd_build_app() {
         local destAppDir=${destDir}/${appName}
         [[ -d "${destAppDir}" ]] || mkdir "${destAppDir}" || exit 1
 
-        appNameAndType="${appNameAndType};${appName}=${appType}"
+        if [[ "${appNameAndType}" == "" ]]; then
+            appNameAndType="${appName}=${appType}"
+        elif
+            appNameAndType="${appNameAndType}\n${appName}=${appType}"
+        fi
+
         echo "${appName}应用类型=${appType}"
 
         if [ ${appType} == 'front' ]; then
@@ -305,7 +310,7 @@ rm -f ${zipname} || exit 1
 cd ${deployDir}
 
 apps=\$(cat ${deployDir}/update_tmp/appNameAndType.txt)
-app_arr=(\${apps//;/ })  
+app_arr=(\${apps//\n/ })  
 for app in \${app_arr[@]}
 do
   if [[ "\${app}" == "" ]]; then
