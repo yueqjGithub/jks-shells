@@ -428,7 +428,7 @@ for i in \${updateApps}
       cd ${deployDir}
     elif [[ \${appType} == 'java' ]]; then
       cd ${deployDir}/\${appName}
-      nohup java -jar \${jarFileName} >/dev/nohup.log 2>&1 & echo "启动脚本已执行"
+      nohup java -jar \${jarFileName} >/dev/null 2>&1 & echo "启动脚本已执行"
       cd ${deployDir}
     fi
   
