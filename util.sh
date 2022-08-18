@@ -146,7 +146,7 @@ function avalon_web_cd_build_app() {
         if [[ "${appNameAndType}" == "" ]]; then
             appNameAndType="${appName}=${appType}"
         elif
-            appNameAndType="${appNameAndType}\n${appName}=${appType}"
+            appNameAndType=$(echo -e "${appNameAndType}\n${appName}=${appType}")
         fi
 
         echo "${appName}应用类型=${appType}"
