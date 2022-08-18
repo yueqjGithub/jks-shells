@@ -308,9 +308,9 @@ fi
 
 cd ${deployDir}
 
-apps=\$(cat ${deployDir}/update_tmp/appNameAndType.txt)
+apps=\$()
 app_arr=(\${apps//\n/ })  
-for app in \${app_arr[@]}
+cat ${deployDir}/update_tmp/appNameAndType.txt | while read app
 do
   if [[ "\${app}" == "" ]]; then
     continue
