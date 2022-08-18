@@ -164,7 +164,6 @@ function avalon_web_cd_build_app() {
             else
                 npm run release || exit 1
             fi
-            exit 0
         fi
 
         if [[ ${appType} == 'laravel' ]]; then
