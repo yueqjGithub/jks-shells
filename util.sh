@@ -315,7 +315,7 @@ for i in \${updateApps}
       appType=pm2
       echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
       pm2 delete \${appName}.\${configFileType}
-      echo "删除原目录"
+      # 删除整个应用目录，从更新包解压
       rm -rf \${appName}
       mv update_tmp/\${appName} ./
     elif [[ \${appType} == "next" ]]; then
@@ -424,7 +424,7 @@ for i in \${updateApps}
       pm2 start \${appName}.\${configFileType}
     elif [[ \${appType} == 'next' ]]; then
       cd ${deployDir}/\${appName}
-      nohup npm run start >/dev/null 2>&1 || exit & echo "启动脚本已执行"
+      nohup npm run start >/dev/null 2>&1 & echo "启动脚本已执行"
       cd ${deployDir}
     elif [[ \${appType} == 'java' ]]; then
       nohup java -jar \${appName}/\${jarFileName} >/dev/null 2>&1 & echo "启动脚本已执行"
