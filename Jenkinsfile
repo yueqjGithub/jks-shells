@@ -130,6 +130,7 @@ pipeline {
                     if (env.CD_VERSION_W_DATA == null | env.CD_VERSION_W_DATA == ''){
                         echo '未配置版本号W位，包名不追加该段'
                     }else{
+                        echo '配置版本号W位，包名追加该段'
                         def arr = env.CD_VERSION_W_DATA.tokenize(",")
                         buildParams.add(
                             choice(
