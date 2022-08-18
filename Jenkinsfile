@@ -145,9 +145,8 @@ pipeline {
                         echo '未设置web构建模式,默认构建命令npm run release'
                     }else{
                         echo '设置web构建模式'
-                        echo "${env.CD_WEB_MODE_DATA.tokenize(",")}"
+                        def arr1 = env.CD_WEB_MODE_DATA.tokenize(",")
                         buildParams.add(
-                            def arr1 = env.CD_WEB_MODE_DATA.tokenize(",")
                             choice(
                                 choices: arr1,
                                 description: 'web构建模式',
