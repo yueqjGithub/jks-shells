@@ -304,8 +304,8 @@ do
     fi
 
     echo "应用配置信息:\${appStr}"
-    appName=\$(echo "\${appStr}" | awk -F= '{print $1}')
-    appType=\$(echo "\${appStr}" | awk -F= '{print $2}')
+    appName=\$(echo "\${appStr}" | awk -F= '{print \$1}')
+    appType=\$(echo "\${appStr}" | awk -F= '{print \$2}')
 
     # 如果应用是.zip包，则先解压
     if [[ -f "${deployDir}/update_tmp/\${appName}.zip" ]]; then
@@ -315,7 +315,7 @@ do
       cd ${deployDir} || exit 1
     fi
 
-    echo "开始更新\${appName}应用,type=\${appType}"
+    echo "开始更新应用,appName=\${appName},appType=\${appType}"
     if [[ \${appType} == "node" ]] ; then
       configFileType="json"
       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
