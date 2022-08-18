@@ -286,9 +286,8 @@ mv -f /tmp/${zipname} ${deployDir}/update_tmp/ || exit 1
 cd ${deployDir}/update_tmp || exit 1
 
 # 解压更新包
-cd ${deployDir}/update_tmp
-unzip -o ${zipname}
-rm -f ${zipname}
+unzip -o ${zipname} || exit 1
+rm -f ${zipname} || exit 1
 
 # 消除压缩包的根目录
 if [[ "${CD_ZIP_ROOT}" != "" ]]; then
@@ -296,10 +295,10 @@ if [[ "${CD_ZIP_ROOT}" != "" ]]; then
     rm -rf ${deployDir}/update_tmp/${CD_ZIP_ROOT}/ || exit 1
 fi
 
-# 查看目录结构，获取要更新的应用列表
-zipStruct=\$(unzip -l "${zipname}" | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/p")
-updateApps=\$(echo "\${zipStruct}" | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p")
-echo "更新的应用列表:\${updateApps}"
+# # 查看目录结构，获取要更新的应用列表
+# zipStruct=\$(unzip -l "${zipname}" | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/p")
+# updateApps=\$(echo "\${zipStruct}" | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p")
+# echo "更新的应用列表:\${updateApps}"
 
 # 尝试解压所有应用的zip
 appZips=\$(ls *.zip 2> /dev/null | wc -l)
@@ -307,7 +306,6 @@ if [[ "\${appZips}" != "0" ]]; then
     unzip -o *.zip || exit 1
 fi
 
-rm -f ${zipname} || exit 1
 cd ${deployDir}
 
 apps=\$(cat ${deployDir}/update_tmp/appNameAndType.txt)
@@ -320,138 +318,138 @@ do
   echo "\${app}"
 done
 
-for i in \${updateApps}
-  do
-    appName=\`echo \${i} | cut -f 1 -d .\`
-    echo ""
-    appType=\$(cat ${deployDir}/update_tmp/appNameAndType.txt | sed -rn "s/^.*\${appName}=([^=;]+).*$/\1/p" )
+# for i in \${updateApps}
+#   do
+#     appName=\`echo \${i} | cut -f 1 -d .\`
+#     echo ""
+#     appType=\$(cat ${deployDir}/update_tmp/appNameAndType.txt | sed -rn "s/^.*\${appName}=([^=;]+).*$/\1/p" )
 
-    echo "开始更新\${appName}应用,type=\${appType}"
-    if [[ \${appType} == "node" ]] ; then
-      configFileType="json"
-      configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
-      appType=pm2
-      echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
-      pm2 delete \${appName}.\${configFileType}
-      # 删除整个应用目录，从更新包解压
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
-    elif [[ \${appType} == "next" ]]; then
-      pid=\$(ps ax | grep -v grep | grep "${deployDir}/\${appName}/node_modules/.bin/next" | awk '{print \$1}') || exit 1
-      if [ -z "\$pid" ] ; then
-        echo "\${appName}未运行,不做停服处理"
-      else
-        kill \${pid}
-        echo "已杀掉进程pid=\${pid}"
-      fi
-      rm -rf "\${appName}_tmp"
-      mkdir "\${appName}_tmp"
-      # 备份配置文件到临时目录
-      if [[ -f \${appName}/.env ]]; then
-        mv \${appName}/.env \${appName}_tmp
-        echo "已备份\${appName}/.env"
-      fi
+#     echo "开始更新\${appName}应用,type=\${appType}"
+#     if [[ \${appType} == "node" ]] ; then
+#       configFileType="json"
+#       configFileType=\$([[ -f \${appName}.yaml ]] && echo "yaml" )
+#       appType=pm2
+#       echo "检测到文件\${appName}.\${configFileType},判断为node应用,使用pm2更新"
+#       pm2 delete \${appName}.\${configFileType}
+#       # 删除整个应用目录，从更新包解压
+#       rm -rf \${appName}
+#       mv update_tmp/\${appName} ./
+#     elif [[ \${appType} == "next" ]]; then
+#       pid=\$(ps ax | grep -v grep | grep "${deployDir}/\${appName}/node_modules/.bin/next" | awk '{print \$1}') || exit 1
+#       if [ -z "\$pid" ] ; then
+#         echo "\${appName}未运行,不做停服处理"
+#       else
+#         kill \${pid}
+#         echo "已杀掉进程pid=\${pid}"
+#       fi
+#       rm -rf "\${appName}_tmp"
+#       mkdir "\${appName}_tmp"
+#       # 备份配置文件到临时目录
+#       if [[ -f \${appName}/.env ]]; then
+#         mv \${appName}/.env \${appName}_tmp
+#         echo "已备份\${appName}/.env"
+#       fi
 
-      # 删除整个应用目录，从更新包解压
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
+#       # 删除整个应用目录，从更新包解压
+#       rm -rf \${appName}
+#       mv update_tmp/\${appName} ./
 
-      # 从临时目录恢复配置文件
-      if [[ -f \${appName}_tmp/.env ]]; then
-        mv \${appName}_tmp/.env \${appName}/
-      fi
+#       # 从临时目录恢复配置文件
+#       if [[ -f \${appName}_tmp/.env ]]; then
+#         mv \${appName}_tmp/.env \${appName}/
+#       fi
 
-      rm -rf "\${appName}_tmp"  
+#       rm -rf "\${appName}_tmp"  
 
-    elif [[ \${appType} == "laravel" ]]; then
-      appType=php
-      echo "laravel应用需要备份.env文件"
-      mv \${appName}/.env \${appName}.env
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
-      mv \${appName}.env \${appName}/.env 
-    elif [[ \${appType} == "java" ]]; then
-      appType=java
-      echo "java应用需要备份配置文件application.properties/application.yml/config目录/resources目录"
-      jarFileName=\$(ls \${appName}/*.jar | head -1 | sed -rn "s/^.+\/(.+)$/\1/p") || exit 1
-      echo "jarFileName=\${jarFileName}"
-      pid=\$(ps ax | grep -i \${jarFileName} |grep java | grep -v grep | awk '{print \$1}') || exit 1
-      if [ -z "\$pid" ] ; then
-        echo "\${jarFileName}未运行,不做停服处理"
-      else
-        kill \${pid}
-        echo "已杀掉进程pid=\${pid}"
-      fi
-      rm -rf "\${appName}_tmp"
-      mkdir "\${appName}_tmp"
+#     elif [[ \${appType} == "laravel" ]]; then
+#       appType=php
+#       echo "laravel应用需要备份.env文件"
+#       mv \${appName}/.env \${appName}.env
+#       rm -rf \${appName}
+#       mv update_tmp/\${appName} ./
+#       mv \${appName}.env \${appName}/.env 
+#     elif [[ \${appType} == "java" ]]; then
+#       appType=java
+#       echo "java应用需要备份配置文件application.properties/application.yml/config目录/resources目录"
+#       jarFileName=\$(ls \${appName}/*.jar | head -1 | sed -rn "s/^.+\/(.+)$/\1/p") || exit 1
+#       echo "jarFileName=\${jarFileName}"
+#       pid=\$(ps ax | grep -i \${jarFileName} |grep java | grep -v grep | awk '{print \$1}') || exit 1
+#       if [ -z "\$pid" ] ; then
+#         echo "\${jarFileName}未运行,不做停服处理"
+#       else
+#         kill \${pid}
+#         echo "已杀掉进程pid=\${pid}"
+#       fi
+#       rm -rf "\${appName}_tmp"
+#       mkdir "\${appName}_tmp"
 
-      # 备份配置文件到临时目录
-      if [[ -f \${appName}/application.properties ]]; then
-        mv \${appName}/application.properties \${appName}_tmp
-        echo "已备份\${appName}/application.properties"
-      fi
-      if [[ -f \${appName}/application.yml ]]; then
-        mv \${appName}/application.yml \${appName}_tmp
-        echo "已备份\${appName}/application.yml"
-      fi
-      if [[ -d \${appName}/config ]]; then
-        mv \${appName}/config \${appName}_tmp
-        echo "已备份\${appName}/config"
-      fi      
-      if [[ -d \${appName}/resources ]]; then
-        mv \${appName}/resources \${appName}_tmp
-        echo "已备份\${appName}/resources"
-      fi   
+#       # 备份配置文件到临时目录
+#       if [[ -f \${appName}/application.properties ]]; then
+#         mv \${appName}/application.properties \${appName}_tmp
+#         echo "已备份\${appName}/application.properties"
+#       fi
+#       if [[ -f \${appName}/application.yml ]]; then
+#         mv \${appName}/application.yml \${appName}_tmp
+#         echo "已备份\${appName}/application.yml"
+#       fi
+#       if [[ -d \${appName}/config ]]; then
+#         mv \${appName}/config \${appName}_tmp
+#         echo "已备份\${appName}/config"
+#       fi      
+#       if [[ -d \${appName}/resources ]]; then
+#         mv \${appName}/resources \${appName}_tmp
+#         echo "已备份\${appName}/resources"
+#       fi   
 
-      # 删除整个应用目录，从更新包解压
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
+#       # 删除整个应用目录，从更新包解压
+#       rm -rf \${appName}
+#       mv update_tmp/\${appName} ./
 
-      # 从临时目录恢复配置文件
-      if [[ -f \${appName}_tmp/application.properties ]]; then
-        mv \${appName}_tmp/application.properties \${appName}/
-      fi
-      if [[ -f \${appName}_tmp/application.yml ]]; then
-        mv \${appName}_tmp/application.yml \${appName}/
-      fi
-      if [[ -d \${appName}_tmp/config ]]; then
-        mv \${appName}_tmp/config \${appName}/
-      fi
-      if [[ -d \${appName}_tmp/resources ]]; then
-        mv \${appName}_tmp/resources \${appName}/
-      fi
+#       # 从临时目录恢复配置文件
+#       if [[ -f \${appName}_tmp/application.properties ]]; then
+#         mv \${appName}_tmp/application.properties \${appName}/
+#       fi
+#       if [[ -f \${appName}_tmp/application.yml ]]; then
+#         mv \${appName}_tmp/application.yml \${appName}/
+#       fi
+#       if [[ -d \${appName}_tmp/config ]]; then
+#         mv \${appName}_tmp/config \${appName}/
+#       fi
+#       if [[ -d \${appName}_tmp/resources ]]; then
+#         mv \${appName}_tmp/resources \${appName}/
+#       fi
 
-      rm -rf "\${appName}_tmp"      
-    else
-      rm -rf \${appName}
-      mv update_tmp/\${appName} ./
-    fi
+#       rm -rf "\${appName}_tmp"      
+#     else
+#       rm -rf \${appName}
+#       mv update_tmp/\${appName} ./
+#     fi
 
-    if [[ -f \${appName}/custom-build/before-app-start.sh ]]
-    then    
-      echo "开始执行应用启动前的自定义脚本"
-      cd \${appName}
-      bash custom-build/before-app-start.sh || exit 1
-      cd ../
-    else
-      echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
-    fi
+#     if [[ -f \${appName}/custom-build/before-app-start.sh ]]
+#     then    
+#       echo "开始执行应用启动前的自定义脚本"
+#       cd \${appName}
+#       bash custom-build/before-app-start.sh || exit 1
+#       cd ../
+#     else
+#       echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
+#     fi
 
-    # 启动服务器
-    if [[ \${appType} == 'node' ]]; then
-      pm2 start \${appName}.\${configFileType}
-    elif [[ \${appType} == 'next' ]]; then
-      cd ${deployDir}/\${appName}
-      nohup npm run start >/dev/null 2>&1 & echo "启动脚本已执行"
-      cd ${deployDir}
-    elif [[ \${appType} == 'java' ]]; then
-      nohup java -jar \${appName}/\${jarFileName} >/dev/null 2>&1 & echo "启动脚本已执行"
-    fi
+#     # 启动服务器
+#     if [[ \${appType} == 'node' ]]; then
+#       pm2 start \${appName}.\${configFileType}
+#     elif [[ \${appType} == 'next' ]]; then
+#       cd ${deployDir}/\${appName}
+#       nohup npm run start >/dev/null 2>&1 & echo "启动脚本已执行"
+#       cd ${deployDir}
+#     elif [[ \${appType} == 'java' ]]; then
+#       nohup java -jar \${appName}/\${jarFileName} >/dev/null 2>&1 & echo "启动脚本已执行"
+#     fi
   
-    rm -f \${appName}.zip
-  done
+#     rm -f \${appName}.zip
+#   done
 
-rm -rf ${deployDir}/update_tmp
+# rm -rf ${deployDir}/update_tmp
 
 exit 0
 EOF
