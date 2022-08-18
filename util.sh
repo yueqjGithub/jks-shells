@@ -256,18 +256,18 @@ function avalon_web_cd_update_to_server(){
     IFS="$OLD_IFS"
     zipname=$(cat ${WORKSPACE}/build/zipname.txt)
     for ut in ${updateTargetList[@]}; do
-        local targetName=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut})
+        local targetName=$(bash ${WORKSPACE}/custom_string_parse.sh ${ut})
         echo "#自动更新到"${targetName}
         local paramStr=$(echo "${ut}" | sed "s/.*(//g" | sed "s/).*//g")
-        local user=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} user)
+        local user=$(bash ${WORKSPACE}/custom_string_parse.sh ${ut} user)
         if [[ ${user} == "" ]]; then
             user="webuser"
         fi
 
-        local ip=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} ip)
-        local port=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} 端口)
-        local willSudo=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} 是否sudo)
-        local deployDir=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${ut} 部署目录)
+        local ip=$(bash ${WORKSPACE}/custom_string_parse.sh ${ut} ip)
+        local port=$(bash ${WORKSPACE}/custom_string_parse.sh ${ut} 端口)
+        local willSudo=$(bash ${WORKSPACE}/custom_string_parse.sh ${ut} 是否sudo)
+        local deployDir=$(bash ${WORKSPACE}/custom_string_parse.sh ${ut} 部署目录)
 
         scp -P ${port} ${WORKSPACE}/dist/${zipname} ${user}@${ip}:/tmp/
 cat >${WORKSPACE}/dist/update_${JOB_BASE_NAME}.sh <<EOF
@@ -278,20 +278,22 @@ rm -rf ${deployDir}/update_tmp
 mkdir ${deployDir}/update_tmp
 mv -f /tmp/${zipname} ${deployDir}/update_tmp/ || exit 1
 cd ${deployDir}/update_tmp || exit 1
-# 查看目录结构，获取要更新的应用列表
-zipStruct=\$(unzip -l "${zipname}" | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/p")
-updateApps=\$(echo "\${zipStruct}" | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p")
-echo "更新的应用列表:\${updateApps}"
 
 # 解压更新包
 cd ${deployDir}/update_tmp
-unzip -o *.zip
+unzip -o ${zipname}.zip
+rm -f ${zipname}.zip
 
 # 消除压缩包的根目录
 if [[ "${CD_ZIP_ROOT}" != "" ]]; then
     mv -f ${deployDir}/update_tmp/${CD_ZIP_ROOT}/*.zip ${deployDir}/update_tmp/update_tmp || exit 1
     rm -rf ${deployDir}/update_tmp/${CD_ZIP_ROOT}/ || exit 1
 fi
+
+# 查看目录结构，获取要更新的应用列表
+zipStruct=\$(unzip -l "${zipname}" | sed -rn "s/^\s+[0-9]+\s+[0-9:]+.+\s+(\S+)$/\1/p")
+updateApps=\$(echo "\${zipStruct}" | sed -rn "s/^([^/]+\/)$/\1/p" | sed -rn "s/^([^/]+)\/*$/\1/p")
+echo "更新的应用列表:\${updateApps}"
 
 # 尝试解压所有应用的zip
 appZips=\$(ls *.zip 2> /dev/null | wc -l)
@@ -301,6 +303,16 @@ fi
 
 rm -f ${zipname} || exit 1
 cd ${deployDir}
+
+apps=\$(cat ${deployDir}/update_tmp/appNameAndType.txt)
+app_arr=(\${apps//;/ })  
+for app in \${app_arr[@]}
+do
+  if [[ "\${app}" == "" ]]; then
+    continue
+  fi
+  echo "\${app}"
+done
 
 for i in \${updateApps}
   do

@@ -304,31 +304,6 @@ pipeline {
             }            
         }
 
-        // stage('邮件通知') {
-        //     when {
-        //         allOf {
-        //             expression { env.CD_MAIL_TO != null }
-        //             expression { env.CD_PROJECT_NAME != null }
-        //         }
-        //     }
-        //     steps {
-        //         script {
-        //             def body = readFile file: 'email_body.html'
-        //             mail body: body, 
-        //                  subject: "【${env.CD_PROJECT_NAME}】${env.CD_APP_VERSION}版本Releasenotes", 
-        //                  to: env.CD_MAIL_TO,
-        //                  cc: env.CD_MAIL_CC
-        //         }
-        //     }
-        // }
-
-//         <!-- #项目名称,影响邮件标题和发件人(可选)
-// CD_PROJECT_NAME=OA工具
-// #邮件收件人(可选)
-// CD_MAIL_TO=lvyangxu@avalongames.cn
-// #邮件抄送人(可选)
-// CD_MAIL_CC=lvyangxu@avalongames.cn -->
-
         stage('归档'){
             steps {
                 archiveArtifacts artifacts: 'dist/*.releaseinfo', defaultExcludes: false, followSymlinks: false
