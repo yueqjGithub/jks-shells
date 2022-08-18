@@ -20,6 +20,27 @@ value(propId1:propValue1，propId2:propValue2)
 + 更新应用时，node应用需要在应用同级目录配置一个同名的pm2配置文件*.json作为启动/停止脚本，比如IAMManage和IAMManage.json
 + java应用需要在应用的根目录下配置一个同名的业务配置文件*.properties，比如SuperSDK/SuperSDK.jar和SuperSDK/SuperSDK.properties
 
+### jenkins工程配置方法
+
+#### 1.配置流水线脚本
+![](./img/config1.png)
+
++ 从SCM获取，类型=git
++ 仓库地址=http://git.avalongames.com/web_util/avalon_web_cd.git
++ 凭据=svn账号-web
++ 指定分支=main
++ 脚本路径=Jenkinsfile
++ 勾选轻量化检出
++ 增加额外行为，Clean before checkout，勾选Delete untracked nested 
+repositories
+
+#### 2.配置环境变量
+
+![](./img/config2.png)
+
++ 参数设置勾选Prepare an environment for the run
++ 在Properties Content内设置环境变量，格式参考下面的使用教程
+
 ### 使用教程
 + 每个应用支持自定义构建脚本，执行路径为应用根目录/custom-build/build.sh，在压缩成zip前执行
 + 每个应用支持自定义更新脚本，执行路径为应用根目录/custom-build/before-app-start.sh，在目标服务器应用启动前执行
