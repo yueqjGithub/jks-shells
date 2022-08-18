@@ -32,6 +32,7 @@ function avalon_web_cd_pull_repo() {
         local projectName=$(echo "${gitProtocolUrl}" | sed "s/.*\///g" | sed "s/\.git//g")
         mkdir -p ${WORKSPACE}/build/${buildSubPath}
         mv ${WORKSPACE}/${projectName}/* ${WORKSPACE}/build/${buildSubPath}/
+        mv ${WORKSPACE}/${projectName}/.* ${WORKSPACE}/build/${buildSubPath}/
         cd ${WORKSPACE}/build || exit 1
         return 0
     elif [[ ${repoType} == "svn" ]]; then
@@ -151,7 +152,6 @@ function avalon_web_cd_build_app() {
 
 
         echo "${appName}应用类型=${appType}"
-        pwd
         if [ ${appType} == 'front' ]; then
             #前端应用
             echo "安装依赖库"
