@@ -287,8 +287,8 @@ cd ${deployDir}/update_tmp || exit 1
 
 # 解压更新包
 cd ${deployDir}/update_tmp
-unzip -o ${zipname}.zip
-rm -f ${zipname}.zip
+unzip -o ${zipname}
+rm -f ${zipname}
 
 # 消除压缩包的根目录
 if [[ "${CD_ZIP_ROOT}" != "" ]]; then
