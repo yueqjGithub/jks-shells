@@ -158,9 +158,9 @@ function avalon_web_cd_build_app() {
             npm install --unsafe-perm || exit 1
             echo "执行构建"
             if [ ${CD_WEB_MODE} == 'out']; then
-                npm run build || exit 1
+                npm run release:out || exit 1
             elif [ ${CD_WEB_MODE} == 'mac' ]; then
-                npm run build || exit 1
+                npm run release:mac || exit 1
             else
                 npm run release || exit 1
             fi
