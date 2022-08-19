@@ -121,7 +121,7 @@ repositories
 
 + CD_WEB_MODE_DATA
 > 是否必填：否
-> 含义：web构建模式，影响前端工程的构建命令，如果存在执行npm run release:xxx，不存在执行npm run release
+> 含义：web构建模式，影响前端工程的构建命令，如果存在执行npm run release:xxx，不存在执行npm run release,当为normal时，也执行npm run release
 > 解析类型：数组，元素格式=string
 > 示例：out,mac
 
