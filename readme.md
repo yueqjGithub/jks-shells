@@ -119,6 +119,12 @@ repositories
 > 解析类型：数组，元素格式=string
 > 示例：release,cn,global,dev
 
++ CD_WEB_MODE_DATA
+> 是否必填：否
+> 含义：web构建模式，影响前端工程的构建命令，如果存在执行npm run release:xxx，不存在执行npm run release
+> 解析类型：数组，元素格式=string
+> 示例：out,mac
+
 + CD_CUSTOM_PARAM
 > 是否必填：否
 > 含义：自定义参数，配合自定义构建脚本、自定义更新脚本使用
