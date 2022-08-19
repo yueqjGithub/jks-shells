@@ -158,10 +158,8 @@ function avalon_web_cd_build_app() {
             echo "安装依赖库"
             npm install --unsafe-perm || exit 1
             echo "执行构建"
-            if [ ${CD_WEB_MODE} == 'out' ]; then
-                npm run release:out || exit 1
-            elif [ ${CD_WEB_MODE} == 'mac' ]; then
-                npm run release:mac || exit 1
+            if [ ${CD_WEB_MODE} != null ] && [ ${CD_WEB_MODE} != 'normal' ] && ; then
+                npm run release:${CD_WEB_MODE} || exit 1
             else
                 npm run release || exit 1
             fi
