@@ -110,6 +110,10 @@ function avalon_web_cd_build_app() {
             if [[ -f "${appAbsolutePath}/vite.confit.ts" ]]; then
                 willZipApp=false
             fi
+        elif [[ -f 'main.py' ]]; then
+            appType='python'
+            buildFile="${appAbsolutePath}/*"
+            willZipApp=false
         elif [[ -f 'next.config.js' ]]; then
             # next应用安装依赖库必须在服务器上
             appType='next'
