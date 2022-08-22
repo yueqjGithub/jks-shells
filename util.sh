@@ -428,6 +428,13 @@ do
       echo "\${appName}未检测到应用启动前的自定义脚本custom-build/before-app-start.sh，无需执行"
     fi
 
+    # python防止权限报错，遍历775
+    if [[ \${appType} == 'python' ]]; then
+      cd ${deployDir} || exit 1
+      chmod -R 775 \${appName}/ || exit 1
+      cd ${deployDir} || exit 1
+    fi
+
     # 启动服务器
     if [[ \${appType} == 'node' ]]; then
       pm2 start \${appName}.\${configFileType}
