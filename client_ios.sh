@@ -1,7 +1,8 @@
 echo 'ready to build ios client'
 
-cd ${WORKSPACE}
 pwd
 # 执行autoBuild.sh
-sh ./ios_avalon/AvalonUIKit/autoBuild.sh
-sh ./ios_avalon/AvalonFoundation/autoBuild.sh
+cd ${WORKSPACE}/ios_avalon/AvalonUIKit || exit 1
+sh autoBuild.sh || exit 1
+cd ${WORKSPACE}/ios_avalon/AvalonFoundation || exit 1
+sh autoBuild.sh || exit 1
