@@ -1,0 +1,1 @@
+echo 'ready to build ios client'
