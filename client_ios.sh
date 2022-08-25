@@ -49,9 +49,23 @@ else
   txtName="${fileName%*_}_all.txt"
 fi
 
-zip -r -q "${zipName}" ./*.zip
-
 echo "归纳成品包"
-zip -r -q
+
+zip -r -q -m "${zipName}" ./*.zip
+
 
 /usr/local/Cellar/md5sha1sum/0.9.5_1/bin/md5sum "${zipName}" | cut -d ' ' -f1 | tee "${txtName}"
+
+echo "写入归档文件"
+releaseinfoName="${zipName%*.}.releaseinfo"
+
+archivePath=${WORKSPACE}/dist/${releaseinfoName}
+cat >>${archivePath} <<EOF
+更新包名:
+  ${zipName}
+更新内容:
+  ${readme}
+EOF
+
+echo "web归档文件【build号】= ${BUILD_NUMBER} ，【文件名】= ${releaseinfoName} "
+echo "包名：${zipName}"
