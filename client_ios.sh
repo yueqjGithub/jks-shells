@@ -41,12 +41,12 @@ echo "安卓包名：${android_result}"
 if [ ${android_result} != '' ];then
   echo "设置了android成果,拉取对应文件"
   curl -u quanjiang.yue:Avalonyqj123@ https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/${android_result} -o ${WORKSPACE}/dist/${android_result}
-  zipName="${android_result%*_}_all.zip"
-  txtName="${android_result%*_}_all.txt"
+  zipName="${android_result%_*}_all.zip"
+  txtName="${android_result%_*}_all.txt"
 else
   echo "未设置android成果,使用默认值"
-  zipName="${fileName%*_}_all.zip"
-  txtName="${fileName%*_}_all.txt"
+  zipName="${fileName%_*}_all.zip"
+  txtName="${fileName%_*}_all.txt"
 fi
 
 echo "归纳成品包"
@@ -57,7 +57,7 @@ zip -r -q -m "${zipName}" ./*.zip
 /usr/local/Cellar/md5sha1sum/0.9.5_1/bin/md5sum "${zipName}" | cut -d ' ' -f1 | tee "${txtName}"
 
 echo "写入归档文件"
-releaseinfoName="${zipName%*.}.releaseinfo"
+releaseinfoName="${zipName%.*}.releaseinfo"
 
 archivePath=${WORKSPACE}/dist/${releaseinfoName}
 cat >>${archivePath} <<EOF
