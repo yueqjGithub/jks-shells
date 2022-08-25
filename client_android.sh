@@ -33,6 +33,7 @@ if [[ ${resultType} == 'apk' ]]; then
 fi
 echo ${libraryVal}
 cd and_super
+exit 0
 sed -i '/library =/ d' AvalonGameCenter/build.gradle | exit 1
 sed -i "1i boolean library=${libraryVal}" AvalonGameCenter/build.gradle | exit 1
 echo "修改library参数完毕"
