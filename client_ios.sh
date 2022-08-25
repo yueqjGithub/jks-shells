@@ -40,4 +40,4 @@ if [ ${android_result} != '' ];then
   curl -u quanjiang.yue:Avalonyqj123@ https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/${android_result} -o ${WORKSPACE}/ios_avalon/dist/${android_result}
 fi
 
-/usr/local/Cellar/md5sha1sum/0.9.5_1/bin/md5sum "${zipName}.zip" | cut -d ' ' -f1 | tee "${txtName}"
+/usr/local/Cellar/md5sha1sum/0.9.5_1/bin/md5sum "${zipName}" | cut -d ' ' -f1 | tee "${txtName}"
