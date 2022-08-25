@@ -67,5 +67,25 @@ cat >>${archivePath} <<EOF
   ${readme}
 EOF
 
+if [[ ${willUploadFtp} == 'true' ]]; then
+ftpUser=webuser
+ftpPassword=vy6Ks348a7s88
+ftp -n <<-EOF
+  open ftp.avalongames.com
+  user ${ftpUser} ${ftpPassword}
+  cd ${ftpPath}
+  bin
+  put ${zipName}
+  put ${txtName}
+  bye
+EOF
+  #检查ftp上传是否成功
+  if [[ $? > 0 ]]; then
+      echo "ftp上传失败，构建结束"
+      exit 1
+  fi
+fi
+
+
 echo "web归档文件【build号】= ${BUILD_NUMBER} ，【文件名】= ${releaseinfoName} "
 echo "包名：${zipName}"
