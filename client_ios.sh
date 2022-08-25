@@ -24,7 +24,7 @@ txtName=${fileName}.txt
 
 cd dist
 
-/usr/local/Cellar/wget/1.21.3/bin/wget https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/SuperSDKClient_2.2.0_Re3d98f_B105_release.zip
+curl -X post -v -u quanjiang.yue:Avalonyqj123@  https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/SuperSDKClient_2.2.0_Re3d98f_B105_release.zip
 
 #mkdir client_ios
 
