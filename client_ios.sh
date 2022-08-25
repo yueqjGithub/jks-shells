@@ -18,19 +18,20 @@ fi
 mv ${WORKSPACE}/ios_avalon/AvalonUIKit/AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${WORKSPACE}/dist/
 
 echo "压缩成果包"
-fileName=${JOB_BASE_NAME}_${appVersion}_R${GIT_COMMIT:0:6}_B${BUILD_NUMBER}
+fileName=${JOB_BASE_NAME}_${appVersion}_R${GIT_COMMIT:0:6}_B${BUILD_NUMBER}_${versioncode_w}
 zipName=${fileName}.zip
 txtName=${fileName}.txt
 
 cd dist
 
-curl -X get -v -u quanjiang.yue:Avalonyqj123@  https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/SuperSDKClient_2.2.0_Re3d98f_B105_release.zip
 
-#mkdir client_ios
+mkdir client_ios
 
-#mv `ls | grep -v client_ios` client_ios/
+mv `ls | grep -v client_ios` client_ios/
 
-#zip -r -q "${zipName}" client_ios/
+zip -r -q "${zipName}" client_ios/
+
+curl -u quanjiang.yue:Avalonyqj123@ https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/SuperSDKClient_2.2.0_Re3d98f_B105_release.zip
 
 #if [[ ${versioncode_w} == null ]]; then
 #    echo "未定义versioncode_w，使用默认值release"
