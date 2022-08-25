@@ -28,10 +28,10 @@ mkdir client_ios
 
 mv `ls | grep -v client_ios` client_ios/
 
-zip -r -q "${zipName}.zip" client_ios/
+zip -r -q "${zipName}" client_ios/
 
-#if [[ ${versioncode_w} == null ]]; then
-#    echo "未定义versioncode_w，使用默认值release"
-#fi
+if [[ ${versioncode_w} == null ]]; then
+    echo "未定义versioncode_w，使用默认值release"
+fi
 
-#md5sum "${zipName}.zip" | cut -d ' ' -f1 | tee "${txtName}"
+md5sum "${zipName}.zip" | cut -d ' ' -f1 | tee "${txtName}"
