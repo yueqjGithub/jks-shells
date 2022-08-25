@@ -18,6 +18,9 @@ fi
 mv ${WORKSPACE}/ios_avalon/AvalonUIKit/AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${WORKSPACE}/dist/
 
 echo "压缩成果包"
+if [[ ${versioncode_w} == null ]]; then
+   echo "未定义versioncode_w，使用默认值release"
+fi
 fileName=${JOB_BASE_NAME}_${appVersion}_R${GIT_COMMIT:0:6}_B${BUILD_NUMBER}_${versioncode_w}
 zipName=${fileName}.zip
 txtName=${fileName}.txt
@@ -31,10 +34,10 @@ mv `ls | grep -v client_ios` client_ios/
 
 zip -r -q "${zipName}" client_ios/
 
-curl -u quanjiang.yue:Avalonyqj123@ https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/SuperSDKClient_2.2.0_Re3d98f_B105_release.zip
+rm -rf client_ios || exit 1
 
-#if [[ ${versioncode_w} == null ]]; then
-#    echo "未定义versioncode_w，使用默认值release"
-#fi
+if [ ${android_result != ''} ];then
+  curl -u quanjiang.yue:Avalonyqj123@ https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/${android_result} -o ${WORKSPACE}/ios_avalon/dist/${android_result}
+fi
 
-#md5sum "${zipName}.zip" | cut -d ' ' -f1 | tee "${txtName}"
+/usr/local/Cellar/md5sha1sum/0.9.5_1/bin/md5sum "${zipName}.zip" | cut -d ' ' -f1 | tee "${txtName}"
