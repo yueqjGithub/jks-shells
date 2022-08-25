@@ -10,9 +10,9 @@ sh autoBuild.sh || exit 1
 # 复制成果文件
 cd ${WORKSPACE}
 if [ -d 'dist' ]; then
-    rm -rf dist
+    rm -rf dist || exit 1
 else
     mkdir dist
 fi
 
-cp -r ${WORKSPACE}/ios_avalon/AvalonUIKit/AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${WORKSPACE}/dist
+cp -r ${WORKSPACE}/ios_avalon/AvalonUIKit/AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${WORKSPACE}/dist/
