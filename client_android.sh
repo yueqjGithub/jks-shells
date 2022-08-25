@@ -32,7 +32,6 @@ if [[ ${resultType} == 'apk' ]]; then
     libraryVal=false
 fi
 echo ${libraryVal}
-cd and_super
 sed -i '/library =/ d' AvalonGameCenter/build.gradle | exit 1
 sed -i "1i boolean library=${libraryVal}" AvalonGameCenter/build.gradle | exit 1
 echo "修改library参数完毕"
@@ -63,42 +62,42 @@ fi
 
 echo "参数插入结束，执行gradle命令生成"
 echo "复制local.properties到工作目录"
-cp ${WORKSPACE}/dist/local.properties ./
+cp dist/local.properties ./
 gradle :AvalonGameCenter:clean && gradle :AvalonGameCenter:assembleRelease
 echo "gradle执行完成,创建成果目录"
-mkdir ${WORKSPACE}/build_result
+mkdir build_result
 
 if [[ ${resultType} == 'aar' ]]; then
     echo "文件类型为aar，执行后续操作"
     echo "修改arr文件名,并移动至unity_core"
     mv -f AvalonGameCenter/build/outputs/aar/AvalonGameCenter-release.aar AvalonGameCenter/build/outputs/aar/avalon-ssdk.aar
-    mv -f AvalonGameCenter/build/outputs/aar/avalon-ssdk.aar ${WORKSPACE}/unity_core/SuperSDK/Assets/Plugins/Android
+    mv -f AvalonGameCenter/build/outputs/aar/avalon-ssdk.aar unity_core/SuperSDK/Assets/Plugins/Android
     echo "移动arr文件完成，复制所需文件"
-    cp -rf ${WORKSPACE}/unity_core/SuperSDK/Assets/AvalonSuperSDK/* ${WORKSPACE}/unity_core/avalon-ssdk-upload/Runtime/AvalonSuperSDK/
-    cp -rf ${WORKSPACE}/unity_core/SuperSDK/Assets/Editor/* ${WORKSPACE}/unity_core/avalon-ssdk-upload/Editor/
-    cp -rf ${WORKSPACE}/unity_core/SuperSDK/Assets/Plugins/Android/* ${WORKSPACE}/unity_core/avalon-ssdk-upload/Plugins/Android/
+    cp -rf unity_core/SuperSDK/Assets/AvalonSuperSDK/* unity_core/avalon-ssdk-upload/Runtime/AvalonSuperSDK/
+    cp -rf unity_core/SuperSDK/Assets/Editor/* unity_core/avalon-ssdk-upload/Editor/
+    cp -rf unity_core/SuperSDK/Assets/Plugins/Android/* unity_core/avalon-ssdk-upload/Plugins/Android/
     echo "移动对应文件完成，修改版本号"
     lineNum=$(echo $(sed -n '/version/=' unity_core/avalon-ssdk-upload/package.json))
-    sed -i "${lineNum}d" ${WORKSPACE}/unity_core/avalon-ssdk-upload/package.json
-    sed -i "${lineNum}i \"version\": \"${appVersion}\"," ${WORKSPACE}/unity_core/avalon-ssdk-upload/package.json
+    sed -i "${lineNum}d" unity_core/avalon-ssdk-upload/package.json
+    sed -i "${lineNum}i \"version\": \"${appVersion}\"," unity_core/avalon-ssdk-upload/package.json
     echo "版本号修改完成,移动到成果目录"
-    mv ${WORKSPACE}/unity_core/avalon-ssdk-upload ${WORKSPACE}/build_result
+    mv unity_core/avalon-ssdk-upload build_result
 elif [[ ${resultType} == 'apk' ]]; then
     echo "文件类型为apk，直接复制apk到build_result目录"
-    mv AvalonGameCenter/build/outputs/apk/release/AvalonGameCenter-release.apk ${WORKSPACE}/build_result
+    mv AvalonGameCenter/build/outputs/apk/release/AvalonGameCenter-release.apk build_result
 fi
 echo "压缩成果文件，上传ftp"
 zipName=${zipPre}${JOB_BASE_NAME}_${appVersion}_R${GIT_COMMIT:0:6}_B${BUILD_NUMBER}_${versioncode_w}.zip
 txtName=${zipName}.txt
 
-cd ${WORKSPACE}/build_result
+cd build_result
 mkdir client
 mv `ls | grep -v client` client/
 zip -r -q "${zipName}" client
 if [[ ${versioncode_w} == null ]]; then
     echo "未定义versioncode_w，使用默认值release"
 fi
-/usr/local/Cellar/md5sha1sum/0.9.5_1/bin/md5sum "${zipName}" | cut -d ' ' -f1 | tee "${txtName}"
+md5sum "${zipName}" | cut -d ' ' -f1 | tee "${txtName}"
 ftp -n <<-EOF
   open ftp.avalongames.com
   user ${ftpUser} ${ftpPassword}
