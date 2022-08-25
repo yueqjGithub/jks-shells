@@ -24,14 +24,16 @@ txtName=${fileName}.txt
 
 cd dist
 
-mkdir client_ios
+wget https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/SuperSDKClient_2.2.0_Re3d98f_B105_release.zip
 
-mv `ls | grep -v client_ios` client_ios/
+#mkdir client_ios
 
-zip -r -q "${zipName}" client_ios/
+#mv `ls | grep -v client_ios` client_ios/
 
-if [[ ${versioncode_w} == null ]]; then
-    echo "未定义versioncode_w，使用默认值release"
-fi
+#zip -r -q "${zipName}" client_ios/
 
-md5sum "${zipName}.zip" | cut -d ' ' -f1 | tee "${txtName}"
+#if [[ ${versioncode_w} == null ]]; then
+#    echo "未定义versioncode_w，使用默认值release"
+#fi
+
+#md5sum "${zipName}.zip" | cut -d ' ' -f1 | tee "${txtName}"
