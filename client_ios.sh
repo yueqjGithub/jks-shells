@@ -16,3 +16,21 @@ else
 fi
 
 mv ${WORKSPACE}/ios_avalon/AvalonUIKit/AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${WORKSPACE}/dist/
+
+# 压缩成果包
+zipName=${JOB_BASE_NAME}_${appVersion}_R${GIT_COMMIT:0:6}_B${BUILD_NUMBER}
+txtName=${zipName}.txt
+
+cd dist
+
+mkdir client_ios
+
+mv `ls | grep -v client_ios` client_ios/
+
+zip -r -q "${zipName}" client_ios/
+
+if [[ ${versioncode_w} == null ]]; then
+    echo "未定义versioncode_w，使用默认值release"
+fi
+
+md5sum "${zipName}.zip" | cut -d ' ' -f1 | tee "${txtName}"
