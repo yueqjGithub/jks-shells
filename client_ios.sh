@@ -36,7 +36,7 @@ zip -r -q "${zipName}" client_ios/
 
 rm -rf client_ios || exit 1
 
-if [ ${android_result != ''} ];then
+if [ ${android_result} != '' ];then
   curl -u quanjiang.yue:Avalonyqj123@ https://newjenkins.avalongames.com/job/AvalonWeb/job/SuperSDK/job/Client/lastSuccessfulBuild/artifact/dist/${android_result} -o ${WORKSPACE}/ios_avalon/dist/${android_result}
 fi
 
