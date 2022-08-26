@@ -80,6 +80,7 @@ rm -rf ios_*_client*
 echo "将zip发送到IOS目标机器"
 
 scp -P ${ios_port} ${WORKSPACE}/${ios_zipname} ${ios_user}@${ios_ip}:/tmp/
+rm -rf ${WORKSPACE}/${ios_zipname}
 cat >${WORKSPACE}/update_${JOB_BASE_NAME}.sh <<EOF
 #!/usr/bin/env bash
 echo "#解压并移动到指定目录"
@@ -108,13 +109,13 @@ mkdir dist
 
 cd ${ios_deployDir}/update_tmp/ios_super_client || exit 1
 sh autoBuild.sh
-mv AProducts/AvalonSuperSDK.xcframework/ios-arm64_armv7/AvalonSuperSDK.framework ${ios_deployDir}/dist/
+mv -f AProducts/AvalonSuperSDK.xcframework/ios-arm64_armv7/AvalonSuperSDK.framework ${ios_deployDir}/dist/
 cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonUIKit || exit 1
 sh autoBuild.sh
-mv AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${ios_deployDir}/dist/
+mv -f AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${ios_deployDir}/dist/
 cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonFoundation
 sh autoBuild.sh
-mv AProducts/AavaFontdation.xcframework/ios-arm64_armv7/AavaFontdation.framework ${ios_deployDir}/dist/
+mv -f AProducts/AavaFontdation.xcframework/ios-arm64_armv7/AvalonFoundation.framework ${ios_deployDir}/dist/
 
 
 
