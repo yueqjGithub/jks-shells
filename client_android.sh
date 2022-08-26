@@ -146,7 +146,7 @@ mv /tmp/ios_result.zip ${WORKSPACE}/ios_result
 unzip ios_result.zip
 rm -rf ios_result.zip
 echo "复制IOS成果到unity工程"
-mv -f ${WORKSPACE}/ios_result/* ${WORKSPACE}/unity_core/SuperSDK/Assets/Plugins/iOS/
+cp -rf ${WORKSPACE}/ios_result/* ${WORKSPACE}/unity_core/SuperSDK/Assets/Plugins/iOS/
 rm -rf ${WORKSPACE}/ios_result
 
 # IOS部分结束
