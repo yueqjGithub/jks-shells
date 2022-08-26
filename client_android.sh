@@ -67,6 +67,7 @@ gradle :AvalonGameCenter:clean && gradle :AvalonGameCenter:assembleRelease
 echo "gradle执行完成,创建成果目录"
 mkdir build_result
 
+# IOS部分
 echo "压缩IOS两个git仓库，存放到IOS目标机器"
 ios_zipname=ios_client.zip
 ios_port=22
@@ -95,7 +96,23 @@ rm -f ${ios_zipname} || exit 1
 EOF
 scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}:/tmp/ || exit 1
 ssh -p ${ios_port} -T ${ios_user}@${ios_ip} "bash /tmp/update_${JOB_BASE_NAME}.sh" || exit 1
+
+echo "执行autoBuild.sh"
+# workspace/update_tmp
+cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonUIKit || exit 1
+sh autoBuild.sh
+cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonFoundation
+sh autoBuild.sh
+cd ${ios_deployDir}
+echo "开始收集IOS成果"
+if [ -d dist ];then
+  rm -rf dist
+fi
+mkdir dist
+
 exit 0
+
+# IOS部分结束
 
 if [[ ${resultType} == 'aar' ]]; then
     echo "文件类型为aar，执行后续操作"
