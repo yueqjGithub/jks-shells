@@ -124,7 +124,8 @@ cd ${ios_deployDir}/dist
 
 zip -r -q -m ios_result.zip ./*
 
-
+echo "复制zip回到jenkins打包机"
+scp -P ${ios_port} ${ios_deployDir}/dist/ios_result.zip webuser@192.168.200.25:/tmp/ || exit 1
 
 EOF
 scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}:/tmp/ || exit 1
