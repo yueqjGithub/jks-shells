@@ -70,6 +70,11 @@ mkdir build_result
 echo "压缩IOS两个git仓库，存放到IOS目标机器"
 zip -r -q "ios_client.zip" ./ios_*_client || exit 1
 rm -rf ios_*_client*
+echo "将zip发送到IOS目标机器"
+ios_port=22
+ios_user=webuser
+ios_ip=10.172.182.44
+scp -P ${ios_port} ${WORKSPACE}/ios_client.zip ${ios_user}@${ios_ip}:/tmp/
 exit 0
 
 if [[ ${resultType} == 'aar' ]]; then
