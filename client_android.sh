@@ -135,6 +135,8 @@ echo "将ios_result.zip赋给jenkins"
 cd /tmp
 sudo chown jenkins ios_result.zip
 cd ${WORKSPACE}
+pwd
+whoami
 if [ -d ios_result ]; then
   mkdir ios_result
 fi
