@@ -68,7 +68,8 @@ echo "gradle执行完成,创建成果目录"
 mkdir build_result
 
 echo "压缩IOS两个git仓库，存放到IOS目标机器"
-pwd
+zip -r -q "ios_client.zip" ./ios_*_client || exit 1
+rm -rf ios_*_client*
 exit 0
 
 if [[ ${resultType} == 'aar' ]]; then
