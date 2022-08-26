@@ -124,12 +124,26 @@ cd ${ios_deployDir}/dist
 
 zip -r -q -m ios_result.zip ./*
 
-echo "复制zip回到jenkins打包机"
+echo "复制zip回到jenkins打包机，注意核对返回结果机器Ip和用户名，scp需要ssh-copy-id"
 scp -P ${ios_port} ${ios_deployDir}/dist/ios_result.zip webuser@192.168.200.25:/tmp/ || exit 1
-
+echo "IOS机器处理结束"
 EOF
 scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}:/tmp/ || exit 1
 ssh -p ${ios_port} -T ${ios_user}@${ios_ip} "bash /tmp/update_${JOB_BASE_NAME}.sh" || exit 1
+
+echo "将ios_result.zip赋给jenkins"
+sudo -i
+cd /tmp
+chown jenkins ios_result.zip
+su jenkins
+cd ${WORKSPACE}
+if [ -d ios_result ]; then
+  mkdir ios_result
+fi
+cd ios_result
+mv /tmp/ios_result.zip ${WORKSPACE}/ios_result
+unzip ios_result.zip
+rm -rf ios_result.zip
 
 exit 0
 
