@@ -68,13 +68,32 @@ echo "gradle执行完成,创建成果目录"
 mkdir build_result
 
 echo "压缩IOS两个git仓库，存放到IOS目标机器"
-zip -r -q "ios_client.zip" ./ios_*_client || exit 1
-rm -rf ios_*_client*
-echo "将zip发送到IOS目标机器"
+ios_zipname=ios_client.zip
 ios_port=22
 ios_user=webuser
 ios_ip=10.172.182.44
-scp -P ${ios_port} ${WORKSPACE}/ios_client.zip ${ios_user}@${ios_ip}:/tmp/
+ios_deployDir=/Users/webuser/workspace
+
+zip -r -q "${ios_zipname}" ./ios_*_client || exit 1
+rm -rf ios_*_client*
+echo "将zip发送到IOS目标机器"
+
+scp -P ${ios_port} ${WORKSPACE}/${ios_zipname} ${ios_user}@${ios_ip}:/tmp/
+cat >${WORKSPACE}/update_${JOB_BASE_NAME}.sh <<EOF
+#!/usr/bin/env bash
+echo "#解压并移动到指定目录"
+# 创建用于更新的临时目录
+rm -rf ${ios_deployDir}/update_tmp
+mkdir ${ios_deployDir}/update_tmp
+mv -f /tmp/${ios_zipname} ${ios_deployDir}/update_tmp/ || exit 1
+cd ${ios_deployDir}/update_tmp || exit 1
+
+# 解压更新包
+unzip -o ${zipname} || exit 1
+rm -f ${zipname} || exit 1
+EOF
+scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}:/tmp/ || exit 1
+ssh -p ${ios_port} -T ${ios_user}@${ios_ip} "bash /tmp/update_${JOB_BASE_NAME}.sh" || exit 1
 exit 0
 
 if [[ ${resultType} == 'aar' ]]; then
