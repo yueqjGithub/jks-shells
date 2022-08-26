@@ -67,6 +67,8 @@ gradle :AvalonGameCenter:clean && gradle :AvalonGameCenter:assembleRelease
 echo "gradle执行完成,创建成果目录"
 mkdir build_result
 
+exit 0
+
 if [[ ${resultType} == 'aar' ]]; then
     echo "文件类型为aar，执行后续操作"
     echo "修改arr文件名,并移动至unity_core"
@@ -98,6 +100,8 @@ if [[ ${versioncode_w} == null ]]; then
     echo "未定义versioncode_w，使用默认值release"
 fi
 md5sum "${zipName}" | cut -d ' ' -f1 | tee "${txtName}"
+
+if [ ${willUploadFtp} == 'true' ]; then
 ftp -n <<-EOF
   open ftp.avalongames.com
   user ${ftpUser} ${ftpPassword}
@@ -111,6 +115,7 @@ EOF
 if [[ $? > 0 ]]; then
     echo "ftp上传失败，构建结束"
     exit 1
+fi
 fi
 
 echo "写入归档文件"
