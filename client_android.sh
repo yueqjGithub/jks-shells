@@ -115,7 +115,7 @@ sh autoBuild.sh
 mv -f AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${ios_deployDir}/dist/
 cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonFoundation
 sh autoBuild.sh
-mv -f AProducts/AavaFontdation.xcframework/ios-arm64_armv7/AvalonFoundation.framework ${ios_deployDir}/dist/
+mv -f AProducts/AvalonFoundation.xcframework/ios-arm64_armv7/AvalonFoundation.framewor ${ios_deployDir}/dist/
 
 
 
