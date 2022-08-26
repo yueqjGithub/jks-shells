@@ -89,6 +89,7 @@ mv -f /tmp/${ios_zipname} ${ios_deployDir}/update_tmp/ || exit 1
 cd ${ios_deployDir}/update_tmp || exit 1
 
 # 解压更新包
+pwd
 unzip ${zipname} || exit 1
 rm -f ${zipname} || exit 1
 EOF
