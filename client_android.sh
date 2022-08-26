@@ -89,7 +89,7 @@ mv -f /tmp/${ios_zipname} ${ios_deployDir}/update_tmp/ || exit 1
 cd ${ios_deployDir}/update_tmp || exit 1
 
 # 解压更新包
-unzip -o ${zipname} || exit 1
+unzip ${zipname} || exit 1
 rm -f ${zipname} || exit 1
 EOF
 scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}:/tmp/ || exit 1
