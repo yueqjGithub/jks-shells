@@ -95,17 +95,28 @@ unzip ${ios_zipname} || exit 1
 rm -f ${ios_zipname} || exit 1
 
 echo "执行autoBuild.sh"
+
 # workspace/update_tmp
-cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonUIKit || exit 1
-sh autoBuild.sh
-cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonFoundation
-sh autoBuild.sh
-cd ${ios_deployDir}
+
 echo "开始收集IOS成果"
+cd ${ios_deployDir}
+# workspace
 if [ -d dist ];then
   rm -rf dist
 fi
 mkdir dist
+
+cd ${ios_deployDir}/update_tmp/ios_super_client || exit 1
+sh autoBuild.sh
+mv AProducts/AvalonSuperSDK.xcframework/ios-arm64_armv7/AvalonSuperSDK.framework ${ios_deployDir}/dist/
+cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonUIKit || exit 1
+sh autoBuild.sh
+mv AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${ios_deployDir}/dist/
+cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonFoundation
+sh autoBuild.sh
+mv AProducts/AavaFontdation.xcframework/ios-arm64_armv7/AavaFontdation.framework ${ios_deployDir}/dist/
+
+
 
 EOF
 scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}:/tmp/ || exit 1
