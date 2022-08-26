@@ -93,9 +93,6 @@ cd ${ios_deployDir}/update_tmp || exit 1
 pwd
 unzip ${ios_zipname} || exit 1
 rm -f ${ios_zipname} || exit 1
-EOF
-scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}:/tmp/ || exit 1
-ssh -p ${ios_port} -T ${ios_user}@${ios_ip} "bash /tmp/update_${JOB_BASE_NAME}.sh" || exit 1
 
 echo "执行autoBuild.sh"
 # workspace/update_tmp
@@ -109,6 +106,10 @@ if [ -d dist ];then
   rm -rf dist
 fi
 mkdir dist
+
+EOF
+scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}:/tmp/ || exit 1
+ssh -p ${ios_port} -T ${ios_user}@${ios_ip} "bash /tmp/update_${JOB_BASE_NAME}.sh" || exit 1
 
 exit 0
 
