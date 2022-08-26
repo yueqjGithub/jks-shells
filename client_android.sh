@@ -132,10 +132,8 @@ scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}
 ssh -p ${ios_port} -T ${ios_user}@${ios_ip} "bash /tmp/update_${JOB_BASE_NAME}.sh" || exit 1
 
 echo "将ios_result.zip赋给jenkins"
-sudo -i
 cd /tmp
-chown jenkins ios_result.zip
-su jenkins
+sudo chown jenkins ios_result.zip
 cd ${WORKSPACE}
 if [ -d ios_result ]; then
   mkdir ios_result
