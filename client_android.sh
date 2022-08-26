@@ -116,6 +116,13 @@ mv -f AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${
 cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonFoundation
 sh autoBuild.sh
 mv -f AProducts/AvalonFoundation.xcframework/ios-arm64_armv7/AvalonFoundation.framewor ${ios_deployDir}/dist/
+cd ${ios_deployDir}/update_tmp/ios_avalon_client/SDKDemo/Bundle
+mv -f AvalonPluginResources.bundle ${ios_deployDir}/dist/
+mv -f AvalonResource.bundle ${ios_deployDir}/dist/
+
+cd ${ios_deployDir}/dist
+
+zip -r -q -m ios_result.zip ./*
 
 
 
