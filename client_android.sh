@@ -145,10 +145,12 @@ cd ios_result
 mv /tmp/ios_result.zip ${WORKSPACE}/ios_result
 unzip ios_result.zip
 rm -rf ios_result.zip
-
-exit 0
+echo "复制IOS成果到unity工程"
+mv -f ${WORKSPACE}/ios_result/* ${WORKSPACE}/unity_core/SuperSDK/Assets/Plugins/iOS/
+rm -rf ${WORKSPACE}/ios_result
 
 # IOS部分结束
+cd ${WORKSPACE}
 
 if [[ ${resultType} == 'aar' ]]; then
     echo "文件类型为aar，执行后续操作"
@@ -158,7 +160,7 @@ if [[ ${resultType} == 'aar' ]]; then
     echo "移动arr文件完成，复制所需文件"
     cp -rf unity_core/SuperSDK/Assets/AvalonSuperSDK/* unity_core/avalon-ssdk-upload/Runtime/AvalonSuperSDK/
     cp -rf unity_core/SuperSDK/Assets/Editor/* unity_core/avalon-ssdk-upload/Editor/
-    cp -rf unity_core/SuperSDK/Assets/Plugins/Android/* unity_core/avalon-ssdk-upload/Plugins/Android/
+    cp -rf unity_core/SuperSDK/Assets/Plugins/* unity_core/avalon-ssdk-upload/Plugins/
     echo "移动对应文件完成，修改版本号"
     lineNum=$(echo $(sed -n '/version/=' unity_core/avalon-ssdk-upload/package.json))
     sed -i "${lineNum}d" unity_core/avalon-ssdk-upload/package.json
