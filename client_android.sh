@@ -138,8 +138,9 @@ cd ${WORKSPACE}
 pwd
 whoami
 if [ -d ios_result ]; then
-  mkdir ios_result
+  rm -rf ios_result
 fi
+mkdir ios_result
 cd ios_result
 mv /tmp/ios_result.zip ${WORKSPACE}/ios_result
 unzip ios_result.zip
