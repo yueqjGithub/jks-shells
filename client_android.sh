@@ -68,87 +68,11 @@ echo "gradle执行完成,创建成果目录"
 mkdir build_result
 
 # IOS部分
-echo "压缩IOS两个git仓库，存放到IOS目标机器"
-ios_zipname=ios_client.zip
-ios_port=22
-ios_user=webuser
-ios_ip=10.172.182.44
-ios_deployDir=/Users/webuser/workspace
-
-zip -r -q "${ios_zipname}" ./ios_*_client || exit 1
-rm -rf ios_*_client*
-echo "将zip发送到IOS目标机器"
-
-scp -P ${ios_port} ${WORKSPACE}/${ios_zipname} ${ios_user}@${ios_ip}:/tmp/
-rm -rf ${WORKSPACE}/${ios_zipname}
-cat >${WORKSPACE}/update_${JOB_BASE_NAME}.sh <<EOF
-#!/usr/bin/env bash
-echo "#解压并移动到指定目录"
-# 创建用于更新的临时目录
-rm -rf ${ios_deployDir}/update_tmp
-mkdir ${ios_deployDir}/update_tmp
-mv -f /tmp/${ios_zipname} ${ios_deployDir}/update_tmp/ || exit 1
-cd ${ios_deployDir}/update_tmp || exit 1
-
-# 解压更新包
-pwd
-unzip ${ios_zipname} || exit 1
-rm -f ${ios_zipname} || exit 1
-
-echo "执行autoBuild.sh"
-
-# workspace/update_tmp
-
-echo "开始收集IOS成果"
-cd ${ios_deployDir}
-# workspace
-if [ -d dist ];then
-  rm -rf dist
-fi
-mkdir dist
-
-cd ${ios_deployDir}/update_tmp/ios_super_client || exit 1
-sh autoBuild.sh
-mv -f AProducts/AvalonSuperSDK.xcframework/ios-arm64_armv7/AvalonSuperSDK.framework ${ios_deployDir}/dist/
-cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonUIKit || exit 1
-sh autoBuild.sh
-mv -f AProducts/AvalonUIKit.xcframework/ios-arm64_armv7/AvalonUIKit.framework ${ios_deployDir}/dist/
-cd ${ios_deployDir}/update_tmp/ios_avalon_client/AvalonFoundation
-sh autoBuild.sh
-mv -f AProducts/AvalonFoundation.xcframework/ios-arm64_armv7/AvalonFoundation.framework ${ios_deployDir}/dist/
-cd ${ios_deployDir}/update_tmp/ios_avalon_client/SDKDemo/Bundle
-mv -f AvalonPluginResources.bundle ${ios_deployDir}/dist/
-mv -f AvalonResource.bundle ${ios_deployDir}/dist/
-
-cd ${ios_deployDir}/dist
-
-zip -r -q -m ios_result.zip ./*
-
-echo "复制zip回到jenkins打包机，注意核对返回结果机器Ip和用户名，scp需要ssh-copy-id"
-scp -P ${ios_port} ${ios_deployDir}/dist/ios_result.zip webuser@192.168.200.25:/tmp/ || exit 1
-echo "IOS机器处理结束"
-EOF
-scp -P ${ios_port} ${WORKSPACE}/update_${JOB_BASE_NAME}.sh ${ios_user}@${ios_ip}:/tmp/ || exit 1
-ssh -p ${ios_port} -T ${ios_user}@${ios_ip} "bash /tmp/update_${JOB_BASE_NAME}.sh" || exit 1
-
-echo "将ios_result.zip赋给jenkins"
-cd /tmp
-sudo chown jenkins ios_result.zip
-cd ${WORKSPACE}
-pwd
-whoami
-if [ -d ios_result ]; then
-  rm -rf ios_result
-fi
-mkdir ios_result
-cd ios_result
-mv /tmp/ios_result.zip ${WORKSPACE}/ios_result
-unzip ios_result.zip
-rm -rf ios_result.zip
-echo "复制IOS成果到unity工程"
-cp -rf ${WORKSPACE}/ios_result/* ${WORKSPACE}/unity_core/SuperSDK/Assets/Plugins/iOS/
-rm -rf ${WORKSPACE}/ios_result
-
+# if [[ ${INCLUDE_IOS} ]]; then
+#   echo '执行IOS相关操作'
+#   cd ${WORKSPACE}
+#   cp -rf ${WORKSPACE}/unity_core/SuperSDK/Assets/Plugins/iOS ${WORKSPACE}/unity_core/avalon-ssdk-upload
+# fi
 # IOS部分结束
 cd ${WORKSPACE}
 
