@@ -252,6 +252,8 @@ function avalon_web_cd_build_app() {
     echo "${zipname}" > ${WORKSPACE}/build/zipname.txt
 
     cd "${WORKSPACE}/dist" || exit 1
+    echo ${CD_ZIP_ROOT}
+    exit 0
     if [[ ${CD_ZIP_ROOT} == "" ]];then
         zip -r -q "${zipname}" *
     else
