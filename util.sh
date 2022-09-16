@@ -107,7 +107,7 @@ function avalon_web_cd_build_app() {
         elif [[ -f 'webpack.config.custom.js' ]] || [[ -f 'vite.config.ts' ]]; then
             appType='front'
             buildFile="${appAbsolutePath}/dist/*"
-            if [[ -f "${appAbsolutePath}/vite.confit.ts" ]]; then
+            if [[ -f "${appAbsolutePath}/vite.config.ts" ]]; then
                 willZipApp=false
             fi
         elif [[ -f 'main.py' ]]; then
