@@ -221,7 +221,11 @@ function avalon_web_cd_build_app() {
         fi
 
         cp -a ${buildFile} "${destAppDir}" || exit 1
-
+        if [[ ${appType} == 'next' ]]; then
+            #next应用不压缩目录
+            echo 'next复制.env到destAppDir'
+            mv ${appAbsolutePath}/.[^.]* "${destAppDir}"
+        fi
         if [[ ${willZipApp} == "true" ]]; then
             #压缩
             cd "${destDir}" || exit 1
@@ -252,8 +256,6 @@ function avalon_web_cd_build_app() {
     echo "${zipname}" > ${WORKSPACE}/build/zipname.txt
 
     cd "${WORKSPACE}/dist" || exit 1
-    echo ${CD_ZIP_ROOT}
-    exit 0
     if [[ ${CD_ZIP_ROOT} == "" ]];then
         zip -r -q "${zipname}" *
     else
