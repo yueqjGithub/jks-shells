@@ -121,7 +121,7 @@ function avalon_web_cd_build_app() {
             willZipApp=false
         elif [[ -f 'package.json' ]]; then
             appType='node'
-            if [[ -f "${appAbsolutePath}/next.config.js" ]] || [[ -f "${appAbsolutePath}/vite.confit.ts" ]]; then
+            if [[ -f "${appAbsolutePath}/next.config.js" ]] || [[ -f "${appAbsolutePath}/vite.config.ts" ]]; then
                 willZipApp=false
             fi
         elif [[ -f 'pom.xml' ]]; then
