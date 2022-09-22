@@ -41,6 +41,10 @@ pwd
 version_line_num=$(echo $(sed -n '/super_sdk_version/=' AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json))
 version_line_num=$((10#${version_line_num}-1))
 echo "${version_line_num}"
+cat >version_temp.txt <<EOF
+"super_sdk_version": "${appVersion}",
+EOF
+sed -i "${version_line_num} r version_temp.txt" AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json
 exit 0
 
 echo "插入参数"
