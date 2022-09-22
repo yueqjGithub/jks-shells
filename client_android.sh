@@ -39,6 +39,8 @@ echo "修改library参数完毕"
 echo '将/AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json中super_sdk_version的值改为appVersion'
 pwd
 version_line_num=$(echo $(sed -n '/super_sdk_version/=' AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json))
+echo "删除原有行"
+sed -i "${version_line_num}d" AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json
 version_line_num=$((10#${version_line_num}-1))
 echo "${version_line_num}"
 cat >version_temp.txt <<EOF
