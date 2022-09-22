@@ -36,6 +36,13 @@ sed -i '/library =/ d' AvalonGameCenter/build.gradle | exit 1
 sed -i "1i boolean library=${libraryVal}" AvalonGameCenter/build.gradle | exit 1
 echo "修改library参数完毕"
 
+echo '将/AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json中super_sdk_version的值改为appVersion'
+sed -i '/super_sdk_version/ d' AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json | exit 1
+version_line_num=$(echo $(sed -n '/\/super_sdk_version/=' /AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json))
+version_line_num=$((10#${version_line_num}-1))
+echo "${version_line_num}"
+exit 0
+
 echo "插入参数"
 if [[ ${resultType} == 'apk' ]]; then
     lineNum=$(echo $(sed -n '/\/application/=' AvalonGameCenter/src/main/AndroidManifest.xml))
