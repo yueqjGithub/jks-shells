@@ -88,6 +88,8 @@ EOF
     sed -i 's/CMODE = "release"/CMODE = "debug"/' AvalonGameCenter/src/main/java/com/avalon/gamecenter/AvalonGameBaseActivity.java
 fi
 
+cd ${WORKSPACE}
+
 echo "参数插入结束，执行gradle命令生成"
 echo "复制local.properties到工作目录"
 cp dist/local.properties ./
