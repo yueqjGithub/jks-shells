@@ -40,14 +40,29 @@ echo '将/AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json中
 pwd
 version_line_num=$(echo $(sed -n '/super_sdk_version/=' AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json))
 echo "删除原有行"
-sed -i "${version_line_num}d" AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json
+sed -i "${version_line_num}d" AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json | exit 1
 version_line_num=$((10#${version_line_num}-1))
 echo "${version_line_num}"
 cat >version_temp.txt <<EOF
 "super_sdk_version": "${appVersion}",
 EOF
-sed -i "${version_line_num} r version_temp.txt" AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json
-exit 0
+sed -i "${version_line_num} r version_temp.txt" AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json | exit 1
+rm version_temp.txt
+echo "super插入jiraversion完成"
+
+echo "sueper_client_unity插入jiraversion"
+cd "${WORKSPACE}/unity_core"
+echo "删除原有行"
+version_line_num=$(echo $(sed -n '/version/=' SuperSDK/Assets/Plugins/iOS/AvalonPluginResources.bundle/super_sdk.json))
+sed -i "${version_line_num}d" SuperSDK/Assets/Plugins/iOS/AvalonPluginResources.bundle/super_sdk.json | exit 1
+version_line_num=$((10#${version_line_num}-1))
+echo "${version_line_num}"
+cat >version_temp.txt <<EOF
+"version": "${appVersion}",
+EOF
+sed -i "${version_line_num} r version_temp.txt" SuperSDK/Assets/Plugins/iOS/AvalonPluginResources.bundle/super_sdk.json | exit 1
+rm version_temp.txt
+echo "super_client_unity插入Jiraversion完成"
 
 echo "插入参数"
 if [[ ${resultType} == 'apk' ]]; then
