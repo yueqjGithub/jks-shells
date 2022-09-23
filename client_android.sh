@@ -44,7 +44,7 @@ sed -i "${version_line_num}d" AvalonSSDKFramework/src/main/assets/avalon_supersd
 version_line_num=$((10#${version_line_num}-1))
 echo "${version_line_num}"
 cat >version_temp.txt <<EOF
-"super_sdk_version": "${appVersion}",
+"super_sdk_version": "${appVersion}"
 EOF
 sed -i "${version_line_num} r version_temp.txt" AvalonSSDKFramework/src/main/assets/avalon_supersdk_properties.json | exit 1
 rm version_temp.txt
