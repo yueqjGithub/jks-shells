@@ -64,6 +64,8 @@ sed -i "${version_line_num} r version_temp.txt" SuperSDK/Assets/Plugins/iOS/Aval
 rm version_temp.txt
 echo "super_client_unity插入Jiraversion完成"
 
+cd ${WORKSPACE}
+
 echo "插入参数"
 if [[ ${resultType} == 'apk' ]]; then
     lineNum=$(echo $(sed -n '/\/application/=' AvalonGameCenter/src/main/AndroidManifest.xml))
