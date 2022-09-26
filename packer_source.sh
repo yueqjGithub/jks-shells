@@ -4,6 +4,16 @@ if [[ ${ftpPath} == '' ]]; then
   exit 1
 fi
 
+if [[ ${CD_BUILD_NAME} == '' ]]; then
+  echo '未设置参数发布名称'
+  exit 1
+fi
+
+if [[ ${CD_BUILD_VERSION} == '' ]]; then
+  echo '未设置发布版本'
+  exit 1
+fi
+
 ftpUser=webuser
 ftpPassword=vy6Ks348a7s88
 
