@@ -25,4 +25,3 @@ else
   echo "未检测到需要发布的插件或渠道"
   exit 1
 fi
-fi
