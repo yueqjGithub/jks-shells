@@ -36,15 +36,14 @@ echo "根据发布类型进入对应目录"
 cd ${CD_BUILD_TYPE}
 
 echo "检测是否有需要发布的插件或渠道"
-fileName = ${CD_BUILD_NAME}-${CD_BUILD_VERSION}
 if [[ -e ${CD_BUILD_NAME}/${CD_BUILD_vERSION} ]]; then
   echo "检测到需要发布的插件或渠道"
   echo "开始收集文件"
   cp -r ${CD_BUILD_NAME}/${CD_BUILD_VERSION} ${WORKSPACE}/build_result
   cd ${WORKSPACE}/build_result
   echo "开始压缩文件"
-  zip -r -q ${fileName}.zip ${CD_BUILD_VERSION}
-  md5sum "${fileName}.zip" | cut -d ' ' -f1 | tee "${fileName}_${BUILD_NUMBER}.txt"
+  zip -r -q ${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip ${CD_BUILD_VERSION}
+  md5sum "${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip" | cut -d ' ' -f1 | tee "${CD_BUILD_NAME}-${CD_BUILD_VERSION}_${BUILD_NUMBER}.txt"
 else
   echo "未检测到需要发布的插件或渠道"
   exit 1
