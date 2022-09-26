@@ -44,7 +44,7 @@ if [[ -e ${CD_BUILD_NAME}/${CD_BUILD_vERSION} ]]; then
   cd ${WORKSPACE}/build_result
   echo "开始压缩文件"
   zip -r -q ${fileName}.zip ${CD_BUILD_VERSION}
-  md5sum "${fileName}_${BUILD_NUMBER}.txt" | cut -d ' ' -f1 | tee "${fileName}.zip"
+  md5sum "${fileName}.zip" | cut -d ' ' -f1 | tee "${fileName}_${BUILD_NUMBER}.txt"
 else
   echo "未检测到需要发布的插件或渠道"
   exit 1
