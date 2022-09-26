@@ -19,6 +19,13 @@ ftpPassword=vy6Ks348a7s88
 
 cd ${WORKSPACE}
 
+if [[ -d build_result ]]; then
+  echo "删除旧的build_result文件夹"
+  rm -rf build_result
+fi
+
+mkdir build_result
+
 echo "发布信息"
 echo "发布类型为${CD_BUILD_TYPE}"
 echo "发布版本为${CD_BUILD_VERSION}"
@@ -31,7 +38,10 @@ cd ${CD_BUILD_TYPE}
 echo "检测是否有需要发布的插件或渠道"
 if [[ -e ${CD_BUILD_NAME}/${CD_BUILD_vERSION} ]]; then
   echo "检测到需要发布的插件或渠道"
+  echo "开始收集文件"
+  cp -r ${CD_BUILD_NAME}/${CD_BUILD_VERSION} ${WORKSPACE}/build_result
 else
   echo "未检测到需要发布的插件或渠道"
   exit 1
 fi
+
