@@ -55,8 +55,7 @@ if [[ -e ${CD_BUILD_NAME}/${CD_BUILD_vERSION} ]]; then
   user ${ftpUser} ${ftpPassword}
   cd ${ftpPath}
   bin
-  put ${zipName}
-  put ${txtName}
+  put ${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip
   bye
 EOF
   #检查ftp上传是否成功
