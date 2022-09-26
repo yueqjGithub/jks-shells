@@ -40,6 +40,9 @@ if [[ -e ${CD_BUILD_NAME}/${CD_BUILD_vERSION} ]]; then
   echo "检测到需要发布的插件或渠道"
   echo "开始收集文件"
   cp -r ${CD_BUILD_NAME}/${CD_BUILD_VERSION} ${WORKSPACE}/build_result
+  cd ${WORKSPACE}/build_result
+  echo "开始压缩文件"
+  zip -r ${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip ${CD_BUILD_VERSION}
 else
   echo "未检测到需要发布的插件或渠道"
   exit 1
