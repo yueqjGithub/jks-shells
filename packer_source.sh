@@ -14,7 +14,7 @@ ftpPath=''
 ftpUser=webuser
 ftpPassword=vy6Ks348a7s88
 
-if [[ ${upload_type} == 'channel' ]]; then
+if [[ ${CD_BUILD_TYPE} =~ 'channel' ]]; then
   ftpPath='corp/PackTools/dev/channels'
 else
   ftpPath='corp/PackTools/dev/plugins'
