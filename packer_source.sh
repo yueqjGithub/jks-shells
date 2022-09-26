@@ -1,8 +1,4 @@
 BUILD_ID=dontKillMe
-if [[ ${ftpPath} == '' ]]; then
-  echo '未设置参数ftpPath (ftp上传路径)'
-  exit 1
-fi
 
 if [[ ${CD_BUILD_NAME} == '' ]]; then
   echo '未设置参数发布名称'
@@ -14,8 +10,16 @@ if [[ ${CD_BUILD_VERSION} == '' ]]; then
   exit 1
 fi
 
+ftpPath=''
 ftpUser=webuser
 ftpPassword=vy6Ks348a7s88
+
+if [[ ${upload_type} == 'channel' ]]; then
+  ftpPath='corp/PackTools/dev/channels'
+else
+  ftpPath='corp/PackTools/dev/plugins'
+fi
+
 
 cd ${WORKSPACE}
 
@@ -44,6 +48,22 @@ if [[ -e ${CD_BUILD_NAME}/${CD_BUILD_vERSION} ]]; then
   echo "开始压缩文件"
   zip -r -q ${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip ${CD_BUILD_VERSION}
   md5sum "${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip" | cut -d ' ' -f1 | tee "${CD_BUILD_NAME}-${CD_BUILD_VERSION}_${BUILD_NUMBER}.txt"
+
+  echo '上传ftp'
+  ftp -n <<-EOF
+  open ftp.avalongames.com
+  user ${ftpUser} ${ftpPassword}
+  cd ${ftpPath}
+  bin
+  put ${zipName}
+  put ${txtName}
+  bye
+EOF
+  #检查ftp上传是否成功
+  if [[ $? > 0 ]]; then
+      echo "ftp上传失败，构建结束"
+      exit 1
+  fi
 else
   echo "未检测到需要发布的插件或渠道"
   exit 1
