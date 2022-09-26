@@ -42,7 +42,9 @@ if [[ -e ${CD_BUILD_NAME}/${CD_BUILD_vERSION} ]]; then
   cp -r ${CD_BUILD_NAME}/${CD_BUILD_VERSION} ${WORKSPACE}/build_result
   cd ${WORKSPACE}/build_result
   echo "开始压缩文件"
-  zip -r ${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip ${CD_BUILD_VERSION}
+  fileName = ${CD_BUILD_NAME}-${CD_BUILD_VERSION}
+  zip -r -q ${fileName}.zip ${CD_BUILD_VERSION}
+  md5sum "${fileName}_${BUILD_NUMBER}.txt" | cut -d ' ' -f1 | tee "${fileName}.zip"
 else
   echo "未检测到需要发布的插件或渠道"
   exit 1
