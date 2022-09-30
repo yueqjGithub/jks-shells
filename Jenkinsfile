@@ -173,12 +173,13 @@ pipeline {
                     if(env.CD_MAIL_TO == '' || env.CD_MAIL_CC == '') {
                         echo '未设置收件人,跳过邮件通知'
                     }else{
-                        def body = 'cat ./email_body.html'
+                        // def body = 'cat ./email_body.html'
+                        def body = readFile file: './email_body.html'
                         emailext body: body, 
                                  subject: '222', 
                                  to: env.CD_MAIL_TO,
-                                 cc: env.CD_MAIL_CC,
-                                 from 'jenkins邮件'
+                                 cc: env.CD_MAIL_CC
+                                //  from 'jenkins邮件'
                     }
                 }
             }
