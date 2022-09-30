@@ -31,4 +31,4 @@ CD_FTP_PATH=corp/OaTools
 #收件人
 CD_MAIL_TO=webdev@avalongames.cn
 #抄送
-CD_MAIL_CC=yangxu.lv@avalongames.cn
+CD_MAIL_CC=lvyangxu@avalongames.cn
