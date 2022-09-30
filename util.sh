@@ -400,6 +400,10 @@ do
       if [[ -d \${appName}/resources ]]; then
         mv \${appName}/resources \${appName}_tmp || exit 1
         echo "已备份\${appName}/resources"
+      fi
+      if [[ -d \${appName}/main.py ]]; then
+        mv \${appName}/source \${appName}_tmp || exit 1
+        echo "已备份\${appName}/source"
       fi   
 
       # 删除整个应用目录，从更新包解压
@@ -418,6 +422,9 @@ do
       fi
       if [[ -d \${appName}_tmp/resources ]]; then
         mv \${appName}_tmp/resources \${appName}/ || exit 1
+      fi
+      if [[ -d \${appName}_tmp/source ]]; then
+        mv \${appName}_tmp/source \${appName}/ || exit 1
       fi
 
       rm -rf "\${appName}_tmp" || exit 1
