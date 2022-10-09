@@ -506,14 +506,14 @@ EOF
     local releaseinfoName=${CD_APP_VERSION}.releaseinfo
     local archivePath=${WORKSPACE}/dist/${releaseinfoName}
     cat >>${archivePath} <<EOF
-  更新包名:
-    ${zipname}  
+更新包名:
+  ${zipname}  
 EOF
 
     if [[ -n ${readme} ]]; then
       cat >>${archivePath} <<EOF
-  配置更新:
-    ${readme}  
+配置更新:
+  ${readme}  
 EOF
     fi
     echo "web归档文件【build号】= ${BUILD_NUMBER} ，【文件名】= ${releaseinfoName} "
