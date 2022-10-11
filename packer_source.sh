@@ -29,7 +29,13 @@ do
   if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cp -r $name/$version ${WORKSPACE}/build_result/$name/$version
+    cd ${WORKSPACE}/build_result
+    if [[ -e $name ]];then
+    else
+      mkdir $name
+    fi
+    cd ${WORKSPACE}/and_channel
+    cp -r $name/$version ${WORKSPACE}/build_result/$name/
     cd ${WORKSPACE}/build_result/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
@@ -65,10 +71,16 @@ do
   name=${var%-*}
   echo $version
   echo $name
-    if [[ -e $name/$version ]]; then
-    echo "检测到需要发布的插件或渠道"
+  if [[ -e $name/$version ]]; then
+   echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cp -r $name/$version ${WORKSPACE}/build_result/$name/$version
+    cd ${WORKSPACE}/build_result
+    if [[ -e $name ]];then
+    else
+      mkdir $name
+    fi
+    cd ${WORKSPACE}/ios_channel
+    cp -r $name/$version ${WORKSPACE}/build_result/$name/
     cd ${WORKSPACE}/build_result/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
@@ -105,10 +117,16 @@ do
   name=${var%-*}
   echo $version
   echo $name
-    if [[ -e $name/$version ]]; then
+  if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cp -r $name/$version ${WORKSPACE}/build_result/$name/$version
+    cd ${WORKSPACE}/build_result
+    if [[ -e $name ]];then
+    else
+      mkdir $name
+    fi
+    cd ${WORKSPACE}/and_plugin
+    cp -r $name/$version ${WORKSPACE}/build_result/$name/
     cd ${WORKSPACE}/build_result/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
@@ -144,10 +162,16 @@ do
   name=${var%-*}
   echo $version
   echo $name
-    if [[ -e $name/$version ]]; then
+  if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cp -r $name/$version ${WORKSPACE}/build_result/$name/$version
+    cd ${WORKSPACE}/build_result
+    if [[ -e $name ]];then
+    else
+      mkdir $name
+    fi
+    cd ${WORKSPACE}/ios_plugin
+    cp -r $name/$version ${WORKSPACE}/build_result/$name/
     cd ${WORKSPACE}/build_result/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
