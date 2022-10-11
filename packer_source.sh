@@ -59,7 +59,7 @@ EOF
         exit 1
     fi
     new_str=""
-    if [[ channel_str == "" ]]; then
+    if [[ $channel_str == "" ]]; then
       new_str="$name-$version.zip"
     else
       new_str=",$name-$version.zip"
@@ -112,7 +112,7 @@ EOF
         exit 1
     fi
     new_str=""
-    if [[ channel_str == "" ]]; then
+    if [[ $channel_str == "" ]]; then
       new_str="$name-$version.zip"
     else
       new_str=",$name-$version.zip"
@@ -168,7 +168,7 @@ EOF
         exit 1
     fi
     new_str=""
-    if [[ plugin_str == "" ]]; then
+    if [[ $plugin_str == "" ]]; then
       new_str="$name-$version.zip"
     else
       new_str=",$name-$version.zip"
@@ -221,7 +221,7 @@ EOF
         exit 1
     fi
     new_str=""
-    if [[ plugin_str == "" ]]; then
+    if [[ $plugin_str == "" ]]; then
       new_str="$name-$version.zip"
     else
       new_str=",$name-$version.zip"
