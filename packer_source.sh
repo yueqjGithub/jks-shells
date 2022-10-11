@@ -11,8 +11,8 @@ do
   # echo $var
   version=${var##*-}
   name=${var%-*}
-  echo version
-  echo name
+  echo $version
+  echo $name
 done
 
 arr=(`echo ${CD_AND_PLUGINS} | tr ',' ' '` )
