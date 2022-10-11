@@ -28,7 +28,7 @@ do
   if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cp -r $name/$version ${WORKSPACE}/build_result/$name
+    cp -r $name/$version ${WORKSPACE}/build_result/$name/$version
     cd ${WORKSPACE}/build_result/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
@@ -67,7 +67,7 @@ do
     if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cp -r $name/$version ${WORKSPACE}/build_result/$name
+    cp -r $name/$version ${WORKSPACE}/build_result/$name/$version
     cd ${WORKSPACE}/build_result/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
@@ -107,7 +107,7 @@ do
     if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cp -r $name/$version ${WORKSPACE}/build_result/$name
+    cp -r $name/$version ${WORKSPACE}/build_result/$name/$version
     cd ${WORKSPACE}/build_result/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
@@ -146,7 +146,7 @@ do
     if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cp -r $name/$version ${WORKSPACE}/build_result/$name
+    cp -r $name/$version ${WORKSPACE}/build_result/$name/$version
     cd ${WORKSPACE}/build_result/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
