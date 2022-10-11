@@ -235,3 +235,13 @@ done
 
 echo $plugin_str
 echo $channel_str
+
+echo "生成归档文件"
+cd ${WORKSPACE}/build_result
+releaseinfoName=${CD_APP_VERSION}.releaseinfo
+cat >> ${WORKSPACE}/build_result/$releaseinfoName << EOF
+channels:
+  $channel_str
+plugins:
+  $plugin_str
+EOF
