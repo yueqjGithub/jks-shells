@@ -14,6 +14,8 @@ fi
 
 mkdir build_result
 
+channel_str=""
+
 ftpPath='corp/PackTools/dev/channels'
 echo "开始处理安卓渠道资源"
 arr=(`echo ${CD_AND_CHANNELS} | tr ',' ' '` )
@@ -56,6 +58,13 @@ EOF
         echo "ftp上传失败，构建结束"
         exit 1
     fi
+    new_str=""
+    if [[ channel_str == "" ]]; then
+      new_str="$name-$version.zip"
+    else
+      new_str=",$name-$version.zip"
+    fi
+    channel_str=${channel_str}${new_str}
   else
     echo "未检测到需要发布的插件或渠道"
     exit 1
@@ -102,12 +111,21 @@ EOF
         echo "ftp上传失败，构建结束"
         exit 1
     fi
+    new_str=""
+    if [[ channel_str == "" ]]; then
+      new_str="$name-$version.zip"
+    else
+      new_str=",$name-$version.zip"
+    fi
+    channel_str=${channel_str}${new_str}
   else
     echo "未检测到需要发布的插件或渠道"
     exit 1
   fi
 done
 
+
+plugin_str=""
 
 echo "开始处理安卓插件资源"
 ftpPath='corp/PackTools/dev/plugins'
@@ -149,6 +167,13 @@ EOF
         echo "ftp上传失败，构建结束"
         exit 1
     fi
+    new_str=""
+    if [[ plugin_str == "" ]]; then
+      new_str="$name-$version.zip"
+    else
+      new_str=",$name-$version.zip"
+    fi
+    plugin_str=${channel_str}${new_str}
   else
     echo "未检测到需要发布的插件或渠道"
     exit 1
@@ -195,8 +220,18 @@ EOF
         echo "ftp上传失败，构建结束"
         exit 1
     fi
+    new_str=""
+    if [[ plugin_str == "" ]]; then
+      new_str="$name-$version.zip"
+    else
+      new_str=",$name-$version.zip"
+    fi
+    plugin_str=${channel_str}${new_str}
   else
     echo "未检测到需要发布的插件或渠道"
     exit 1
   fi
 done
+
+echo $plugin_str
+echo $channel_str
