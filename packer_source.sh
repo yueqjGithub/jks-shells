@@ -9,16 +9,16 @@ cd ${WORKSPACE}/and_channel
 for var in ${arr[@]}
 do
   # echo $var
-  echo ${\$var##*-}
-  echo ${\$var%*-}
+  echo ${$var##*-}
+  echo ${$var%*-}
 done
 
 arr=(`echo ${CD_AND_PLUGINS} | tr ',' ' '` )
 cd ${WORKSPACE}/and_plugin
 for var in ${arr[@]}
 do
-  echo ${\$var##*-}
-  echo ${\$var%*-}
+  echo ${var##*-}
+  echo ${var%*-}
 done
 
 arr=(`echo ${CD_IOS_CHANNELS} | tr ',' ' '` )
@@ -33,6 +33,6 @@ arr=(`echo ${CD_IOS_PLUGINS} | tr ',' ' '` )
 cd ${WORKSPACE}/ios_plugin
 for var in ${arr[@]}
 do
-  echo ${\$var##*-}
-  echo ${\$var%*-}
+  echo ${$var##*-}
+  echo ${$var%*-}
 done
