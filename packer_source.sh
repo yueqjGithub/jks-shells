@@ -30,7 +30,8 @@ do
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
     cd ${WORKSPACE}/build_result
-    if [[ -e $name ]];then
+    if [[ -e $name ]]; then
+      echo "已存在资源名称目录，无需创建"
     else
       mkdir $name
     fi
@@ -75,7 +76,8 @@ do
    echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
     cd ${WORKSPACE}/build_result
-    if [[ -e $name ]];then
+    if [[ -e $name ]]; then
+      echo "已存在资源名称目录，无需创建"
     else
       mkdir $name
     fi
@@ -121,7 +123,8 @@ do
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
     cd ${WORKSPACE}/build_result
-    if [[ -e $name ]];then
+    if [[ -e $name ]]; then
+      echo "已存在资源名称目录，无需创建"
     else
       mkdir $name
     fi
@@ -166,7 +169,8 @@ do
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
     cd ${WORKSPACE}/build_result
-    if [[ -e $name ]];then
+    if [[ -e $name ]]; then
+      echo "已存在资源名称目录，无需创建"
     else
       mkdir $name
     fi
