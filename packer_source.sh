@@ -173,7 +173,7 @@ EOF
     else
       new_str=",$name-$version.zip"
     fi
-    plugin_str=${channel_str}${new_str}
+    plugin_str=${plugin_str}${new_str}
   else
     echo "未检测到需要发布的插件或渠道"
     exit 1
@@ -226,7 +226,7 @@ EOF
     else
       new_str=",$name-$version.zip"
     fi
-    plugin_str=${channel_str}${new_str}
+    plugin_str=${plugin_str}${new_str}
   else
     echo "未检测到需要发布的插件或渠道"
     exit 1
