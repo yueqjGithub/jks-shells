@@ -9,8 +9,10 @@ cd ${WORKSPACE}/and_channel
 for var in ${arr[@]}
 do
   # echo $var
-  echo ${var##*-}
-  echo ${var%-*}
+  version=${var##*-}
+  name=${var%-*}
+  echo version
+  echo name
 done
 
 arr=(`echo ${CD_AND_PLUGINS} | tr ',' ' '` )
