@@ -17,9 +17,10 @@ mkdir build_result
 ftpPath='corp/PackTools/dev/channels'
 echo "开始处理安卓渠道资源"
 arr=(`echo ${CD_AND_CHANNELS} | tr ',' ' '` )
-cd ${WORKSPACE}/and_channel
+
 for var in ${arr[@]}
 do
+  cd ${WORKSPACE}/and_channel
   # echo $var
   version=${var##*-}
   name=${var%-*}
@@ -57,9 +58,9 @@ done
 
 echo "开始处理IOS渠道资源"
 arr=(`echo ${CD_IOS_CHANNELS} | tr ',' ' '` )
-cd ${WORKSPACE}/ios_channel
 for var in ${arr[@]}
 do
+  cd ${WORKSPACE}/ios_channel
   version=${var##*-}
   name=${var%-*}
   echo $version
@@ -97,9 +98,9 @@ done
 echo "开始处理安卓插件资源"
 ftpPath='corp/PackTools/dev/plugins'
 arr=(`echo ${CD_AND_PLUGINS} | tr ',' ' '` )
-cd ${WORKSPACE}/and_plugin
 for var in ${arr[@]}
 do
+  cd ${WORKSPACE}/and_plugin
   version=${var##*-}
   name=${var%-*}
   echo $version
@@ -136,9 +137,9 @@ done
 
 echo "开始处理IOS插件资源"
 arr=(`echo ${CD_IOS_PLUGINS} | tr ',' ' '` )
-cd ${WORKSPACE}/ios_plugin
 for var in ${arr[@]}
 do
+  cd ${WORKSPACE}/ios_plugin
   version=${var##*-}
   name=${var%-*}
   echo $version
