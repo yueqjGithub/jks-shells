@@ -510,7 +510,7 @@ EOF
     ${zipname}  
 EOF
 
-    if [[ -n ${readme} ]]; then
+    if [[ -n ${CD_README} ]]; then
       cat >>${archivePath} <<EOF
   配置更新:
     ${readme}  
