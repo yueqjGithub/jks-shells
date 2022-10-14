@@ -510,10 +510,11 @@ EOF
   ${zipname}  
 EOF
 
-    if [[ -n ${readme} ]]; then
+    if [[ -n ${CD_README} ]]; then
+      echo "有配置更新，写入releaseinfo"
       cat >>${archivePath} <<EOF
 配置更新:
-  ${readme}  
+  ${CD_README}  
 EOF
     fi
     echo "web归档文件【build号】= ${BUILD_NUMBER} ，【文件名】= ${releaseinfoName} "
