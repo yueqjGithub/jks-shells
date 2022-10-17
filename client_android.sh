@@ -69,17 +69,17 @@ cd "${WORKSPACE}/unity_core/SuperSDK/Assets/Plugins/iOS"
 echo "删除原有行"
 version_line_num=$(echo $(sed -n '/static BOOL DEBUG_MODE /=' AvalonCommunicateForUnity.mm))
 echo "${version_line_num}"
-exit 0
 sed -i "${version_line_num}d" AvalonCommunicateForUnity.mm | exit 1
 version_line_num=$((10#${version_line_num}-1))
 echo "${version_line_num}"
 cat >version_temp.txt <<EOF
-static BOOL DEBUG_MODE = NO;
+static BOOL DEBUG_MODE = NO1;
 EOF
 sed -i "${version_line_num} r version_temp.txt" AvalonCommunicateForUnity.mm | exit 1
 rm version_temp.txt
 echo "修改AvalonCommunicateForUnity.mm完成"
 
+exit 0
 
 cd ${WORKSPACE}
 
