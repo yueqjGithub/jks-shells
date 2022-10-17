@@ -67,8 +67,9 @@ echo "super_client_unity插入Jiraversion完成"
 echo "客户端supersdk构建 需要修改一个变量static BOOL DEBUG_MODE = NO;"
 cd "${WORKSPACE}/unity_core/SuperSDK/Assets/Plugins/iOS"
 echo "删除原有行"
+version_line_num=$(echo $(sed -n '/static BOOL DEBUG_MODE /=' AvalonCommunicateForUnity.mm))
+echo "${version_line_num}"
 exit 0
-version_line_num=$(echo $(sed -n '/static BOOL DEBUG_MODE =' AvalonCommunicateForUnity.mm))
 sed -i "${version_line_num}d" AvalonCommunicateForUnity.mm | exit 1
 version_line_num=$((10#${version_line_num}-1))
 echo "${version_line_num}"
