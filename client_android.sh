@@ -73,7 +73,7 @@ sed -i "${version_line_num}d" AvalonCommunicateForUnity.mm | exit 1
 version_line_num=$((10#${version_line_num}-1))
 echo "${version_line_num}"
 cat >version_temp.txt <<EOF
-static BOOL DEBUG_MODE = NO1;
+static BOOL DEBUG_MODE = NO;
 EOF
 sed -i "${version_line_num} r version_temp.txt" AvalonCommunicateForUnity.mm | exit 1
 rm version_temp.txt
