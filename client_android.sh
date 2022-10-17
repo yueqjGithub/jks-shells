@@ -79,8 +79,6 @@ sed -i "${version_line_num} r version_temp.txt" AvalonCommunicateForUnity.mm | e
 rm version_temp.txt
 echo "修改AvalonCommunicateForUnity.mm完成"
 
-exit 0
-
 cd ${WORKSPACE}
 
 echo "插入参数"
