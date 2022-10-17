@@ -77,7 +77,7 @@ EOF
 sed -i "${version_line_num} r version_temp.txt" AvalonCommunicateForUnity.mm | exit 1
 rm version_temp.txt
 echo "修改AvalonCommunicateForUnity.mm完成"
-
+exit 0
 
 cd ${WORKSPACE}
 
