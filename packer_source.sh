@@ -245,3 +245,5 @@ channels:
 plugins:
   $plugin_str
 EOF
+
+echo "web归档文件【build号】= ${BUILD_NUMBER} ，【文件名】= ${CD_APP_VERSION}.releaseinfo"
