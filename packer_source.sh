@@ -7,12 +7,12 @@ ftpPassword=vy6Ks348a7s88
 echo "成品目录处理"
 cd ${WORKSPACE}
 
-if [[ -d build_result ]]; then
-  echo "删除旧的build_result文件夹"
-  rm -rf build_result
+if [[ -d dist ]]; then
+  echo "删除旧的dist文件夹"
+  rm -rf dist
 fi
 
-mkdir build_result
+mkdir dist
 
 channel_str=""
 
@@ -31,15 +31,15 @@ do
   if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cd ${WORKSPACE}/build_result
+    cd ${WORKSPACE}/dist
     if [[ -e $name ]]; then
       echo "已存在资源名称目录，无需创建"
     else
       mkdir $name
     fi
     cd ${WORKSPACE}/and_channel
-    cp -r $name/$version ${WORKSPACE}/build_result/$name/
-    cd ${WORKSPACE}/build_result/$name
+    cp -r $name/$version ${WORKSPACE}/dist/$name/
+    cd ${WORKSPACE}/dist/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
     # md5sum "${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip" | cut -d ' ' -f1 | tee "${CD_BUILD_NAME}-${CD_BUILD_VERSION}_${BUILD_NUMBER}.txt"
@@ -84,15 +84,15 @@ do
   if [[ -e $name/$version ]]; then
    echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cd ${WORKSPACE}/build_result
+    cd ${WORKSPACE}/dist
     if [[ -e $name ]]; then
       echo "已存在资源名称目录，无需创建"
     else
       mkdir $name
     fi
     cd ${WORKSPACE}/ios_channel
-    cp -r $name/$version ${WORKSPACE}/build_result/$name/
-    cd ${WORKSPACE}/build_result/$name
+    cp -r $name/$version ${WORKSPACE}/dist/$name/
+    cd ${WORKSPACE}/dist/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
     # md5sum "${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip" | cut -d ' ' -f1 | tee "${CD_BUILD_NAME}-${CD_BUILD_VERSION}_${BUILD_NUMBER}.txt"
@@ -140,15 +140,15 @@ do
   if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cd ${WORKSPACE}/build_result
+    cd ${WORKSPACE}/dist
     if [[ -e $name ]]; then
       echo "已存在资源名称目录，无需创建"
     else
       mkdir $name
     fi
     cd ${WORKSPACE}/and_plugin
-    cp -r $name/$version ${WORKSPACE}/build_result/$name/
-    cd ${WORKSPACE}/build_result/$name
+    cp -r $name/$version ${WORKSPACE}/dist/$name/
+    cd ${WORKSPACE}/dist/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
     # md5sum "${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip" | cut -d ' ' -f1 | tee "${CD_BUILD_NAME}-${CD_BUILD_VERSION}_${BUILD_NUMBER}.txt"
@@ -193,15 +193,15 @@ do
   if [[ -e $name/$version ]]; then
     echo "检测到需要发布的插件或渠道"
     echo "开始收集文件"
-    cd ${WORKSPACE}/build_result
+    cd ${WORKSPACE}/dist
     if [[ -e $name ]]; then
       echo "已存在资源名称目录，无需创建"
     else
       mkdir $name
     fi
     cd ${WORKSPACE}/ios_plugin
-    cp -r $name/$version ${WORKSPACE}/build_result/$name/
-    cd ${WORKSPACE}/build_result/$name
+    cp -r $name/$version ${WORKSPACE}/dist/$name/
+    cd ${WORKSPACE}/dist/$name
     echo "开始压缩文件"
     zip -r -q $name-$version.zip $version
     # md5sum "${CD_BUILD_NAME}-${CD_BUILD_VERSION}.zip" | cut -d ' ' -f1 | tee "${CD_BUILD_NAME}-${CD_BUILD_VERSION}_${BUILD_NUMBER}.txt"
@@ -237,9 +237,9 @@ echo $plugin_str
 echo $channel_str
 
 echo "生成归档文件"
-cd ${WORKSPACE}/build_result
+cd ${WORKSPACE}/dist
 releaseinfoName=${CD_APP_VERSION}.releaseinfo
-cat >> ${WORKSPACE}/build_result/$releaseinfoName << EOF
+cat >> ${WORKSPACE}/dist/$releaseinfoName << EOF
 channels:
   $channel_str
 plugins:
