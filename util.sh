@@ -378,7 +378,7 @@ do
       if [ -z "\$pid" ] ; then
         echo "\${jarFileName}未运行,不做停服处理"
       else
-        kill \${pid}
+        kill -9 \${pid}
         echo "已杀掉进程pid=\${pid}"
       fi
       rm -rf "\${appName}_tmp" || exit 1
