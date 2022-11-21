@@ -257,9 +257,9 @@ function avalon_web_cd_build_app() {
 
     cd "${WORKSPACE}/dist" || exit 1
     if [[ ${CD_ZIP_ROOT} == "" ]];then
-        zip -r -q "${zipname}" *
+        zip -r -q "${zipname}" * -x '*.git'
     else
-        zip -r -q "${zipname}" "${CD_ZIP_ROOT}"
+        zip -r -q "${zipname}" "${CD_ZIP_ROOT}" -x '*.git'
     fi
 
     md5sum "${zipname}" | cut -d ' ' -f1 | tee "${zipname}.txt"
