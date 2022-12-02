@@ -226,6 +226,7 @@ function avalon_web_cd_build_app() {
             echo 'next复制.env到destAppDir'
             mv ${appAbsolutePath}/.[^.]* "${destAppDir}"
         fi
+        exit 0;
         if [[ ${willZipApp} == "true" ]]; then
             #压缩
             cd "${destDir}" || exit 1
