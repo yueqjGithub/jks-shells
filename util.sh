@@ -129,6 +129,9 @@ function avalon_web_cd_build_app() {
             # java应用不压缩目录
             willZipApp=false
             jarPath=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} jar包路径)
+            if (CD_JAR_PATH) {
+              jarPath = ${CD_JAR_PATH}
+            }
             if [[ jarPath == "" ]]; then
                 echo "未配置jar包路径"
                 exit 1
@@ -226,7 +229,6 @@ function avalon_web_cd_build_app() {
             echo 'next复制.env到destAppDir'
             mv ${appAbsolutePath}/.[^.]* "${destAppDir}"
         fi
-        exit 0;
         if [[ ${willZipApp} == "true" ]]; then
             #压缩
             cd "${destDir}" || exit 1
