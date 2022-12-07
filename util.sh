@@ -129,9 +129,10 @@ function avalon_web_cd_build_app() {
             # java应用不压缩目录
             willZipApp=false
             jarPath=$(bash -x ${WORKSPACE}/custom_string_parse.sh ${appConfigStr} jar包路径)
-            if [[ CD_JAR_PATH != '' ]]; then
+            if [[ ${CD_JAR_PATH} != '' ]]; then
               jarPath=${CD_JAR_PATH}
             fi
+            echo ${jarPath}
             if [[ jarPath == "" ]]; then
                 echo "未配置jar包路径"
                 exit 1
