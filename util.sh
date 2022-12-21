@@ -376,6 +376,7 @@ do
       mv \${appName}.env \${appName}/.env  || exit 1
     elif [[ \${appType} == "java" ]]; then
       echo "java应用需要备份配置文件application.properties/application.yml/config目录/resources目录"
+      pwd
       jarFileName=\$(ls \${appName}/*.jar | head -1 | sed -rn "s/^.+\/(.+)$/\1/p") || exit 1
       echo "jarFileName=\${jarFileName}"
       pid=\$(ps ax | grep -i \${jarFileName} |grep java | grep -v grep | awk '{print \$1}') || exit 1
